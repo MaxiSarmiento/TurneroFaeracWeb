@@ -1,0 +1,85 @@
+﻿body {
+    font-family: Verdana, sans-serif;
+    box-sizing: border-box;
+    background: url(fondofaerac.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.container {
+    text-align: center;
+    background-color: transparent; /* Sin fondo para el contenedor */
+}
+
+h1 {
+    color:black;
+    font-size: 36px; /* Tamaño grande */
+    font-weight: bold; /* Negrita */
+
+}
+
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; /* Botones debajo del otro */
+    align-items: center;
+}
+
+.oval-button {
+    padding: 60px 40px; /* Más ancho para forma ovalada */
+    font-size: 30px;
+    border: none;
+    border-radius: 50px; /* Forma ovalada */
+    cursor: pointer;
+    margin: 10px 0; /* Espaciado vertical entre botones */
+    background-color: #4cff00;
+    color: #000000;
+    outline: none; /* Sin bordes al hacer clic */
+}
+
+.lab-button {
+    padding: 60px 40px; /* Más ancho para forma ovalada */
+    font-size: 30px;
+    border: none;
+    border-radius: 50px; /* Forma ovalada */
+    cursor: pointer;
+    margin: 10px 0; /* Espaciado vertical entre botones */
+    background-color: #4cff00;
+    color: #000000;
+    outline: none; /* Sin bordes al hacer clic */
+}
+.patient-list {
+    margin-top: 20px;
+    background-color: #fff; /* Fondo blanco */
+    border: 1px solid #000; /* Borde negro alrededor de la tabla */
+    border-collapse: collapse; /* Colapsar bordes de celda */
+}
+
+    .patient-list h2 {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        margin: 0;
+    }
+
+    .patient-list table {
+        width: 100%;
+    }
+
+    .patient-list th,
+    .patient-list td {
+        border: 1px solid #000; /* Borde negro para celdas */
+        padding: 8px;
+        text-align: center;
+    }
+
+    .patient-list th {
+        background-color: #f0f0f0; /* Color de fondo de encabezados */
+    }
+
+    .oval-button:hover,
+    .lab-button:hover {
+        opacity: 0.8;
+    }

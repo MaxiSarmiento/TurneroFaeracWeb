@@ -1,0 +1,119 @@
+html {
+    box-sizing: border-box;
+    background: url(fondofaerac.jpg) no-repeat center center fixed;
+   
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: inherit;
+}
+
+body {
+    background: transparent;
+    background-size: cover;
+    height: fit-content;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    background-color: transparent;
+}
+
+.contenedor {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px 0;
+    display: flex;
+    gap: 2px;
+    background-color: transparent;
+}
+
+.titulo {
+    font-size: 24px;
+    padding: 20px 0;
+}
+
+.contenedor-conciertos {
+    width: 40%; /* Ancho para los cards */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background: transparent;
+}
+
+.card {
+    border-width: 8px 8px 8px 8px;
+    min-height: 200px;
+    font-weight: bold;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+    width: calc(50% - 2px);
+    flex: 0 0 calc(50% - 20px);
+    box-sizing: border-box;
+    background: transparent;
+    border-style: double;
+    border-width: 8px 8px 8px 8px;
+    border-color: #99ceadbb;
+    border-radius: 3rem;
+}
+
+    .card .textos {
+        height: 100%;
+        color: black;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: space-between;
+    }
+
+.image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner {
+    border-radius: 10px;
+    text-align: top;
+    padding: 20px;
+    background-size: cover;
+    background-position: center center;
+    width: 80%; /* Ancho para el banner */
+    height: 10%;
+    flex: 0 0 calc(30% - 20px);
+    box-sizing: border-box;
+    background: transparent;
+    border-style: outset;
+    border-width: 8px 8px 8px 8px;
+    border-color: #99ceadbb;
+    border-radius: 3rem;
+}
+
+    .banner ul {
+        list-style: none;
+    }
+
+        .banner ul li {
+            margin: 15px;
+            font-weight: bold;
+        }
+
+@media screen and (max-width: 900px) {
+    .contenedor {
+        flex-direction: column; /* Cambiar a una columna en pantallas más pequeñas */
+    }
+
+    .card, .banner {
+        width: 100%; /* Ancho al 100% en pantallas más pequeñas */
+        flex: 0 0 calc(100% - 20px);
+        height: fit-content;
+    }
+}

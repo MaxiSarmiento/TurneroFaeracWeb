@@ -1,0 +1,409 @@
+﻿@model TurneroFaeracWeb.Models.TurneroFaeracEntities
+<!DOCTYPE html>
+@{
+    ViewData["Title"] = "Doctor";
+}
+
+<script src="~/lib/daypilot/daypilot-all.min.js"></script>
+
+<div class="columns">
+    <div class="column-left">
+        <div id="nav"></div>
+    </div>
+    <div class="column-main">
+        <div class="view-toolbar">
+            <button id="buttonDay">Dia</button>
+            <button id="buttonWeek">Semana</button>
+            <button id="buttonMonth">Mes</button>
+        </div>
+        <div class="toolbar">
+            <button id="buttonPrevious">&lt;</button>
+            <button id="buttonToday">Hoy</button>
+            <button id="buttonNext">&gt;</button>
+
+            Appointment slots:
+
+            <button id="buttonGenerate">Generar</button>
+            <button id="buttonClear">Limpiar</button>
+        </div>
+        <div id="day"></div>
+        <div id="week"></div>
+        <div id="month"></div>
+    </div>
+</div>
+
+<script>
+    const app = {
+        elements: {
+            buttonDay: document.querySelector("#buttonDay"),
+            buttonWeek: document.querySelector("#buttonWeek"),
+            buttonMonth: document.querySelector("#buttonMonth"),
+            buttonPrevious: document.querySelector("#buttonPrevious"),
+            buttonToday: document.querySelector("#buttonToday"),
+            buttonNext: document.querySelector("#buttonNext"),
+            buttonClear: document.querySelector("#buttonClear"),
+            buttonGenerate: document.querySelector("#buttonGenerate"),
+        },
+        colors: {
+            blue: "#6fa8dc",
+            blueDarker: "#3d85c6",
+            orange: "#f6b26b",
+            orangeDarker: "#d49049",
+            green: "#93c47d",
+            greenDarker: "#71a25b",
+            text: "white"
+        },
+        range() {
+            switch (nav.selectMode) {
+                case "Day":
+                    return {
+                        start: day.visibleStart(),
+                        end: day.visibleEnd()
+                    };
+                case "Week":
+                    return {
+                        start: week.visibleStart(),
+                        end: week.visibleEnd()
+                    };
+                case "Month":
+                    return {
+                        start: month.startDate.firstDayOfMonth(),
+                        end: month.startDate.firstDayOfMonth().addMonths(1)
+                    };
+            }
+        },
+        active() {
+            switch (nav.selectMode) {
+                case "Day":
+                    return day;
+                case "Week":
+                    return week;
+                case "Month":
+                    return month;
+            }
+        },
+        async createespTurno(args) {
+            const appointment = {
+                status: "free",
+                start: args.start,
+                end: args.end
+            };
+            const { data } = await DayPilot.Http.post(`/api/appointments`, appointment);
+            args.control.events.add(data);
+
+        },
+        async moveespTurno(args) {
+            const appointment = {
+                ...args.e.data,
+                start: args.newStart,
+                end: args.newEnd
+            };
+            const { data } = await DayPilot.Http.put(`/api/appointments/${appointment.id}`, appointment);
+        },
+        async deleteAppointmentSlot(args) {
+            const id = args.e.data.id;
+            await DayPilot.Http.delete(`/api/appointments/${id}`);
+        },
+        renderAppointmentSlot(args) {
+            switch (args.data.status) {
+                case "free":
+                    args.data.backColor = app.colors.blue;
+                    args.data.barColor = app.colors.blueDarker;
+                    args.data.borderColor = "darker";
+                    args.data.fontColor = app.colors.text;
+                    args.data.text = "Available";
+                    break;
+                case "waiting":
+                    args.data.backColor = app.colors.orange;
+                    args.data.barColor = app.colors.orangeDarker;
+                    args.data.borderColor = "darker";
+                    args.data.fontColor = app.colors.text;
+                    args.data.text = args.data.patientName;
+                    break;
+                case "confirmed":
+                    args.data.backColor = app.colors.green;
+                    args.data.barColor = app.colors.greenDarker;
+                    args.data.borderColor = "darker";
+                    args.data.fontColor = app.colors.text;
+                    args.data.text = args.data.patientName;
+                    break;
+            }
+        },
+        async editAppointmentSlot(args) {
+            const form = [
+                { name: "Edit Appointment" },
+                { name: "Name", id: "patientName" },
+                {
+                    name: "Status", id: "status", type: "select", options: [
+                        { name: "Free", id: "free" },
+                        { name: "Waiting", id: "waiting" },
+                        { name: "Confirmed", id: "confirmed" },
+                    ]
+                },
+                { name: "From", id: "start", dateFormat: "MMMM d, yyyy h:mm tt", disabled: true },
+                { name: "To", id: "end", dateFormat: "MMMM d, yyyy h:mm tt", disabled: true },
+            ];
+
+            const data = args.e.data;
+
+            const options = {
+                focus: "patientName"
+            };
+
+            const modal = await DayPilot.Modal.form(form, data, options);
+            if (modal.canceled) {
+                return;
+            }
+
+            const params = {
+                ...args.e.data,
+                name: modal.result.patientName,
+                status: modal.result.status
+            };
+
+            await DayPilot.Http.put(`/api/appointments/${params.id}`, params);
+            args.control.events.update(modal.result);
+
+        },
+        async loadEvents(date) {
+            const start = nav.visibleStart();
+            const end = nav.visibleEnd();
+
+            const { data } = await DayPilot.Http.get(`/api/appointments?start=${start}&end=${end}`);
+
+            const options = {
+                visible: true,
+                events: data
+            };
+
+            if (date) {
+                options.startDate = date;
+            }
+
+            day.hide();
+            week.hide();
+            month.hide();
+
+            const active = app.active();
+            active.update(options);
+
+            nav.update({
+                events: data
+            });
+        },
+        init() {
+
+            app.elements.buttonDay.addEventListener("click", ev => {
+                nav.update({
+                    selectMode: "Day"
+                });
+            });
+
+            app.elements.buttonWeek.addEventListener("click", ev => {
+                nav.update({
+                    selectMode: "Week"
+                });
+            });
+
+            app.elements.buttonMonth.addEventListener("click", ev => {
+                nav.update({
+                    selectMode: "Month"
+                });
+            });
+
+            app.elements.buttonPrevious.addEventListener("click", ev => {
+                const current = nav.selectionDay;
+                let updated;
+                switch (nav.selectMode) {
+                    case "Day":
+                        updated = current.addDays(-1);
+                        break;
+                    case "Week":
+                        updated = current.addDays(-7);
+                        break;
+                    case "Month":
+                        updated = current.addMonths(-1);
+                        break;
+                }
+                nav.select(updated);
+            });
+
+            app.elements.buttonNext.addEventListener("click", ev => {
+                const current = nav.selectionDay;
+                let updated;
+                switch (nav.selectMode) {
+                    case "Day":
+                        updated = current.addDays(1);
+                        break;
+                    case "Week":
+                        updated = current.addDays(7);
+                        break;
+                    case "Month":
+                        updated = current.addMonths(1);
+                        break;
+                }
+                nav.select(updated);
+            });
+
+            app.elements.buttonToday.addEventListener("click", ev => {
+                nav.select(DayPilot.Date.today());
+            });
+
+            app.elements.buttonClear.addEventListener("click", async ev => {
+
+                const modal = await DayPilot.Modal.confirm("Do you want to delete all free slots in the current view?");
+                if (modal.canceled) {
+                    return;
+                }
+
+                const params = app.range();
+
+                const { data } = await DayPilot.Http.post("/api/appointments/clear", params);
+                app.loadEvents();
+            });
+
+            app.elements.buttonGenerate.addEventListener("click", async ev => {
+                const current = nav.selectMode.toLowerCase();
+                const form = [
+                    { text: `Generate slots for the current ${current}?` },
+                ];
+
+                if (current === "week" || current === "month") {
+                    form.push({
+                        name: "Include weekends",
+                        type: "checkbox",
+                        id: "weekends"
+                    });
+                }
+
+                form.push({
+                    text: "In the month view, you can also generate slots by selecting days using drag and drop."
+                });
+
+                const modal = await DayPilot.Modal.form(form, {});
+                if (modal.canceled) {
+                    return;
+                }
+
+                let range = app.range();
+
+                const params = {
+                    start: range.start,
+                    end: range.end,
+                    weekends: modal.result.weekends,
+                };
+
+                const { data } = await DayPilot.Http.post("/api/appointments/create", params);
+                app.loadEvents();
+
+
+            });
+
+
+            app.loadEvents();
+        }
+    };
+
+    const nav = new DayPilot.Navigator("nav", {
+        selectMode: "Week",
+        showMonths: 3,
+        skipMonths: 3,
+        onTimeRangeSelected: (args) => {
+            app.loadEvents(args.day);
+        }
+    });
+    nav.init();
+
+    const day = new DayPilot.Calendar("day", {
+        viewType: "Day",
+        visible: false,
+        eventDeleteHandling: "Update",
+        onTimeRangeSelected: (args) => {
+            app.createAppointmentSlot(args);
+        },
+        onEventMoved: (args) => {
+            app.moveAppointmentSlot(args);
+        },
+        onEventResized: (args) => {
+            app.moveAppointmentSlot(args);
+        },
+        onEventDeleted: (args) => {
+            app.deleteAppointmentSlot(args);
+        },
+        onBeforeEventRender: (args) => {
+            app.renderAppointmentSlot(args);
+        },
+        onEventClick: (args) => {
+            app.editAppointmentSlot(args);
+        }
+    });
+    day.init();
+
+    const week = new DayPilot.Calendar("week", {
+        viewType: "Week",
+        eventDeleteHandling: "Update",
+        onTimeRangeSelected: (args) => {
+            app.createAppointmentSlot(args);
+        },
+        onEventMoved: (args) => {
+            app.moveAppointmentSlot(args);
+        },
+        onEventResized: (args) => {
+            app.moveAppointmentSlot(args);
+        },
+        onEventDeleted: (args) => {
+            app.deleteAppointmentSlot(args);
+        },
+        onBeforeEventRender: (args) => {
+            app.renderAppointmentSlot(args);
+        },
+        onEventClick: (args) => {
+            app.editAppointmentSlot(args);
+        }
+    });
+    week.init();
+
+
+    const month = new DayPilot.Month("month", {
+        visible: false,
+        eventDeleteHandling: "Update",
+        eventMoveHandling: "Disabled",
+        eventResizeHandling: "Disabled",
+        cellHeight: 150,
+        onCellHeaderClick: args => {
+            nav.selectMode = "Day";
+            nav.select(args.start);
+        },
+        onEventDelete: args => {
+            app.deleteAppointmentSlot(args);
+        },
+        onBeforeEventRender: args => {
+            app.renderAppointmentSlot(args);
+
+            // customize content
+            const locale = DayPilot.Locale.find(month.locale);
+            const start = new DayPilot.Date(args.data.start).toString(locale.timePattern);
+            const name = DayPilot.Util.escapeHtml(args.data.patientName || "");
+            args.data.html = `<span class='month-time'>${start}</span> ${name}`;
+        },
+        onTimeRangeSelected: async (args) => {
+            const params = {
+                start: args.start.toString(),
+                end: args.end.toString(),
+                weekends: true
+            };
+
+            args.control.clearSelection();
+
+            const { data } = await DayPilot.Http.post("/api/appointments/create", params);
+            app.loadEvents();
+        },
+        onEventClick: (args) => {
+            app.editAppointmentSlot(args);
+        }
+    });
+    month.init();
+
+    app.init();
+
+</script>

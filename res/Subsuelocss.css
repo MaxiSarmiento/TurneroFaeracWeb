@@ -1,0 +1,73 @@
+html {
+	box-sizing: border-box;
+	background: url(fondofaerac.jpg) no-repeat center center fixed; 
+    
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+/* Subsuelocss.css */
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
+	background:transparent;
+}
+
+.contenedor {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	
+	background-color: transparent;
+}
+
+.contenedor-conciertos {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	background-color: transparent;
+}
+
+.card {
+	width: calc(50% - 20px); /* La mitad del ancho de la pantalla, dejando un pequeño espacio entre las columnas */
+	max-height: calc(100vh - 20px); /* Altura máxima limitada al largo del monitor, dejando un pequeño espacio arriba y abajo */
+	margin: 10px; /* Espacio entre las cards */
+	border: 1px solid #ccc; /* Bordes para las cards */
+	border-radius: 10px; /* Esquinas redondeadas para las cards */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para las cards */
+	overflow: auto; /* Evitar que el contenido se desborde */
+	border-color:mediumseagreen;
+	border-block-style:double;
+	background:transparent;
+	flex-direction:column;
+}
+
+.textos {
+	padding: 5px;
+}
+
+/* Estilos para los títulos */
+h1 {
+	font-size: 40px;
+	font-weight: 500;
+	margin: 0;
+	font-optical-sizing: auto;
+	
+}
+
+h2 {
+	font-size: 35px;
+	font-weight: 700;
+	margin: 0;
+	justify-content: center;
+	text-align: center;
+}
+
+h6 {
+	font-size: 24px;
+	font-weight: 400;
+	margin: 0;
+}

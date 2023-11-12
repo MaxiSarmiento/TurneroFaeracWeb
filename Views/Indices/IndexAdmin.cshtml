@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/res/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Panel de Administrador</h1>
+        <div class="admin-buttons">
+            <a href="#" class="button admin-button">Registrar Empleado</a>
+            <a href="#" class="button admin-button">Editar Empleado</a>
+            <a href="#" class="button admin-button">Ver Lista de Pacientes</a>
+
+            <!-- Elementos solo para el administrador -->
+            @if (User.IsInRole("Admin"))
+            {
+                <a href="#" class="button admin-button">Gestionar Usuarios</a>
+                <a href="#" class="button admin-button">Generar Informes</a>
+            }
+        </div>
+    </div>
+</body>
+</html>

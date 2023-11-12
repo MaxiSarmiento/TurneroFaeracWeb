@@ -1,0 +1,11 @@
+﻿@using TurneroFaeracWeb.Models
+@model List<TablaTurnosCLS>
+
+<select id="ddlHorarios" class="form-select bg-light border-0" style="height: 55px;">
+    <option selected>Elija Hora</option>
+    @foreach (var horario in Model)
+    {
+        <option value="@horario">@horario</option>
+    }
+</select>
+

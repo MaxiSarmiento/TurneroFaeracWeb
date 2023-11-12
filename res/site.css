@@ -1,0 +1,173 @@
+﻿p, body, td, input, select, button {
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    font-size: 14px;
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+    background-color: #ffffff;
+}
+
+a {
+    color: #1155a3;
+}
+
+.space {
+    margin: 10px 0px 10px 0px;
+}
+
+.header {
+    background: #003267;
+    background: linear-gradient(to right, #011329 0%,#00639e 44%,#011329 100%);
+    padding: 20px 10px;
+    color: white;
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.75);
+    margin-bottom: 20px;
+}
+
+    .header a {
+        color: white;
+    }
+
+    .header h1 a {
+        text-decoration: none;
+    }
+
+    .header h1 {
+        padding: 0px;
+        margin: 0px;
+    }
+
+.main {
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.generated {
+    color: #999;
+}
+
+    .generated a {
+        color: #999;
+    }
+
+/* */
+
+.area {
+    /* border: 5px solid #ccc; */
+    /* border-radius: 10px; */
+    display: inline-block;
+}
+
+    .area a {
+        width: 200px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        /* background: linear-gradient(to bottom, #1155cc 0%, #1155a3 100%); */
+        background: #3d85c6;
+        text-decoration: none;
+    }
+
+        .area a span {
+            border: 3px solid #fff;
+            border-radius: 30px;
+            padding: 10px 30px;
+        }
+
+nav {
+    margin: 10px;
+}
+
+.columns {
+    display: flex;
+}
+
+.column-main {
+    flex-grow: 1;
+}
+
+.column-left {
+    margin-right: 10px;
+}
+
+.toolbar {
+    margin: 10px 0px;
+}
+
+    .toolbar > .toolbar-item:not(:last-child) {
+        border-right: 1px solid #ccc;
+    }
+
+.toolbar-item {
+    padding: 0px 10px;
+}
+
+.toolbar button {
+    background-color: #f3f3f3;
+    border: 1px solid #c0c0c0;
+    color: #333;
+    padding: 6px 12px;
+    /* width: 80px; */
+    border-radius: 2px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.view-toolbar button {
+    display: inline-block;
+    text-align: center;
+    /* background-color: #3c78d8; */
+    background-color: #3d85c6;
+    border: 1px solid #1155cc;
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-right: 1px;
+    width: 80px;
+    text-decoration: none;
+}
+
+.view-toolbar {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* */
+
+.month-time {
+    display: inline-block;
+    width: 55px;
+    margin-right: 5px;
+    text-align: right;
+}
+
+body .month_default_event_inner {
+    border-left: 5px solid #6fa8dc;
+}
+
+body .month_default_cell_header {
+    text-align: center;
+}
+
+    body .month_default_cell_header:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+body .calendar_default_event_inner {
+    margin-bottom: 1px;
+    padding-left: 8px;
+}
+
+body .calendar_default_event_bar,
+body .calendar_default_event_bar_inner {
+    width: 5px;
+    margin-bottom: 1px;
+}
