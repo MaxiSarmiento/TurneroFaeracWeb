@@ -34,6 +34,7 @@ namespace TurneroFaeracWeb.Models
         public virtual DbSet<HorariosDisponibles> HorariosDisponibles { get; set; }
         public virtual DbSet<HorariosPredefinidos> HorariosPredefinidos { get; set; }
         public virtual DbSet<IndiceAnalisis> IndiceAnalisis { get; set; }
+        public virtual DbSet<IndiceGenero> IndiceGenero { get; set; }
         public virtual DbSet<IndiceHorarios> IndiceHorarios { get; set; }
         public virtual DbSet<Pacientes> Pacientes { get; set; }
         public virtual DbSet<PatientDetails> PatientDetails { get; set; }

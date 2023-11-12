@@ -5,6 +5,9 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI.WebControls;
+using System.Web.SessionState;
+using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace FaeracT.Controllers
 {
@@ -23,7 +26,7 @@ namespace FaeracT.Controllers
         public ActionResult IndexTurnos()
         {
             // Obtener el IdPaciente de la sesión (asegúrate de que esto esté configurado en tu aplicación).
-
+            
             listarComboRol();
             llenarEspecializacion();
 
@@ -87,6 +90,7 @@ namespace FaeracT.Controllers
         {
         }
 
+
         public ActionResult Filtrar(DoctoresCLS oDoctoresCLS)
         {
             string nombreDoc = oDoctoresCLS.nombreFiltro;
@@ -119,32 +123,7 @@ namespace FaeracT.Controllers
                 }
             return PartialView("_TablaDocs", listaDocs);
         }
-        /* public int Guardar(TurnosCLS oTurnosCLS, int titulo)
-         {
-             int rpta = 0;
-             using (var bd = new TurneroFaeracEntities())
-             {
-                 if (titulo == 1)
-                 {
-                     // Crear una instancia de Turnos que se corresponda con la entidad de Entity Framework
-                     FaeracT.Models.Turnos oTurnos = new FaeracT.Models.Turnos
-                     {
-                         IdPaciente = oTurnosCLS.IdPaciente,
-                         Fecha = oTurnosCLS.Fecha,
-                         Hora = oTurnosCLS.Hora,
-                         TurnoRealizado = false,
-                     };
-
-                     bd.Turnos.Add(oTurnos);
-                     rpta = bd.SaveChanges();
-
-                     if (rpta == 0) rpta = 0;
-                 }
-             }
-             return rpta;
-         }
-
-         */
+      
 
         public string Guardar(TurnosCLS oTurnosCLS, int titulo)
         {
@@ -238,6 +217,7 @@ namespace FaeracT.Controllers
                 ViewBag.listaEspecializacion = lista;
             }
         }
+
         public ActionResult AgregarTurno(TurnosCLS oTurnosCLS)
         {
             if (!ModelState.IsValid)
@@ -281,7 +261,8 @@ namespace FaeracT.Controllers
             return RedirectToAction("Index");
         }
 
-        public string Eliminar(TurnosCLS oTurnosCLS)
+       
+        public string EliminarTurno(TurnosCLS oTurnosCLS)
         {
             string rpta = "";
             try
@@ -316,9 +297,266 @@ namespace FaeracT.Controllers
         }
 
 
+        List<SelectListItem> listaGenero;
+        private void llenarGenero()
+        {
+            using (var db = new TurneroFaeracEntities())
+            {
+                listaGenero = (from genero in db.IndiceGenero
+                             where genero.Habilitado == 1
+                             select new SelectListItem
+                             {
+                                 Text = genero.Descripcion,
+                                 Value = genero.IdGenero.ToString()
+                             }).ToList();
+
+                listaGenero.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
+
+            }
+        }
+        public ActionResult EditarUsuario(int id)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    llenarEspecializacion();
+                    llenarGenero();
+                    ViewBag.lista = listaGenero;
+                    ViewBag.Lista = listaEspecializacion;
+                    UsuarioCLS oUsuarioCLS = new UsuarioCLS();
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        Usuarios oUsuario = db.Usuarios.Where(p => p.IdUser.Equals(id)).First();
+                        oUsuarioCLS.IdUser = oUsuario.IdUser;
+                        oUsuarioCLS.Usuario = oUsuario.Usuario;
+                        oUsuarioCLS.IdTipo = oUsuario.IdTipo;
+                        oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
+                        oUsuarioCLS.IdGenero = (int)oUsuario.Genero;
+                    }
+                   
+                    return View(oUsuarioCLS);
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult EditarUsuario(UsuarioCLS oUsuarioCLS)
+        {
+            int id = oUsuarioCLS.IdUser;
+
+            if (!ModelState.IsValid)
+            {
+                llenarEspecializacion();
+                llenarGenero();
+                ViewBag.lista = listaGenero;
+                ViewBag.Lista = listaEspecializacion;
+                return View(oUsuarioCLS);
+            }
+
+            using (var db = new TurneroFaeracEntities())
+            {
+                Usuarios oUsuario = db.Usuarios.Where(p => p.IdUser.Equals(id)).First();
+                oUsuarioCLS.IdUser = oUsuario.IdUser;
+                oUsuarioCLS.Usuario = oUsuario.Usuario;
+                oUsuarioCLS.IdTipo = oUsuario.IdTipo;
+                oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
+                oUsuarioCLS.IdGenero = (int)oUsuario.Genero;
+                if (oUsuario.IdTipo == 3)
+                {
+                    // Agregar a la tabla Pacientes
+                    Pacientes nuevoPaciente = new Pacientes
+                    {
+                        IdUser = oUsuarioCLS.IdUser,
+                        Genero = oUsuarioCLS.IdGenero,
+                        NombrePac = "vacio",
+                        ApePac = "Vacio",
+                        DNIPac =  "vacio",
+                        EdadPac = 0,
+                        GeneroPac = "",
+                        TipoDNI = "",
+                        Email = oUsuarioCLS.Correo,
+
+                    };
+                    db.Pacientes.Add(nuevoPaciente);
+                }
+                else if (oUsuario.IdTipo == 2)
+                {
+                    // Agregar a la tabla Doctores
+                    Doctores nuevoDoctor = new Doctores
+                    {
+                        // Asigna los valores apropiados a los campos del nuevo Doctor
+                        IdUser = oUsuarioCLS.IdUser,
+                        NombreDoc = "vacio",
+                        ApeDoc = "vacio",
+                        IDEspecializacion= 0,
+
+
+                    };
+                    db.Doctores.Add(nuevoDoctor);
+                }
+
+                // Actualizar la entidad Usuarios
+                oUsuario.IdTipo = oUsuarioCLS.IdTipo;
+                oUsuario.NumeroContacto = oUsuarioCLS.NumeroContacto;
+
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult EditarDoctor(int id)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    llenarEspecializacion();
+                    llenarGenero();
+                    ViewBag.lista = listaGenero;
+                    ViewBag.Lista = listaEspecializacion;
+                    DoctoresCLS oDoctoresCLS = new DoctoresCLS();
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        Doctores oDoctores = db.Doctores.Where(p => p.IdUser.Equals(id)).First();
+                        oDoctores.IdDoc = oDoctoresCLS.IdDoc;
+                        oDoctores.IdUser = oDoctoresCLS.IdUser;
+                        oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;
+                        oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
+                        oDoctores.IDEspecializacion = oDoctoresCLS.IDEspecializacion;
+                    }
+
+                    return View(oDoctoresCLS);
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+        }
+        [HttpPost]
+        public ActionResult EditarDoctor(DoctoresCLS oDoctoresCLS)
+        {
+            int id = oDoctoresCLS.IdDoc;
+
+            if (!ModelState.IsValid)
+            {
+                llenarEspecializacion();
+                llenarGenero();
+                ViewBag.lista = listaGenero;
+                ViewBag.Lista = listaEspecializacion;
+                
+            }
+
+            using (var db = new TurneroFaeracEntities())
+            {
+                Doctores oDoctores = db.Doctores.Where(p => p.IdUser.Equals(id)).First();
+                oDoctores.IdDoc = oDoctoresCLS.IdDoc;
+                oDoctores.IdUser = oDoctoresCLS.IdUser;
+                oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;
+                oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
+                oDoctores.IDEspecializacion = oDoctoresCLS.IDEspecializacion;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult EditarPaciente(int id)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    llenarEspecializacion();
+                    llenarGenero();
+                    ViewBag.lista = listaGenero;
+                    ViewBag.Lista = listaEspecializacion;
+                    PacientesCLS oPacientesCLS = new PacientesCLS();
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        Pacientes oPacientes = db.Pacientes.Where(p => p.IdPaciente.Equals(id)).First();
+                        oPacientes.IdPaciente = oPacientesCLS.IdPaciente;
+                        oPacientes.IdUser = oPacientesCLS.IdUser;
+                        oPacientes.NombrePac = oPacientesCLS.NombrePac;
+                        oPacientes.ApePac = oPacientesCLS.ApePac;
+                        oPacientes.DNIPac = oPacientesCLS.DNIPac;
+                        oPacientes.EdadPac = oPacientesCLS.EdadPac;
+                        oPacientes.GeneroPac = "null";
+                        oPacientes.TipoDNI = oPacientesCLS.TipoDNI;
+                        oPacientes.Email = oPacientesCLS.Email;
+                        oPacientes.Telefono = oPacientesCLS.Telefono;
+                        oPacientes.Genero = oPacientesCLS.IdGenero;
+
+                    }
+
+                    return View(oPacientesCLS);
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+        }
+        [HttpPost]
+        public ActionResult EditarPaciente(PacientesCLS oPacientesCLS)
+        {
+            int id = oPacientesCLS.IdPaciente;
+
+            if (!ModelState.IsValid)
+            {
+                llenarEspecializacion();
+                llenarGenero();
+                ViewBag.lista = listaGenero;
+                ViewBag.Lista = listaEspecializacion;
+
+            }
+
+            using (var db = new TurneroFaeracEntities())
+            {
+                Pacientes oPacientes = db.Pacientes.Where(p => p.IdPaciente.Equals(id)).First();
+                oPacientes.IdPaciente = oPacientesCLS.IdPaciente;
+                oPacientes.IdUser = oPacientesCLS.IdUser;
+                oPacientes.NombrePac = oPacientesCLS.NombrePac;
+                oPacientes.ApePac = oPacientesCLS.ApePac;
+                oPacientes.DNIPac = oPacientesCLS.DNIPac;
+                oPacientes.EdadPac = oPacientesCLS.EdadPac;
+                oPacientes.GeneroPac = "null";
+                oPacientes.TipoDNI = oPacientesCLS.TipoDNI;
+                oPacientes.Email = oPacientesCLS.Email;
+                oPacientes.Telefono = oPacientesCLS.Telefono;
+                oPacientes.Genero = oPacientesCLS.IdGenero;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
 
     }
 }
+
 /*   private List<HorarioPredefinido> HorariosTurnos()
    {
        using (var context = new TurneroFaeracEntities())

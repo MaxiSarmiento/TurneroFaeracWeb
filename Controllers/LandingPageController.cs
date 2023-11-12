@@ -94,7 +94,9 @@ namespace FaeracT.Controllers
                                  select new DoctoresCLS
                                  {
                                      IDEspecializacion = Doctores.IDEspecializacion,
-                                     ApeDoc = Doctores.ApeDoc
+                                     ApeDoc = Doctores.ApeDoc,
+                                     NombreDoc = Doctores.NombreDoc 
+
                                  }).ToList();
                 }
             }
