@@ -22,8 +22,9 @@ namespace TurneroFaeracWeb.Models
         public string Descripcion { get; set; }
         public string Token { get; set; }
         public Nullable<int> Genero { get; set; }
+        public virtual ICollection<IndiceGenero> ListarGenero { get; set; } = new List<IndiceGenero>();
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Doctores> Doctores { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pacientes> Pacientes { get; set; }

@@ -34,7 +34,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Ajax.BeginForm("Guardar2", "Tablas", null, new AjaxOptions
+            @using (Ajax.BeginForm("Guardar2","Tablas", null, new AjaxOptions
             {
                 HttpMethod = "POST",
                 OnSuccess = "Guardar",
@@ -58,9 +58,25 @@
                 @Html.TextBox("NumeroContacto", null, new { @class = "form-control" })
             </div>
             <div>
-                <div>
-                    @Html.Label("Genero")
-                    @Html.DropDownList("IdGenero", new SelectList(ListarGeneros, "IdGenero", "Descripcion"), new { @class = "form-control" })
+                <div class="mb-3">
+                    <label>Genero</label>
+                    <div class="mb-3">
+                        <label>Genero</label>
+                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="Genero" name="Genero">
+                            <option value="1">Masculino</option>
+                            <option value="2">Femenino</option>
+                            <option value="3">Otro</option>
+                        </select>
+                        <!-- Agrega un campo oculto para almacenar el valor seleccionado -->
+                        <input type="hidden" id="IdGenero" name="IdGenero" />
+                    </div>
+                    <script>
+                        // Agrega este script después de tu formulario
+                        document.getElementById("Genero").addEventListener("change", function () {
+                            var selectedValue = document.getElementById("Genero").value;
+                            document.getElementById("IdGenero").value = selectedValue;
+                        });
+                    </script>
                 </div>
             </div>
     
@@ -113,7 +129,9 @@
     }
 
     function Guardar(resultado) {
+        alert(resultado);
         if (resultado == "1" || resultado == "0") {
+
             $("#frmFiltrado").trigger("submit");
             document.getElementById("btnclose").click();
             alert("Se guardo correctamente");
@@ -127,15 +145,25 @@
     }
 
     function Editar(id) {
-        Limpiar();
         document.getElementById("divError").innerHTML = "";
         document.getElementById("titulo").value = id;
-        $.get("../Rol/RellenarCampos/?titulo=" + id, function (data) {
+
+        $.get("../Tablas/RellenarCampos/?titulo=" + id, function (data) {
             document.getElementById("Usuario").value = data.Usuario;
-            document.getElementById("Tipo").value = data.IdTipo;
+            document.getElementById("IdTipo").value = data.IdTipo;
             document.getElementById("NumeroContacto").value = data.NumeroContacto;
-            document.getElementById("IdGenero").value = data.IdGenero;
-        })
+
+            // Buscar el elemento select
+            var generoSelect = document.getElementById("Genero");
+
+            // Iterar sobre las opciones y seleccionar la correspondiente al valor recibido
+            for (var i = 0; i < generoSelect.options.length; i++) {
+                if (generoSelect.options[i].value == data.IdGenero) {
+                    generoSelect.options[i].selected = true;
+                    break;
+                }
+            }
+        });
     }
 
 

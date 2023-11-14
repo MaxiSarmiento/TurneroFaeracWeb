@@ -19,21 +19,48 @@ namespace FaeracT.Controllers
     {
 
 
-        public ActionResult TablaEmpleados()
+        public ActionResult TablaEmpleados(UsuarioCLS oUsuarioCLS)
         {
+            string nombreUSR = oUsuarioCLS.Usuario;
+            llenarGenero();
             GetTipoUsuarioList();
             GetGeneroUsuarioList();
             List<UsuarioCLS> listaUsuario = new List<UsuarioCLS>();
             using (var db = new TurneroFaeracEntities())
+
             {
-                listaUsuario = (from Usuarios in db.Usuarios
+                if (oUsuarioCLS.Usuario == null) { 
+                    listaUsuario = (from Usuario in db.Usuarios
                                 select new UsuarioCLS
                                 {
-                                    IdUser = Usuarios.IdUser,
-                                    Usuario = Usuarios.Usuario,
-                                    Contraseña = Usuarios.Contraseña,
-                                    IdTipo = Usuarios.IdTipo
+                                    IdUser = Usuario.IdUser,
+                                    Usuario = Usuario.Usuario,
+                                    Contraseña = Usuario.Contraseña,
+                                    IdTipo = Usuario.IdTipo,
+                                    Genero = Usuario.Genero,
+                                    NumeroContacto = Usuario.NumeroContacto
+                                    
+                                    
                                 }).ToList();
+                Session["lista"] = listaUsuario;
+            }
+           else
+            {
+                listaUsuario = (from Usuario in db.Usuarios
+                                  where Usuario.IdTipo !=4 
+                                  select new UsuarioCLS
+                                  {
+                                      IdUser = Usuario.IdUser,
+                                      Usuario = Usuario.Usuario,
+                                      Contraseña = Usuario.Contraseña,
+                                      IdTipo = Usuario.IdTipo,
+                                      Genero = Usuario.Genero,
+                                      NumeroContacto = Usuario.NumeroContacto
+                                  }).ToList();
+
+                    Session["lista"] = listaUsuario;
+                }
+
             }
             return View(listaUsuario);
         }
@@ -152,7 +179,7 @@ namespace FaeracT.Controllers
 
 
         }
-        public ActionResult Editar(int id)
+        public ActionResult editar(int id)
         {
             try
             {
@@ -389,14 +416,17 @@ namespace FaeracT.Controllers
             return rpta;
         }
 
-        public string Guardar2(UsuarioCLS oUsuarioCLS, int titulo)
+        public string Guardar2(UsuarioCLS oUsuarioCLS, int titulo, int Genero)
         {
+            GetGeneroUsuarioList();
             string rpta = "";
 
             try
             {
+                
                 if (!ModelState.IsValid)
                 {
+                    try { 
                     var query = (from state in ModelState.Values
                                  from error in state.Errors
                                  select error.ErrorMessage).ToList();
@@ -406,21 +436,25 @@ namespace FaeracT.Controllers
                         rpta += "<li class='list-group-item'>" + item + "</li";
                     }
                     rpta += "</ul>";
+                    }
+                    catch (Exception)
+                    {
+                        rpta = "fragmento 1";
+                    }
                 }
                 else
                 {
+                    try { 
                     using (var db = new TurneroFaeracEntities())
                     {
                         if (titulo == -1)
                         {
-                            Usuarios oUsuario = new Usuarios
-                            {
-                                IdUser = oUsuarioCLS.IdUser,
-                                Usuario = oUsuarioCLS.Usuario,
-                                Contraseña = oUsuarioCLS.Contraseña,
-                                IdTipo = oUsuarioCLS.IdTipo,
-                                Genero = oUsuarioCLS.Genero
-                            };
+                            Usuarios oUsuario = db.Usuarios.Where(p => p.IdUser == titulo).First();
+                            oUsuario.Usuario = oUsuarioCLS.Usuario;
+                            oUsuario.NumeroContacto = oUsuarioCLS.NumeroContacto;
+                            oUsuario.IdTipo = oUsuarioCLS.IdTipo;
+                            oUsuario.Genero = Genero;
+                            
                             db.Usuarios.Add(oUsuario);
                             rpta = db.SaveChanges().ToString();
                             if (rpta == "0") rpta = "";
@@ -428,18 +462,24 @@ namespace FaeracT.Controllers
                         else
                         {
                             Usuarios oUsuario = db.Usuarios.Where(p => p.IdUser == titulo).First();
-                            oUsuario.Usuario = oUsuarioCLS.Usuario;
-                            oUsuario.Contraseña = oUsuarioCLS.Contraseña;
-                            oUsuario.IdTipo = oUsuarioCLS.IdTipo;
-                            oUsuario.Genero = oUsuarioCLS.Genero;
-                            rpta = db.SaveChanges().ToString();
+                              
+                                oUsuario.Usuario = oUsuarioCLS.Usuario;
+                                oUsuario.NumeroContacto = oUsuarioCLS.NumeroContacto;
+                                oUsuario.IdTipo = oUsuarioCLS.IdTipo;
+                                oUsuario.Genero = Genero;
+                                rpta = db.SaveChanges().ToString();
                         }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        rpta = "Error en Datos";
                     }
                 }
             }
             catch (Exception)
             {
-                rpta = "";
+                rpta = "Error en otra cosa";
             }
             return rpta;
         }
@@ -447,7 +487,8 @@ namespace FaeracT.Controllers
         public JsonResult RellenarCampos(int titulo)
 
         {
-     
+            GetTipoUsuarioList();
+          GetGeneroUsuarioList();
             UsuarioCLS oUsuarioCLS = new UsuarioCLS();
             using (var db = new TurneroFaeracEntities())
             {
@@ -455,7 +496,9 @@ namespace FaeracT.Controllers
                 oUsuarioCLS.Usuario = oUsuario.Usuario;
                 oUsuarioCLS.Contraseña = oUsuario.Contraseña;
                 oUsuarioCLS.IdTipo = oUsuario.IdTipo;
-                oUsuarioCLS.Genero = (int)oUsuario.Genero;
+                oUsuarioCLS.Genero = oUsuario.Genero;
+                oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
+
             }
             return Json(oUsuarioCLS, JsonRequestBehavior.AllowGet);
         }

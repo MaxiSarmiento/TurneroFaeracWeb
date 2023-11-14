@@ -1,15 +1,15 @@
 ﻿@model List<TurneroFaeracWeb.Models.UsuarioCLS>
 
-
 <table class="table tab-content table-bordered table-hover">
     <tr>
         <td align="center"><strong>ID</strong></td>
         <td align="center"><strong>Nombre Usuario</strong></td>
         <td align="center"><strong>Tipo</strong></td>
-        <td align="center"><strong>Numero contacto</strong></td>
         <td align="center"><strong>Genero</strong></td>
+        <td align="center"><strong>Numero contacto</strong></td>
+        <td align="center"><strong>Acciones</strong></td>
     </tr>
- 
+
     @foreach (var item in Model)
     {
         <tr>
@@ -20,19 +20,43 @@
                 @Html.DisplayFor(modelItem => item.Usuario)
             </td>
             <td style="text-align: center;">
-                @Html.DisplayFor(modelItem => item.IdTipo)
+                @{
+                    if (item.IdTipo == 1)
+                    {
+                        <strong>Admin</strong>
+                    }
+                    else if (item.IdTipo == 2)
+                    {
+                        <strong>Paciente</strong>
+                    }
+                    else if (item.IdTipo == 3)
+                    {
+                        <strong>Doctor</strong>
+                    }
+                }
             </td>
             <td style="text-align: center;">
+                @{
+                    if (item.Genero == 1)
+                    {
+                        <strong>Masculino</strong>
+                    }
+                    else if (item.Genero == 2)
+                    {
+                        <strong>Femenino</strong>
+                    }
+                    else if (item.Genero == 3)
+                    {
+                        <strong>Otro</strong>
+                    }
+                }
+            </td>
             <td style="text-align: center;">
                 @Html.DisplayFor(modelItem => item.NumeroContacto)
             </td>
             <td style="text-align: center;">
-            <td style="text-align: center;">
-                @Html.DisplayFor(modelItem => item.IdGenero)
-            </td>
-            <td style="text-align: center;">
                 <button type="button" onclick="Editar(@item.IdUser)" class="btn btn-primary glyphicon-edit" data-toggle="modal" data-target="#exampleModal">
-                    <img src="~/images/btnedit.svg" alt="Editar" class="editar-icon" />
+                    <img src="~/images/btnedit.svg" alt="editar" class="editar-icon" />
                 </button>
                 <button type="button" onclick="Eliminar(@item.IdUser)" class="btn btn-danger glyphicon-trash" data-toggle="modal" data-target="#EliminarConfirmacion">
                     <img src="~/images/btnborrar.svg" alt="Eliminar" class="editar-icon" />
@@ -40,6 +64,4 @@
             </td>
         </tr>
     }
-
-
 </table>
