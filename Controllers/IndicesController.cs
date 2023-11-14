@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using System.Web.SessionState;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FaeracT.Controllers
 {
@@ -63,7 +64,11 @@ namespace FaeracT.Controllers
         {
             return View();
         }
-
+        public ActionResult _ListaTurnos()
+        {
+            TurnosDoctores turnosDoctores = new TurnosDoctores();
+            return View(turnosDoctores);
+        }
         public ActionResult PanelUser()
         {
             return View();
@@ -125,7 +130,7 @@ namespace FaeracT.Controllers
         }
       
 
-        public string Guardar(TurnosCLS oTurnosCLS, int titulo)
+        public string GuardarTurno(TurnosCLS oTurnosCLS, int titulo)
         {
             //Error
             string rpta = "";
@@ -337,7 +342,7 @@ namespace FaeracT.Controllers
                         oUsuarioCLS.Usuario = oUsuario.Usuario;
                         oUsuarioCLS.IdTipo = oUsuario.IdTipo;
                         oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
-                        oUsuarioCLS.IdGenero = (int)oUsuario.Genero;
+                        oUsuarioCLS.Genero = (int)oUsuario.Genero;
                     }
                    
                     return View(oUsuarioCLS);
@@ -372,14 +377,14 @@ namespace FaeracT.Controllers
                 oUsuarioCLS.Usuario = oUsuario.Usuario;
                 oUsuarioCLS.IdTipo = oUsuario.IdTipo;
                 oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
-                oUsuarioCLS.IdGenero = (int)oUsuario.Genero;
+                oUsuarioCLS.Genero = (int)oUsuario.Genero;
                 if (oUsuario.IdTipo == 3)
                 {
                     // Agregar a la tabla Pacientes
                     Pacientes nuevoPaciente = new Pacientes
                     {
                         IdUser = oUsuarioCLS.IdUser,
-                        Genero = oUsuarioCLS.IdGenero,
+                        Genero = oUsuarioCLS.Genero,
                         NombrePac = "vacio",
                         ApePac = "Vacio",
                         DNIPac =  "vacio",

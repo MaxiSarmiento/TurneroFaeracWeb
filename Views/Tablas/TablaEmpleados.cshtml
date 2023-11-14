@@ -1,0 +1,166 @@
+﻿@model List<TurneroFaeracWeb.Models.UsuarioCLS> 
+
+<h2 align="center">Listado de Usuarios</h2>
+<hr />
+
+<!-- Button trigger modal -->
+<button type="button" onclick="Agregar()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Agregar
+</button>
+<hr />
+
+@using (Ajax.BeginForm("Filtrar", "", new AjaxOptions
+{
+    HttpMethod = "Post",
+    UpdateTargetId = "divRol",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmFiltrado" }))
+{
+    @Html.Label("Filtrar por Apellido")
+    @Html.TextBox("nombreFiltro")
+    <div id="divRol">
+        @Html.Partial("_TablaEmpleados", Model)
+    </div>
+}
+<hr />
+
+<!-- Modal AGREGAR-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel" align="center" draggable="true"><b>ALTA-MODIFICAR User</b></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("Guardar2", "Tablas", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "Guardar",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divError"
+            }))
+            {
+                @Html.Hidden("titulo")
+        <div class="modal-body">
+
+            <div>
+                @Html.Label("Nombre Usuario")
+                @Html.TextBox("Usuario", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Tipo Usuario")
+                @Html.TextBox("IdTipo", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("NumeroContacto")
+                @Html.TextBox("NumeroContacto", null, new { @class = "form-control" })
+            </div>
+            <div>
+                <div>
+                    @Html.Label("Genero")
+                    @Html.DropDownList("IdGenero", new SelectList(ListarGeneros, "IdGenero", "Descripcion"), new { @class = "form-control" })
+                </div>
+            </div>
+    
+
+        </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnclose" class="btn btn-secondary" data-dismiss="modal"><b>Cancelar</b></button>
+                    <button type="submit" class="btn btn-primary"><b>GUARDAR</b></button>
+                </div>
+                <div id="divError" class="alert-warning"></div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="EliminarConfirmacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <h2 align="center" class="modal-title" id="exampleModalLabel"><b>Baja de Roles</b></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <h4 align="center" class="modal-title alert-warning" id="exampleModalLabel"><b>¿Desea eliminar este ROL?</b></h4>
+            <div class="modal-footer alert-warning">
+                <button type="button" id="btnCerrar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="EliminarRegistro()" class="btn btn-primary">Aceptar</button>
+            </div>
+            <div id="divError"></div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var frmFiltrado = document.getElementById("frmFiltrado");
+    var nombreFiltro = document.getElementById("nombreFiltro");
+    nombreFiltro.onkeyup = function () {
+        $("#frmFiltrado").trigger("submit");
+    }
+
+    function Agregar() {
+        Limpiar();
+        document.getElementById("divError").innerHTML = "";
+        document.getElementById("titulo").value = "-1";
+    }
+
+    function Guardar(resultado) {
+        if (resultado == "1" || resultado == "0") {
+            $("#frmFiltrado").trigger("submit");
+            document.getElementById("btnclose").click();
+            alert("Se guardo correctamente");
+        } else {
+            if (resultado == "-1") {
+                alert("Ese Usuario ya existe")
+                document.getElementById("divError").innerHTML = "";
+            } else
+                alert("ERROR->No se pudo guardar el Usuario");
+        }
+    }
+
+    function Editar(id) {
+        Limpiar();
+        document.getElementById("divError").innerHTML = "";
+        document.getElementById("titulo").value = id;
+        $.get("../Rol/RellenarCampos/?titulo=" + id, function (data) {
+            document.getElementById("Usuario").value = data.Usuario;
+            document.getElementById("Tipo").value = data.IdTipo;
+            document.getElementById("NumeroContacto").value = data.NumeroContacto;
+            document.getElementById("IdGenero").value = data.IdGenero;
+        })
+    }
+
+
+
+    function Eliminar(IdUser) {
+        var id = document.getElementById("titulo").value = IdUser;
+    }
+
+    function EliminarRegistro() {
+        var id = document.getElementById("titulo").value;
+        $.get("../Tablas/Eliminar/?IdUser=" + id, function (data) {
+            if (data == "1") {
+                alert("Usuario Eliminado");
+                $("#frmFiltrado").trigger("submit");
+                document.getElementById("btnCerrar").click();
+            }
+        })
+
+    }
+    function Limpiar() {
+        document.getElementById("Usuario").value = "";
+        document.getElementById("IdTipo").value = "";
+        document.getElementById("NumeroContacto").value = "";
+        document.getElementById("IdGenero").value = "";
+        document.getElementById("divError").innerHTML = "";
+    }
+
+</script>

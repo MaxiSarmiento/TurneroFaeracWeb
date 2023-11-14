@@ -11,55 +11,50 @@
     <meta name="viewport" content="width=device-width" />
     <title>Registrar</title>
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/bootstrap")
 </head>
 <body>
     <div class="row justify-content-center mt-5">
-
         <div class="col-5">
-
             <div class="card">
-                <div class="card-header"><h3 class="text-center">Registrar cuenta</h3></div>
+                <div class="card-header">
+                    <h3 class="text-center">Registrar cuenta</h3>
+                </div>
                 <div class="card-body">
-
                     @if (ViewBag.Creado == null)
                     {
-                        <form action="@Url.Action("Registro","Login")" method="post">
-
-                            <div class="mb-3">
-                                <label>Nombre</label>
-
-                                <input type="text" class="form-control" name="Usuario" value="@(ViewBag.Usuario !=null ? ViewBag.Usuario: "")" required />
-
+                        using (Html.BeginForm("Registro", "Login", FormMethod.Post, new { onsubmit = "return validarContraseñas();" }))
+                        {
+                            <div class="input-box">
+                                @Html.LabelFor(p => p.Usuario)
+                                @Html.EditorFor(p => p.Usuario, new { @type = "text", @class = "form-control", @placeholder = "Ingrese Nombre de Usuario", @required = "required" })
                                 <span style="color: red;">@ViewBag.MensajeUsuario</span>
-
-
                             </div>
-                            <div class="mb-3">
-                                <label>Correo</label>
-
-                                <input type="email" class="form-control" name="Correo" value="@(ViewBag.Correo !=null ? ViewBag.Correo : "")" required />
-
+                            <div class="input-box">
+                                @Html.LabelFor(p => p.Contraseña)
+                                @Html.PasswordFor(p => p.Contraseña, new { @class = "form-control", @placeholder = "Crear Contraseña", @required = "required", @id = "Contraseña" })
+                            </div>
+                            <div class="input-box">
+                                @Html.Label("Confirmar Contraseña:")
+                                @Html.Password("ConfirmarContraseña", null, new { @class = "form-control", @placeholder = "Confirmar Contraseña", @required = "required", @id = "ConfirmarContraseña" })
+                                <span style="color: red;" id="mensajeContraseña"></span>
+                            </div>
+                            <div class="input-box">
+                                @Html.LabelFor(p => p.Correo)
+                                @Html.EditorFor(p => p.Correo, new { @type = "email", @class = "form-control", @placeholder = "Ingrese su Email", @required = "required" })
                                 <span style="color: red;">@ViewBag.MensajeCorreo</span>
-
                             </div>
                             <div class="mb-3">
-                                <label>Número de Teléfono</label>
-
-                                <input type="number" class="form-control" name="NumeroContacto" value="@(ViewBag.NumeroContacto !=null ? ViewBag.NumeroContacto : "")" required />
-
-                                <span style="color: red;">@ViewBag.NumeroContacto</span>
-
-                            </div>
-                            <div class="mb-3">
-                                <label>Contraseña</label>
-                                <input type="password" class="form-control" name="Contraseña" id="Contraseña" required />
-                            </div>
-                            <div class="mb-3">
-                                <label>Confirmar Contraseña</label>
-                                <input type="password" class="form-control" name="ConfirmarContraseña" id="ConfirmarContraseña" required />
+                                <label>Genero</label>
+                                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="Genero" name="IdGenero">
+                                    <option selected>Seleccione su Genero</option>
+                                    <option value="1">Masculino</option>
+                                    <option value="2">Femenino</option>
+                                    <option value="3">Otro</option>
+                                </select>
                             </div>
 
-                            @if (ViewBag.Mensaje != null)
+                            if (ViewBag.Mensaje != null)
                             {
                                 <div class="alert alert-danger">
                                     @ViewBag.Mensaje
@@ -68,52 +63,41 @@
 
                             <div class="mb-3">
                                 <div class="d-grid">
-                                    <button class="btn btn-primary" type="submit">Registrarse </button>
+                                    <button class="btn btn-primary" type="submit">Registrarse</button>
                                     <a class="btn btn-link" href="@Url.Action("Login","Login")">Ya tienes una cuenta? Inicia sesion</a>
                                 </div>
                             </div>
-
-
-                        </form>
+                        }
                     }
                     else
                     {
                         <div class="alert alert-success">
-                            <p>
-                                @ViewBag.Mensaje="Registrado Correctamente">
-                                <a class="btn btn-success" href="@Url.Action("Login","Login")">Ingresar</a>
+                            <p>@ViewBag.Mensaje="Registrado Correctamente"</p>
+                            <a class="btn btn-success" href="@Url.Action("Login","Login")">Ingresar</a>
                         </div>
                     }
-
-
                 </div>
             </div>
-
         </div>
     </div>
-    @Scripts.Render("~/bundles/bootstrap")
+
+    <script>
+        function validarContraseñas() {
+            var contraseña = document.getElementById('Contraseña').value;
+            var confirmarContraseña = document.getElementById('ConfirmarContraseña').value;
+            var mensajeContraseña = document.getElementById('mensajeContraseña');
+
+            // Verificar si las contraseñas coinciden
+            if (contraseña === confirmarContraseña) {
+                // Contraseñas coinciden, eliminar cualquier mensaje de error
+                mensajeContraseña.innerText = '';
+                return true; // Permitir el envío del formulario
+            } else {
+                // Contraseñas no coinciden, establecer un mensaje de error
+                mensajeContraseña.innerText = 'Las contraseñas no coinciden';
+                return false; // Evitar el envío del formulario
+            }
+        }
+    </script>
 </body>
 </html>
-<script>
-    // Obtener referencias a los campos de contraseña
-    var contraseñaField = document.getElementById('Contraseña');
-    var confirmarContraseñaField = document.getElementById('ConfirmarContraseña');
-
-    // Agregar un controlador de evento para verificar la igualdad al escribir
-    contraseñaField.addEventListener('input', validarContraseñas);
-    confirmarContraseñaField.addEventListener('input', validarContraseñas);
-
-    function validarContraseñas() {
-        var contraseña = contraseñaField.value;
-        var confirmarContraseña = confirmarContraseñaField.value;
-
-        // Verificar si las contraseñas coinciden
-        if (contraseña === confirmarContraseña) {
-            // Contraseñas coinciden, eliminar cualquier mensaje de error
-            confirmarContraseñaField.setCustomValidity('');
-        } else {
-            // Contraseñas no coinciden, establecer un mensaje de error
-            confirmarContraseñaField.setCustomValidity('Las contraseñas no coinciden');
-        }
-    }
-</script>

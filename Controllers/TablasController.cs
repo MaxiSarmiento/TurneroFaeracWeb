@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using TurneroFaeracWeb.Controllers;
 using System.Text;
 using System.Security.Cryptography;
 using FaeracT.Controllers;
@@ -21,6 +21,8 @@ namespace FaeracT.Controllers
 
         public ActionResult TablaEmpleados()
         {
+            GetTipoUsuarioList();
+            GetGeneroUsuarioList();
             List<UsuarioCLS> listaUsuario = new List<UsuarioCLS>();
             using (var db = new TurneroFaeracEntities())
             {
@@ -68,6 +70,69 @@ namespace FaeracT.Controllers
             return View(listaCombinada);
         }
 
+        [HttpGet]
+        public ActionResult Agregar()
+        {
+            if (Session["UserID"] == null)
+            {
+
+                return RedirectToAction("Login", "Login");
+            }
+            else
+            {
+                llenarGenero();
+                ViewBag.lista = listaGenero;
+                llenarEspecializacion();
+                ViewBag.Lista = listaEspecializacion;
+                return View();
+            }
+
+        }
+        public ActionResult Agregar(UsuarioCLS oUsuarioCLS)
+        {
+            if (!ModelState.IsValid)
+            {
+                llenarGenero();
+                ViewBag.lista = listaGenero;
+                llenarEspecializacion();
+                ViewBag.Lista = listaEspecializacion;
+                return View(oUsuarioCLS);
+            }
+            else
+            {
+                using (var db = new TurneroFaeracEntities())
+                {
+                    // Verificar si el Usuario ya existe
+                    bool dniExistente = db.Usuarios.Any(e => e.Usuario == oUsuarioCLS.Usuario);
+
+                    if (dniExistente)
+                    {
+                        // Usuario Existente, mostrar mensaje de error
+                        ModelState.AddModelError("Usuario", "Usuario ya existente");
+                        llenarGenero();
+                        ViewBag.lista = listaGenero;
+                        llenarEspecializacion();
+                        ViewBag.Lista = listaEspecializacion;
+                        return View(oUsuarioCLS);
+                    }
+                    else
+                    {
+                        // El Usuario no existe, proceder con el agregado
+                        Usuarios oUsuario = new Usuarios();
+                        oUsuario.Usuario = oUsuario.Usuario;
+                        oUsuario.Contraseña = oUsuario.Contraseña;
+                        oUsuario.NumeroContacto = oUsuario.NumeroContacto;
+                        oUsuario.Genero = (int)oUsuarioCLS.Genero;
+                        oUsuario.IdTipo= (int)oUsuarioCLS.IdTipo;
+                        oUsuario.Descripcion = oUsuarioCLS.Descripcion;
+                        db.Usuarios.Add(oUsuario);
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
         private List<PacientesCLS> ObtenerListaPacientes()
         {
             List<PacientesCLS> listaPacientes = new List<PacientesCLS>();
@@ -87,7 +152,137 @@ namespace FaeracT.Controllers
 
 
         }
+        public ActionResult Editar(int id)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
 
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    llenarGenero();
+                    ViewBag.lista = listaGenero;
+                    llenarEspecializacion();
+                    ViewBag.Lista = listaEspecializacion;
+                   
+                    UsuarioCLS oUsuarioCLS = new UsuarioCLS();
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        Usuarios oUsuario = db.Usuarios.Where(p => p.IdUser.Equals(id)).First();
+                        oUsuarioCLS.IdUser = oUsuario.IdUser;
+                        oUsuarioCLS.Usuario = oUsuario.Usuario;
+                        oUsuarioCLS.Genero = (int)oUsuario.Genero;
+                        oUsuarioCLS.Descripcion = oUsuario.Descripcion;
+                        oUsuarioCLS.Correo = oUsuario.Correo;
+                        oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
+                        
+                    }
+                    return View(oUsuarioCLS);
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+        }
+        [HttpPost]
+        public ActionResult editar(UsuarioCLS oUsuarioCLS)
+        {
+            int id = oUsuarioCLS.IdUser;
+
+            if (!ModelState.IsValid)
+            {
+                llenarGenero();
+                ViewBag.lista = listaGenero;
+                llenarEspecializacion();
+                ViewBag.Lista = listaEspecializacion;
+                return View(oUsuarioCLS);
+                
+            }
+
+            using (var db = new TurneroFaeracEntities())
+            {
+                Usuarios oUsuario = db.Usuarios.Where(p => p.IdUser.Equals(id)).First();
+                oUsuarioCLS.IdUser = oUsuario.IdUser;
+                oUsuarioCLS.Usuario = oUsuario.Usuario;
+                oUsuarioCLS.Genero = (int)oUsuario.Genero;
+                oUsuarioCLS.Descripcion = oUsuario.Descripcion;
+                oUsuarioCLS.Correo = oUsuario.Correo;
+                oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Home");
+        }
+
+
+        public ActionResult FiltrarEmpleados(UsuarioCLS oUsuariosCLS)
+        {
+            string nombreUsr = oUsuariosCLS.nombreFiltro;
+            List<UsuarioCLS> listaUsr = new List<UsuarioCLS>();
+            using (var db = new TurneroFaeracEntities())
+
+                if (nombreUsr == null)
+                {
+                    listaUsr = (from Usuarios in db.Usuarios
+                                 select new UsuarioCLS
+
+                                 {
+                                     IdUser = Usuarios.IdUser,
+                                     Usuario = Usuarios.Usuario,
+                                     Contraseña = Usuarios.Contraseña,
+                                     IdTipo = Usuarios.IdTipo,
+                                     NumeroContacto = Usuarios.NumeroContacto,
+                                     Genero = (int)Usuarios.Genero
+
+                                 }).ToList();
+
+                }
+                else
+                {
+                    listaUsr = (from Usuarios in db.Usuarios
+                                 where Usuarios.Usuario.Contains(nombreUsr)
+                                 select new UsuarioCLS
+                                 {
+                                     IdUser = Usuarios.IdUser,
+                                     Usuario = Usuarios.Usuario,
+                                     Contraseña = Usuarios.Contraseña,
+                                     IdTipo = Usuarios.IdTipo,
+                                     NumeroContacto = Usuarios.NumeroContacto,
+                                     Genero = (int)Usuarios.Genero
+                                 }).ToList();
+                }
+            return PartialView("_TablaEmpleados", listaUsr);
+        }
+
+
+        private List<UsuarioCLS> ObtenerListaUsuarios()
+        {
+            llenarEspecializacion();
+            List<UsuarioCLS> listaUsuarios = new List<UsuarioCLS>();
+            using (var db = new TurneroFaeracEntities())
+               
+            {
+                listaUsuarios = (from Usuarios in db.Usuarios
+                                  select new UsuarioCLS
+                                  {
+                                      IdUser = Usuarios.IdUser,
+                                      Usuario = Usuarios.Usuario,
+                                      Contraseña = Usuarios.Contraseña,
+                                      IdTipo = Usuarios.IdTipo,
+                                      NumeroContacto = Usuarios.NumeroContacto,
+                                      Genero = (int)Usuarios.Genero
+
+                                  }).ToList();
+                return listaUsuarios;
+            }
+
+
+
+        }
         private List<AnalisisPacientesCLS> ObtenerListaAnalisis()
         {
             List<AnalisisPacientesCLS> listaAnalisis = new List<AnalisisPacientesCLS>();
@@ -122,7 +317,7 @@ namespace FaeracT.Controllers
 
         public ActionResult Filtrar(UsuarioCLS oUsuarioCLS)
         {
-            string nombreUsuario = oUsuarioCLS.NombreFiltro;
+            string nombreUsuario = oUsuarioCLS.nombreFiltro;
             List<UsuarioCLS> listaUsuario = new List<UsuarioCLS>();
             using (var db = new TurneroFaeracEntities())
             {
@@ -165,7 +360,7 @@ namespace FaeracT.Controllers
                         IdUser = oUsuarioCLS.IdUser,
                         Usuario = oUsuarioCLS.Usuario,
                         Contraseña = oUsuarioCLS.Contraseña,
-                        IdTipo = oUsuarioCLS.TipoUsuario
+                        IdTipo = oUsuarioCLS.IdTipo
                     };
                     db.Usuarios.Add(oUsuario);
                     rpta = db.SaveChanges();
@@ -223,7 +418,8 @@ namespace FaeracT.Controllers
                                 IdUser = oUsuarioCLS.IdUser,
                                 Usuario = oUsuarioCLS.Usuario,
                                 Contraseña = oUsuarioCLS.Contraseña,
-                                IdTipo = oUsuarioCLS.IdTipo
+                                IdTipo = oUsuarioCLS.IdTipo,
+                                Genero = oUsuarioCLS.Genero
                             };
                             db.Usuarios.Add(oUsuario);
                             rpta = db.SaveChanges().ToString();
@@ -235,6 +431,7 @@ namespace FaeracT.Controllers
                             oUsuario.Usuario = oUsuarioCLS.Usuario;
                             oUsuario.Contraseña = oUsuarioCLS.Contraseña;
                             oUsuario.IdTipo = oUsuarioCLS.IdTipo;
+                            oUsuario.Genero = oUsuarioCLS.Genero;
                             rpta = db.SaveChanges().ToString();
                         }
                     }
@@ -248,7 +445,9 @@ namespace FaeracT.Controllers
         }
 
         public JsonResult RellenarCampos(int titulo)
+
         {
+     
             UsuarioCLS oUsuarioCLS = new UsuarioCLS();
             using (var db = new TurneroFaeracEntities())
             {
@@ -256,6 +455,7 @@ namespace FaeracT.Controllers
                 oUsuarioCLS.Usuario = oUsuario.Usuario;
                 oUsuarioCLS.Contraseña = oUsuario.Contraseña;
                 oUsuarioCLS.IdTipo = oUsuario.IdTipo;
+                oUsuarioCLS.Genero = (int)oUsuario.Genero;
             }
             return Json(oUsuarioCLS, JsonRequestBehavior.AllowGet);
         }
@@ -265,12 +465,85 @@ namespace FaeracT.Controllers
             List<SelectListItem> tipoUsuarioList = new List<SelectListItem>
     {
         new SelectListItem { Value = "1", Text = "Administrador" },
-        new SelectListItem { Value = "2", Text = "Jefe de Personal" },
-        new SelectListItem { Value = "3", Text = "EmpleadoBOX" },
-        new SelectListItem { Value = "4", Text = "Doctor" }
+        new SelectListItem { Value = "2", Text = "Usuario" },
+        new SelectListItem { Value = "3", Text = "Doctor" },
+        new SelectListItem { Value = "4", Text ="Deshabilitado"}
+    };
+        
+
+                return tipoUsuarioList;
+        }
+        public static List<SelectListItem> GetGeneroUsuarioList()
+        {
+            List<SelectListItem> generoUsuarioList = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "1", Text = "Masculino" },
+        new SelectListItem { Value = "2", Text = "Femenino" },
+        new SelectListItem { Value = "3", Text = "Otro" },
+
     };
 
-            return tipoUsuarioList;
+
+            return generoUsuarioList;
         }
+
+        List<SelectListItem> listaEspecializacion;
+        private void llenarEspecializacion()
+        {
+            using (var db = new TurneroFaeracEntities())
+            {
+                listaEspecializacion = (from Especializaciones in db.Especializaciones
+
+                                        select new SelectListItem
+                                        {
+                                            Text = Especializaciones.Descripcion,
+                                            Value = Especializaciones.IDEspecializacion.ToString()
+                                        }).ToList();
+
+                listaEspecializacion.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
+
+            }
+        }
+
+        List<SelectListItem> listaGenero;
+        private void llenarGenero()
+        {
+            using (var db = new TurneroFaeracEntities())
+            {
+                listaGenero = (from Genero in db.IndiceGenero
+                             where Genero.Habilitado != 0
+                             select new SelectListItem
+                             {
+                                 Text = Genero.Descripcion,
+                                 Value = Genero.IdGenero.ToString()
+                             }).ToList();
+
+                listaGenero.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
+
+            }
+        }
+        public ActionResult ListarGeneros()
+        {
+            using (var context = new TurneroFaeracEntities()) // Reemplaza "TuDbContext" con el nombre real de tu contexto de base de datos
+            {
+                var usuarios = context.Usuarios.ToList();
+                var generos = context.IndiceGenero.ToList();
+                var tipo = context.TipoUsuarios.ToList();
+
+                // Mapea el IdGenero en la lista de usuarios con sus descripciones correspondientes
+                var usuariosConGenero = usuarios.Select(u => new
+                {
+                    u.IdUser,
+                    u.Usuario,
+                    TipoUsuario = tipo.FirstOrDefault(g => g.IdTipo == u.IdTipo)?.Descripcion,
+                    NumeroContacto = u.NumeroContacto,
+                    Genero = generos.FirstOrDefault(g => g.IdGenero == u.Genero)?.Descripcion
+                }).ToList();
+
+                return View(usuariosConGenero);
+            }
+        }
+
     }
+
 }
