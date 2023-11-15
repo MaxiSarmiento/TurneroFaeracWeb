@@ -253,7 +253,7 @@ namespace FaeracT.Controllers
                     {
                         // El Usuario no existe, proceder con el agregado
                        Doctores oDoctores = new Doctores();
-                        oDoctores.IdDoc = oDoctoresCLS.IdDoc;
+                       
                         oDoctores.IdUser = oDoctoresCLS.IdUser;
                         oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
                         oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;
@@ -747,7 +747,7 @@ namespace FaeracT.Controllers
                             // Agregar nuevo usuario
                             Doctores oDoctores = new Doctores
                             {
-                                IdDoc = oDoctoresCLS.IdDoc,
+                            
                             IdUser = oDoctoresCLS.IdUser,
                             ApeDoc = oDoctoresCLS.ApeDoc,
                             NombreDoc = oDoctoresCLS.NombreDoc,
@@ -765,7 +765,7 @@ namespace FaeracT.Controllers
 
                             if (oDoctores != null)
                             {
-                                oDoctores.IdDoc = oDoctoresCLS.IdDoc;
+                               
                                 oDoctores.IdUser = oDoctoresCLS.IdUser;
                                 oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
                                 oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;

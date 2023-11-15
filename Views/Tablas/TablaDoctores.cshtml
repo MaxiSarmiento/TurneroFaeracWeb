@@ -12,7 +12,7 @@
 </button>
 <hr />
 
-@using (Ajax.BeginForm("Filtrar", "", new AjaxOptions
+@using (Ajax.BeginForm("FiltrarD", "", new AjaxOptions
 {
     HttpMethod = "Post",
     UpdateTargetId = "divRol",
@@ -65,7 +65,7 @@
                         <label>Especializacion</label>
                         <div class="mb-3">
                             <label>Especializaciones</label>
-                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="IDEspecializacion" name="Descripcion">
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="IDEspecializacion" name="IDEspecializacion">
                                 <option value="1">Generalista</option>
                                 <option value="2">Gastroenterologia</option>
                                 <option value="3">Neurologia</option>
@@ -80,7 +80,7 @@
                             </select>
 
                             <!-- Agrega un campo oculto para almacenar el valor seleccionado -->
-                            <input type="hidden" id="IDEspecializacionHidden" name="Descripcion" />
+                            <input type="hidden" id="IDEspecializacionHidden" name="IDEspecializacion" />
 
                             <script>
                                 // Agrega este script después de tu formulario
