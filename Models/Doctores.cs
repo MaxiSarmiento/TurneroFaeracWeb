@@ -22,11 +22,12 @@ namespace TurneroFaeracWeb.Models
         }
     
         public int IdDoc { get; set; }
-        public int IdUser { get; set; }
+        public Nullable<int> IdUser { get; set; }
         public Nullable<int> idConsultorio { get; set; }
         public string NombreDoc { get; set; }
         public string ApeDoc { get; set; }
         public Nullable<int> IDEspecializacion { get; set; }
+        public Nullable<int> Flag { get; set; }
     
         public virtual Usuarios Usuarios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

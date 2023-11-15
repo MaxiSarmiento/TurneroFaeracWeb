@@ -9,15 +9,16 @@ namespace TurneroFaeracWeb.Models
     {
 
         public int IdDoc { get; set; }
-        public int IdUser { get; set; }
-        public Nullable<int> idConsultorio { get; set; }
+        public int? IdUser { get; set; }
+        public int? idConsultorio { get; set; }
         public string NombreDoc { get; set; }
         public string ApeDoc { get; set; }
-        public Nullable<int> IDEspecializacion { get; set; }
-
+        public int? IDEspecializacion { get; set; }
+      
         public virtual Usuarios Usuarios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IndiceHorarios> IndiceHorarios { get; set; }
+        
+         public virtual ICollection<IndiceHorarios> IndiceHorarios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Turnos> Turnos { get; set; }
         public string nombreFiltro { get; set; }

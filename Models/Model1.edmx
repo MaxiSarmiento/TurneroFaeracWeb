@@ -54,11 +54,12 @@
             <PropertyRef Name="IdDoc" />
           </Key>
           <Property Name="IdDoc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="IdUser" Type="int" />
           <Property Name="idConsultorio" Type="int" />
-          <Property Name="NombreDoc" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="ApeDoc" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="NombreDoc" Type="varchar" MaxLength="100" />
+          <Property Name="ApeDoc" Type="varchar" MaxLength="100" />
           <Property Name="IDEspecializacion" Type="int" />
+          <Property Name="Flag" Type="int" />
         </EntityType>
         <EntityType Name="Especializaciones">
           <Key>
@@ -121,11 +122,10 @@
           <Property Name="ApePac" Type="varchar" MaxLength="100" />
           <Property Name="DNIPac" Type="varchar" MaxLength="20" />
           <Property Name="EdadPac" Type="int" />
-          <Property Name="GeneroPac" Type="char" MaxLength="1" />
           <Property Name="TipoDNI" Type="char" MaxLength="1" />
           <Property Name="IdUser" Type="int" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="100" />
-          <Property Name="Telefono" Type="varchar" MaxLength="100" />
+          <Property Name="Correo" Type="varchar" MaxLength="100" />
+          <Property Name="NumeroContacto" Type="varchar" MaxLength="100" />
           <Property Name="Genero" Type="int" />
         </EntityType>
         <EntityType Name="PatientDetails">
@@ -245,7 +245,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Doctores_Usuarios">
-          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
           <End Role="Doctores" Type="Self.Doctores" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuarios">
@@ -480,11 +480,12 @@
             <PropertyRef Name="IdDoc" />
           </Key>
           <Property Name="IdDoc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="IdUser" Type="Int32" />
           <Property Name="idConsultorio" Type="Int32" />
-          <Property Name="NombreDoc" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ApeDoc" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NombreDoc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApeDoc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IDEspecializacion" Type="Int32" />
+          <Property Name="Flag" Type="Int32" />
           <NavigationProperty Name="Usuarios" Relationship="FaeracTModel.FK_Doctores_Usuarios" FromRole="Doctores" ToRole="Usuarios" />
           <NavigationProperty Name="IndiceHorarios" Relationship="FaeracTModel.FK_IndiceHorarios_Doctores" FromRole="Doctores" ToRole="IndiceHorarios" />
           <NavigationProperty Name="Turnos" Relationship="FaeracTModel.FK_Turnos_Doctores" FromRole="Doctores" ToRole="Turnos" />
@@ -552,11 +553,10 @@
           <Property Name="ApePac" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="DNIPac" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="EdadPac" Type="Int32" />
-          <Property Name="GeneroPac" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="TipoDNI" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="IdUser" Type="Int32" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Telefono" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NumeroContacto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Genero" Type="Int32" />
           <NavigationProperty Name="HorariosDisponibles" Relationship="FaeracTModel.FK_HorariosDisponibles_Pacientes" FromRole="Pacientes" ToRole="HorariosDisponibles" />
           <NavigationProperty Name="Usuarios" Relationship="FaeracTModel.FK_Pacientes_Usuarios" FromRole="Pacientes" ToRole="Usuarios" />
@@ -684,7 +684,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Doctores_Usuarios">
-          <End Type="FaeracTModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="FaeracTModel.Usuarios" Role="Usuarios" Multiplicity="0..1" />
           <End Type="FaeracTModel.Doctores" Role="Doctores" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuarios">
@@ -812,6 +812,7 @@
           <EntitySetMapping Name="Doctores">
             <EntityTypeMapping TypeName="FaeracTModel.Doctores">
               <MappingFragment StoreEntitySet="Doctores">
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
                 <ScalarProperty Name="IDEspecializacion" ColumnName="IDEspecializacion" />
                 <ScalarProperty Name="ApeDoc" ColumnName="ApeDoc" />
                 <ScalarProperty Name="NombreDoc" ColumnName="NombreDoc" />
@@ -883,11 +884,10 @@
             <EntityTypeMapping TypeName="FaeracTModel.Pacientes">
               <MappingFragment StoreEntitySet="Pacientes">
                 <ScalarProperty Name="Genero" ColumnName="Genero" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="NumeroContacto" ColumnName="NumeroContacto" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
                 <ScalarProperty Name="IdUser" ColumnName="IdUser" />
                 <ScalarProperty Name="TipoDNI" ColumnName="TipoDNI" />
-                <ScalarProperty Name="GeneroPac" ColumnName="GeneroPac" />
                 <ScalarProperty Name="EdadPac" ColumnName="EdadPac" />
                 <ScalarProperty Name="DNIPac" ColumnName="DNIPac" />
                 <ScalarProperty Name="ApePac" ColumnName="ApePac" />

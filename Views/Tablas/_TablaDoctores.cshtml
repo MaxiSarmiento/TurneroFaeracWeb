@@ -1,0 +1,82 @@
+﻿@model List<TurneroFaeracWeb.Models.DoctoresCLS>
+@{
+    ViewBag.Title = "listaEspecializacion";
+}
+
+<table class="table tab-content table-bordered table-hover">
+    <tr>
+        <td align="center"><strong>ID Doc</strong></td>
+        <td align="center"><strong>ID User</strong></td>
+        <td align="center"><strong>Apellido</strong></td>
+        <td align="center"><strong>Nombre</strong></td>
+        <td align="center"><strong>Especializacion</strong></td>
+        <td align="center"><strong>Acciones</strong></td>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.IdDoc)</td>
+            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.IdUser)</td>
+            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.ApeDoc)</td>
+            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.NombreDoc)</td>
+            <td style="text-align: center;">
+                @{
+                    if (item.IDEspecializacion == 1)
+                    {
+                        <strong>Generalista</strong>
+                    }
+                    else if (item.IDEspecializacion == 2)
+                    {
+                        <strong>Gastroenterologia</strong>
+                    }
+                    else if (item.IDEspecializacion == 3)
+                    {
+                        <strong>Neurologia</strong>
+                    }
+                    else if (item.IDEspecializacion == 4)
+                    {
+                        <strong>Cirujano</strong>
+                    }
+                    else if (item.IDEspecializacion == 5)
+                    {
+                        <strong>Cuidados Paleativos</strong>
+                    }
+                    else if (item.IDEspecializacion == 6)
+                    {
+                        <strong>Pediatria</strong>
+                    }
+                    else if (item.IDEspecializacion == 7)
+                    {
+                        <strong>Ginecologia</strong>
+                    }
+                    else if (item.IDEspecializacion == 8)
+                    {
+                        <strong>Otorrinolaringologia</strong>
+                    }
+                    else if (item.IDEspecializacion == 9)
+                    {
+                        <strong>Oncologo</strong>
+                    }
+                    else if (item.IDEspecializacion == 10)
+                    {
+                        <strong>Obstetra</strong>
+                    }
+                    else if (item.IDEspecializacion == 11)
+                    {
+                        <strong>Proctologo</strong>
+                    }
+                }
+            </td>
+
+            <td style="text-align: center;">
+                <button type="button" onclick="editard(@item.IdDoc)" class="btn btn-primary glyphicon-edit" data-toggle="modal" data-target="#exampleModal">
+                    <img src="~/images/btnedit.svg" alt="editar" class="editar-icon" />
+                </button>
+                <button type="button" onclick="Eliminard(@item.IdDoc)" class="btn btn-danger glyphicon-trash" data-toggle="modal" data-target="#EliminarConfirmacion">
+                    <img src="~/images/btnborrar.svg" alt="Eliminar" class="editar-icon" />
+                </button>
+            </td>
+        </tr>
+    }
+</table>

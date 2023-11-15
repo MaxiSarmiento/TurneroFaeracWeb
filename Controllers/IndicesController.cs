@@ -378,7 +378,7 @@ namespace FaeracT.Controllers
                 oUsuarioCLS.IdTipo = oUsuario.IdTipo;
                 oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
                 oUsuarioCLS.Genero = (int)oUsuario.Genero;
-                if (oUsuario.IdTipo == 3)
+                if (oUsuario.IdTipo == 2)
                 {
                     // Agregar a la tabla Pacientes
                     Pacientes nuevoPaciente = new Pacientes
@@ -389,14 +389,14 @@ namespace FaeracT.Controllers
                         ApePac = "Vacio",
                         DNIPac =  "vacio",
                         EdadPac = 0,
-                        GeneroPac = "",
                         TipoDNI = "",
-                        Email = oUsuarioCLS.Correo,
+                        NumeroContacto=oUsuarioCLS.NumeroContacto,
+                        Correo = oUsuarioCLS.Correo,
 
                     };
                     db.Pacientes.Add(nuevoPaciente);
                 }
-                else if (oUsuario.IdTipo == 2)
+                else if (oUsuario.IdTipo == 3)
                 {
                     // Agregar a la tabla Doctores
                     Doctores nuevoDoctor = new Doctores
@@ -509,11 +509,11 @@ namespace FaeracT.Controllers
                         oPacientes.ApePac = oPacientesCLS.ApePac;
                         oPacientes.DNIPac = oPacientesCLS.DNIPac;
                         oPacientes.EdadPac = oPacientesCLS.EdadPac;
-                        oPacientes.GeneroPac = "null";
+                        oPacientes.Genero = oPacientesCLS.Genero;
                         oPacientes.TipoDNI = oPacientesCLS.TipoDNI;
-                        oPacientes.Email = oPacientesCLS.Email;
-                        oPacientes.Telefono = oPacientesCLS.Telefono;
-                        oPacientes.Genero = oPacientesCLS.IdGenero;
+                        oPacientes. Correo = oPacientesCLS.Correo;
+                        oPacientes.NumeroContacto = oPacientesCLS.NumeroContacto;
+                       
 
                     }
 
@@ -549,11 +549,11 @@ namespace FaeracT.Controllers
                 oPacientes.ApePac = oPacientesCLS.ApePac;
                 oPacientes.DNIPac = oPacientesCLS.DNIPac;
                 oPacientes.EdadPac = oPacientesCLS.EdadPac;
-                oPacientes.GeneroPac = "null";
+                oPacientes.Genero = oPacientesCLS.Genero;
                 oPacientes.TipoDNI = oPacientesCLS.TipoDNI;
-                oPacientes.Email = oPacientesCLS.Email;
-                oPacientes.Telefono = oPacientesCLS.Telefono;
-                oPacientes.Genero = oPacientesCLS.IdGenero;
+                oPacientes.Correo = oPacientesCLS.Correo;
+                oPacientes.NumeroContacto = oPacientesCLS.NumeroContacto;
+                
                 db.SaveChanges();
             }
             return RedirectToAction("Index");

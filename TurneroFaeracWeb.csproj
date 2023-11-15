@@ -462,6 +462,8 @@
     <Content Include="Views\Indices\_ListaTurnos.cshtml" />
     <Content Include="Views\Tablas\TablaEmpleados.cshtml" />
     <Content Include="Views\Tablas\_TablaEmpleados.cshtml" />
+    <Content Include="Views\Tablas\TablaDoctores.cshtml" />
+    <Content Include="Views\Tablas\_TablaDoctores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

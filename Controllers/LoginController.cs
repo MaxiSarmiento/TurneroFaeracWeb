@@ -93,7 +93,19 @@ namespace Progweb1.Controllers
                 // Agrega el nuevo usuario a la base de datos
                 db.Usuarios.Add(nuevoUsuario);
                 db.SaveChanges();
+                if (nuevoUsuario.IdTipo == 2)
+                {
+                    // Agrega el nuevo paciente a la tabla de pacientes
+                    Pacientes nuevoPaciente = new Pacientes
+                    {
+                        Correo = nuevoUsuario.Correo,
+                        NumeroContacto = nuevoUsuario.NumeroContacto,
+                        IdUser = nuevoUsuario.IdUser // Asigna el IdUser del nuevo usuario al IdUser del paciente
+                    };
 
+                    db.Pacientes.Add(nuevoPaciente);
+                    db.SaveChanges();
+                }
                 // Envía un correo electrónico de confirmación aquí
                 //EnviarCorreoConfirmacion(nuevoUsuario.Correo, nuevoUsuario.Token);
             }

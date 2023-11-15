@@ -1,0 +1,248 @@
+﻿@model List<TurneroFaeracWeb.Models.DoctoresCLS>
+@{
+    ViewBag.Title = "listaEspecializacion";
+}
+
+<h2 align="center">Listado de Doctores</h2>
+<hr />
+
+<!-- Button trigger modal -->
+<button type="button" onclick="AgregarD()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Agregar
+</button>
+<hr />
+
+@using (Ajax.BeginForm("Filtrar", "", new AjaxOptions
+{
+    HttpMethod = "Post",
+    UpdateTargetId = "divRol",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmFiltrado" }))
+{
+    <div>
+        @Html.Label("Filtrar por Nombre")
+        @Html.TextBox("nombreFiltro")
+    </div>
+    <div id="divRol">
+        @Html.Partial("_TablaDoctores", Model)
+    </div>
+}
+<hr />
+
+<!-- Modal AGREGAR-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel" align="center" draggable="true"><b>ALTA-MODIFICAR Doctor</b></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("GuardarDocs", "Tablas", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "GuardarDocs",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divError"
+            }))
+            {
+                @Html.Hidden("titulo")
+                <div class="modal-body">
+                    <div>
+                        @Html.Label("ID Usuario")
+                        @Html.TextBox("IdUser", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Nombre Doctor")
+                        @Html.TextBox("NombreDoc", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Apellido Doctor")
+                        @Html.TextBox("ApeDoc", null, new { @class = "form-control" })
+                    </div>
+                    <div class="mb-3">
+                        <label>Especializacion</label>
+                        <div class="mb-3">
+                            <label>Especializaciones</label>
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="IDEspecializacion" name="Descripcion">
+                                <option value="1">Generalista</option>
+                                <option value="2">Gastroenterologia</option>
+                                <option value="3">Neurologia</option>
+                                <option value="4">Cirujano</option>
+                                <option value="5">Cuidados Paleativos</option>
+                                <option value="6">Pediatra</option>
+                                <option value="7">Ginecologo</option>
+                                <option value="8">Otorrinolaringologo</option>
+                                <option value="9">Oncologo</option>
+                                <option value="10">Obstetra</option>
+                                <option value="11">Proctologo</option>
+                            </select>
+
+                            <!-- Agrega un campo oculto para almacenar el valor seleccionado -->
+                            <input type="hidden" id="IDEspecializacionHidden" name="Descripcion" />
+
+                            <script>
+                                // Agrega este script después de tu formulario
+                                document.getElementById("IDEspecializacion").addEventListener("change", function () {
+                                    var selectedValue = document.getElementById("IDEspecializacion").value;
+                                    document.getElementById("IDEspecializacionHidden").value = selectedValue;
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnclose" class="btn btn-secondary" data-dismiss="modal"><b>Cancelar</b></button>
+                    <button type="submit" class="btn btn-primary"><b>GUARDAR</b></button>
+                </div>
+                <div id="divError" class="alert-warning"></div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="EliminarConfirmacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <h2 align="center" class="modal-title" id="exampleModalLabel"><b>Baja de Roles</b></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <h4 align="center" class="modal-title alert-warning" id="exampleModalLabel"><b>¿Desea eliminar este ROL?</b></h4>
+            <div class="modal-footer alert-warning">
+                <button type="button" id="btnCerrar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="Eliminard()" class="btn btn-primary">Aceptar</button>
+            </div>
+            <div id="divError"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var frmFiltrado = document.getElementById("frmFiltrado");
+    var nombreFiltro = document.getElementById("nombreFiltro");
+    nombreFiltro.onkeyup = function () {
+        $("#frmFiltrado").trigger("submit");
+    }
+
+    function AgregarD() {
+        Limpiar();
+        document.getElementById("divError").innerHTML = "";
+        document.getElementById("titulo").value = "-1";
+    }
+
+    function GuardarDocs(resultado) {
+        alert(resultado);
+        if (resultado == "1" || resultado == "0") {
+            $("#frmFiltrado").trigger("submit");
+            document.getElementById("btnclose").click();
+            alert("Se guardo correctamente");
+        } else {
+            if (resultado == "-1") {
+                alert("Ese Doctor ya existe")
+                document.getElementById("divError").innerHTML = "";
+            } else
+                alert("ERROR->No se pudo guardar el Doctor");
+        }
+    }
+
+    function editard(id) {
+        document.getElementById("divError").innerHTML = "";
+        document.getElementById("titulo").value = id;
+
+        $.get("../Tablas/RellenarDocs/?titulo=" + id, function (data) {
+            document.getElementById("NombreDoc").value = data.NombreDoc;
+            document.getElementById("ApeDoc").value = data.ApeDoc;
+            document.getElementById("IDEspecializacion").value = data.IDEspecializacion;
+            document.getElementById("IdUser").value = data.IdUser;
+
+            // Buscar el elemento select
+            var generoSelect = document.getElementById("IDEspecializacion");
+
+            // Iterar sobre las opciones y seleccionar la correspondiente al valor recibido
+            for (var i = 0; i < generoSelect.options.length; i++) {
+                if (generoSelect.options[i].value == data.IDEspecializacion) {
+                    generoSelect.options[i].selected = true;
+                    break;
+                }
+            }
+        });
+    }
+
+    function Eliminar(IdDoc) {
+        var id = document.getElementById("titulo").value = IdDoc;
+    }
+
+    function EliminarRegistro() {
+        var id = document.getElementById("titulo").value;
+        $.get("../Tablas/Eliminar/?IdDoc=" + id, function (data) {
+            if (data == "1") {
+                alert("Doctor Eliminado");
+                $("#frmFiltrado").trigger("submit");
+                document.getElementById("btnCerrar").click();
+            }
+        })
+    }
+
+    function Limpiar() {
+        document.getElementById("NombreDoc").value = "";
+        document.getElementById("ApeDoc").value = "";
+        document.getElementById("IDEspecializacion").value = 0;
+        document.getElementById("IdUser").value = 0;
+        document.getElementById("divError").innerHTML = "";
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnBuscar").click(function () {
+            var selectedEspecializacion = $("#ddlEspecializacion").val();
+            var nombreFiltro = $("#txtKeyword").val(); // Obtén el valor del filtro de búsqueda
+
+            $.ajax({
+                url: "/LandingPage/BuscarDocs",
+                type: "POST",
+                data: { idEspecializacion: selectedEspecializacion, nombreFiltro: nombreFiltro }, // Incluye ambos valores
+                success: function (data) {
+                    $("#resultadoBusqueda").html(data);
+                },
+                error: function () {
+                    alert("Hubo un error al buscar doctores.");
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Evento cuando se cambia la especialización
+        $("#ddlEspecializacion").change(function () {
+            var idEspecializacion = $(this).val();
+
+            // Realiza una solicitud AJAX para obtener los doctores según la especialización seleccionada
+            $.ajax({
+                url: "/LandingPage/ObtenerDoctores", // Reemplaza con la URL correcta de tu acción
+                type: "GET", // O POST según tu configuración
+                data: { idEspecializacion: idEspecializacion },
+                success: function (data) {
+                    // Limpia el segundo select
+                    $("#ddlDoctores").empty();
+
+                    // Agrega las opciones de doctores
+                    $.each(data, function (index, doctor) {
+                        $("#ddlDoctores").append('<option value="' + doctor.Value + '">' + doctor.Text + '</option>');
+                    });
+                },
+                error: function () {
+                    alert("Hubo un error al cargar los doctores.");
+                }
+            });
+        });
+    });
+</script>
