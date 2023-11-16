@@ -27,7 +27,7 @@ namespace TurneroFaeracWeb.Models
         public string DNIPac { get; set; }
         public Nullable<int> EdadPac { get; set; }
         public string TipoDNI { get; set; }
-        public int IdUser { get; set; }
+        public Nullable<int> IdUser { get; set; }
         public string Correo { get; set; }
         public string NumeroContacto { get; set; }
         public Nullable<int> Genero { get; set; }

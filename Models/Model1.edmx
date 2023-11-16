@@ -122,8 +122,8 @@
           <Property Name="ApePac" Type="varchar" MaxLength="100" />
           <Property Name="DNIPac" Type="varchar" MaxLength="20" />
           <Property Name="EdadPac" Type="int" />
-          <Property Name="TipoDNI" Type="char" MaxLength="1" />
-          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="TipoDNI" Type="varchar" MaxLength="50" />
+          <Property Name="IdUser" Type="int" />
           <Property Name="Correo" Type="varchar" MaxLength="100" />
           <Property Name="NumeroContacto" Type="varchar" MaxLength="100" />
           <Property Name="Genero" Type="int" />
@@ -281,7 +281,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Pacientes_Usuarios">
-          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
           <End Role="Pacientes" Type="Self.Pacientes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuarios">
@@ -553,8 +553,8 @@
           <Property Name="ApePac" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="DNIPac" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="EdadPac" Type="Int32" />
-          <Property Name="TipoDNI" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="TipoDNI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdUser" Type="Int32" />
           <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="NumeroContacto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Genero" Type="Int32" />
@@ -732,7 +732,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Pacientes_Usuarios">
-          <End Type="FaeracTModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="FaeracTModel.Usuarios" Role="Usuarios" Multiplicity="0..1" />
           <End Type="FaeracTModel.Pacientes" Role="Pacientes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuarios">

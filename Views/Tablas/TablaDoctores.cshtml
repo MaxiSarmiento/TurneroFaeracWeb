@@ -7,7 +7,7 @@
 <hr />
 
 <!-- Button trigger modal -->
-<button type="button" onclick="AgregarD()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+<button type="button" onclick="Agregar()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
     Agregar
 </button>
 <hr />
@@ -180,7 +180,7 @@
 
     function EliminarRegistro() {
         var id = document.getElementById("titulo").value;
-        $.get("../Tablas/Eliminar/?IdDoc=" + id, function (data) {
+        $.get("../Tablas/EliminarD/?IdDoc=" + id, function (data) {
             if (data == "1") {
                 alert("Doctor Eliminado");
                 $("#frmFiltrado").trigger("submit");

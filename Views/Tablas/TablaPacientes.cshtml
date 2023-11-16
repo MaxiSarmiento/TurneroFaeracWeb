@@ -1,0 +1,224 @@
+﻿@model List<TurneroFaeracWeb.Models.PacientesCLS>
+
+<h2 align="center">Listado de Pacientes</h2>
+<hr />
+
+<!-- Button trigger modal -->
+<button type="button" onclick="Agregar()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Agregar
+</button>
+<hr />
+
+@using (Ajax.BeginForm("FiltrarP", "", new AjaxOptions
+{
+    HttpMethod = "Post",
+    UpdateTargetId = "divRol",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmFiltrado" }))
+{
+    @Html.Label("Filtrar por Apellido")
+    @Html.TextBox("nombreFiltro")
+    <div id="divRol">
+        @Html.Partial("_TablaPacientes", Model)
+    </div>
+}
+<hr />
+
+<!-- Modal AGREGAR-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel" align="center" draggable="true"><b>ALTA-MODIFICAR User</b></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("GuardarPacs","Tablas", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "GuardarPacs",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divError"
+            }))
+            {
+
+                @Html.Hidden("titulo")
+        <div class="modal-body">
+            <div>
+                @Html.Label("IdUser")
+                @Html.TextBox("IdUser", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Nombre Paciente")
+                @Html.TextBox("NombrePac", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Apellido Paciente")
+                @Html.TextBox("ApePac", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Edad")
+                @Html.TextBox("EdadPac", null, new { @class = "form-control" })
+            </div>
+            <div>
+                <div class="mb-3">
+
+                    <label>Genero</label>
+                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="Genero" name="Genero">
+                        <option value="1">Masculino</option>
+                        <option value="2">Femenino</option>
+                        <option value="3">Otro</option>
+                    </select>
+
+                    <!-- Agrega un campo oculto para almacenar el valor seleccionado -->
+                    <input type="hidden" id="IdGenero" name="IdGenero" />
+                </div>
+                <script>
+                    // Agrega este script después de tu formulario
+                    document.getElementById("Genero").addEventListener("change", function () {
+                        var selectedValue = document.getElementById("Genero").value;
+                        document.getElementById("IdGenero").value = selectedValue;
+                    });
+                </script>
+            </div>
+
+            <div>
+                @Html.Label("Tipo DNI")
+                @Html.TextBox("TipoDNI", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Numero DNI")
+                @Html.TextBox("DNIPac", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Correo")
+                @Html.TextBox("Correo", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Numero Contacto")
+                @Html.TextBox("NumeroContacto", null, new { @class = "form-control" })
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnclose" class="btn btn-secondary" data-dismiss="modal"><b>Cancelar</b></button>
+                <button type="submit" class="btn btn-primary"><b>GUARDAR</b></button>
+            </div>
+            <div id="divError" class="alert-warning"></div>
+        </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="EliminarConfirmacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <h2 align="center" class="modal-title" id="exampleModalLabel"><b>Baja de Roles</b></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <h4 align="center" class="modal-title alert-warning" id="exampleModalLabel"><b>¿Desea eliminar este ROL?</b></h4>
+            <div class="modal-footer alert-warning">
+                <button type="button" id="btnCerrar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="Eliminarp()" class="btn btn-primary">Aceptar</button>
+            </div>
+            <div id="divError"></div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var frmFiltrado = document.getElementById("frmFiltrado");
+    var nombreFiltro = document.getElementById("nombreFiltro");
+    nombreFiltro.onkeyup = function () {
+        $("#frmFiltrado").trigger("submit");
+    }
+
+    function AgregarP() {
+        Limpiar();
+        document.getElementById("divError").innerHTML = "";
+        document.getElementById("titulo").value = "-1";
+    }
+
+    function GuardarPacs(resultado) {
+        alert(resultado);
+        if (resultado == "1" || resultado == "0") {
+
+            $("#frmFiltrado").trigger("submit");
+            document.getElementById("btnclose").click();
+            alert("Se guardo correctamente");
+        } else {
+            if (resultado == "-1") {
+                alert("Ese Paciente ya existe")
+                document.getElementById("divError").innerHTML = "";
+            } else
+                alert("ERROR->No se pudo guardar el Paciente");
+        }
+    }
+
+    function editarp(id) {
+        document.getElementById("divError").innerHTML = "";
+        document.getElementById("titulo").value = id;
+
+        $.get("../Tablas/RellenarPacs/?titulo=" + id, function (data) {
+            document.getElementById("IdUser").value = data.IdUser;
+            document.getElementById("NombrePac").value = data.NombrePac;
+            document.getElementById("ApePac").value = data.ApePac;
+            document.getElementById("EdadPac").value = data.EdadPac;
+           
+            document.getElementById("TipoDNI").value = data.TipoDNI;
+            document.getElementById("DNIPac").value = data.DNIPac;
+            document.getElementById("Correo").value = data.Correo;
+            document.getElementById("NumeroContacto").value = data.NumeroContacto;
+
+            // Buscar el elemento select
+            var generoSelect = document.getElementById("Genero");
+
+            // Iterar sobre las opciones y seleccionar la correspondiente al valor recibido
+            for (var i = 0; i < generoSelect.options.length; i++) {
+                if (generoSelect.options[i].value == data.IdGenero) {
+                    generoSelect.options[i].selected = true;
+                    break;
+                }
+            }
+        });
+    }
+
+
+
+    function Eliminar(IdPaciente) {
+        var id = document.getElementById("titulo").value = IdPaciente;
+    }
+
+    function EliminarRegistro() {
+        var id = document.getElementById("titulo").value;
+        $.get("../Tablas/EliminarP/?IdPaciente=" + id, function (data) {
+            if (data == "1") {
+                alert("Paciente Eliminado");
+                $("#frmFiltrado").trigger("submit");
+                document.getElementById("btnCerrar").click();
+            }
+        })
+
+    }
+    function Limpiar() {
+        document.getElementById("IdUser").value = data.IdUser;
+        document.getElementById("NombrePac").value = data.NombrePac;
+        document.getElementById("ApePac").value = data.ApePac;
+        document.getElementById("EdadPac").value = data.EdadPac;
+        document.getElementById("Genero").value = data.Genero;
+        document.getElementById("TipoDNI").value = data.TipoDNI;
+        document.getElementById("DNIPac").value = data.DNIPac;
+        document.getElementById("Correo").value = data.Correo;
+        document.getElementById("NumeroContacto").value = data.NumeroContacto;
+
+    }
+
+</script>

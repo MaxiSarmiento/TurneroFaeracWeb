@@ -1,0 +1,76 @@
+﻿
+@model List<TurneroFaeracWeb.Models.PacientesCLS>
+
+<table class="table tab-content table-bordered table-hover">
+    <tr>
+        <td align="center"><strong>ID</strong></td>
+        <td align="center"><strong>IdUsuario</strong></td>
+        <td align="center"><strong>Nombre</strong></td>
+        <td align="center"><strong>Apellido</strong></td>
+        <td align="center"><strong>Edad</strong></td>
+        <td align="center"><strong>Genero</strong></td>
+        <td align="center"><strong>TipoDNI</strong></td>
+        <td align="center"><strong>DNI</strong></td>
+        <td align="center"><strong>Correo</strong></td>
+        <td align="center"><strong>NumeroContacto</strong></td>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.IdPaciente)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.IdUser)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.NombrePac)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.ApePac)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.EdadPac)
+            </td>
+            <td style="text-align: center;">
+                @{
+                    if (item.Genero == 1)
+                    {
+                        <strong>Masculino</strong>
+                    }
+                    else if (item.Genero == 2)
+                    {
+                        <strong>Femenino</strong>
+                    }
+                    else if (item.Genero == 3)
+                    {
+                        <strong>Otro</strong>
+                    }
+                }
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.TipoDNI)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.DNIPac)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.Correo)
+            </td>
+           
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.NumeroContacto)
+            </td>
+            <td style="text-align: center;">
+                <button type="button" onclick="editarp(@item.IdPaciente)" class="btn btn-primary glyphicon-edit" data-toggle="modal" data-target="#exampleModal">
+                    <img src="~/images/btnedit.svg" alt="editar" class="editar-icon" />
+                </button>
+                <button type="button" onclick="Eliminar(@item.IdPaciente)" class="btn btn-danger glyphicon-trash" data-toggle="modal" data-target="#EliminarConfirmacion">
+                    <img src="~/images/btnborrar.svg" alt="Eliminar" class="editar-icon" />
+                </button>
+            </td>
+        </tr>
+    }
+</table>
