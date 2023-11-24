@@ -10,7 +10,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url(fondofaerac.jpg) no-repeat center center fixed;
+    background: url(FondoWeb.jpg) no-repeat center center fixed;
 }
 .wrapper{
   position: relative;

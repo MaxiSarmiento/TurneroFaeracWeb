@@ -1,0 +1,134 @@
+﻿@model List<TurneroFaeracWeb.Models.PacientesCLS>
+
+<h2 align="center">Listado de Usuarios</h2>
+<hr />
+
+<!-- Button trigger modal -->
+<button type="button" onclick="Agregar()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Agregar
+</button>
+<hr />
+
+@using (Ajax.BeginForm("FiltrarP", "", new AjaxOptions
+{
+    HttpMethod = "Post",
+    UpdateTargetId = "divRol",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmFiltrado" }))
+{
+    @Html.Label("Filtrar por Apellido")
+    @Html.TextBox("nombreFiltro")
+    <div id="divRol">
+        @Html.Partial("_TablaPacientes", Model)
+    </div>
+}
+<hr />
+
+<!-- Modal AGREGAR-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel" align="center" draggable="true"><b>ALTA-MODIFICAR User</b></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("GuardarPacs", "Tablas", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "Guardar",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divError"
+            }))
+            {
+                @Html.Hidden("titulo")
+        <div class="modal-body">
+           
+            <div>
+                @Html.Label("Nombre")
+                @Html.TextBox("NombrePac", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Apellido")
+                @Html.TextBox("ApePac", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("DNI")
+                @Html.TextBox("DNIPac", null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.Label("Edad")
+                @Html.TextBox("EdadPac", null, new { @class = "form-control" })
+            </div>
+            <div>
+                <div class="mb-3">
+                    <label>Genero</label>
+                    <div class="mb-3">
+                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="Genero" name="Genero">
+                            <option value="1">Masculino</option>
+                            <option value="2">Femenino</option>
+                            <option value="3">Otro</option>
+                        </select>
+                        <!-- Agrega un campo oculto para almacenar el valor seleccionado -->
+                        <input type="hidden" id="IdGenero" name="IdGenero" />
+                    </div>
+                    <script>
+                        // Agrega este script después de tu formulario
+                        document.getElementById("Genero").addEventListener("change", function () {
+                            var selectedValue = document.getElementById("Genero").value;
+                            document.getElementById("IdGenero").value = selectedValue;
+                        });
+                    </script>
+                </div>
+
+                <div>
+                    @Html.Label("IdUsuario")
+                    @Html.TextBox("IdUser", null, new { @class = "form-control" })
+                </div>
+                <div>
+                    @Html.Label("Correo")
+                    @Html.TextBox("Correo", null, new { @class = "form-control" })
+                </div>
+                <div>
+                    @Html.Label("Numero Tel")
+                    @Html.TextBox("NumeroContacto", null, new { @class = "form-control" })
+                </div>
+              
+            </div>
+
+
+        </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnclose" class="btn btn-secondary" data-dismiss="modal"><b>Cancelar</b></button>
+                    <button type="submit" class="btn btn-primary"><b>GUARDAR</b></button>
+                </div>
+                <div id="divError" class="alert-warning"></div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="EliminarConfirmacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <h2 align="center" class="modal-title" id="exampleModalLabel"><b>Baja de Roles</b></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <h4 align="center" class="modal-title alert-warning" id="exampleModalLabel"><b>¿Desea eliminar este ROL?</b></h4>
+            <div class="modal-footer alert-warning">
+                <button type="button" id="btnCerrar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="EliminarRegistro()" class="btn btn-primary">Aceptar</button>
+            </div>
+            <div id="divError"></div>
+            }
+        </div>
+    </div>
+</div>
+
+

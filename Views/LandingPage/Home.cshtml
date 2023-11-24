@@ -80,7 +80,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
-                        <a href="~/Views/LandingPage/Home.cshtml" class="nav-item nav-link active">Home</a>
+                        <a href="~/LandingPage/Home" class="nav-item nav-link active">Home</a>
                         <a href="about.html" class="nav-item nav-link">Sobre nosotros</a>
                         <a href="#servicios" class="nav-item nav-link">Servicios</a>
 
@@ -92,9 +92,11 @@
                                 <a href="#testimonios" class="dropdown-item">Testimonios</a>
                                 <a href="#turnos" class="dropdown-item">Turnos</a>
                                 <a href="#busqueda" class="dropdown-item">Búsqueda</a>
+
                             </div>
                         </div>
                         <a href="contact.html" class="nav-item nav-link">Contacto</a>
+                        <a href="~/Login/Login" class="nav-item nav-link">Login/Registro</a>
                     </div>
                 </div>
             </nav>
@@ -545,6 +547,8 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+    <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -630,7 +634,7 @@
 
             // Realiza una solicitud AJAX para obtener los horarios disponibles en la fecha y hora seleccionadas
             $.ajax({
-                url: "/LandingPage/ObtenerHorariosDisponibles", // Reemplaza con la URL correcta
+                url: "./LandingPage/ObtenerHorariosDisponibles", // Reemplaza con la URL correcta
                 type: "GET", // O POST según tu configuración
                 data: { fecha: selectedDate, hora: selectedTime },
                 success: function (data) {

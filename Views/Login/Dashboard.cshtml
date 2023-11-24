@@ -1,0 +1,52 @@
+﻿@model List<TurneroFaeracWeb.Controllers.HomeController>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<canvas id="patientChart" width="400" height="200"></canvas>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/helpers.min.js" integrity="sha512-JG3S/EICkp8Lx9YhtIpzAVJ55WGnxT3T6bfiXYbjPRUoN9yu+ZM+wVLDsI/L2BWRiKjw/67d+/APw/CDn+Lm0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" integrity="sha512-SIMGYRUjwY8+gKg7nn9EItdD8LCADSDfJNutF9TPrvEo86sQmFMh6MyralfIyhADlajSxqc7G0gs7+MwWF/ogQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" integrity="sha512-7U4rRB8aGAHGVad3u2jiC7GA5/1YhQcQjxKeaVms/bT66i3LVBMRcBI9KwABNWnxOSwulkuSXxZLGuyfvo7V1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $(document).ready(function() {
+        debugger
+        var ctx = document.getElementById('patientChart').getContext('2d');
+        var data = @Html.Raw(Json.Serialize(Model));
+        debugger
+
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.map(item => 'Doctor ' + item.doctorName),
+                datasets: [{
+                    label: 'Number of Patients',
+                    data: data.map(item => item.patientCount),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    barPercentage: 0.6, // Adjust the width of the bars (60% of available space)
+                    categoryPercentage: 0.8, // Adjust the space between bars (80% of available space)
+
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            max: 100,
+                            min: 0,
+                            stepSize: 1,
+                        },
+                    }
+                }
+            }
+        });
+    })
+</script>

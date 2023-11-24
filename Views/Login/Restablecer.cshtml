@@ -8,14 +8,17 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Restablecer</title>
+    <link rel="stylesheet" href="~/res/EstiloLogin.css">
     @Styles.Render("~/res/Homestilo")
 </head>
+
 <body>
     <div class="row justify-content-center mt-5">
 
         <div class="col-5">
 
-            <div class="card">
+            <div class="card" >
+                <img src="~/images/SantaClogoGr.jpg" />
                 <div class="card-header"><h3 class="text-center">Restablecer cuenta</h3></div>
                 <div class="card-body">
                     @if (ViewBag.Restablecido == null)
@@ -38,7 +41,8 @@
                             <div class="mb-3">
                                 <div class="d-grid">
                                     <button class="btn btn-primary" type="submit">Restablecer</button>
-                                    <a class="btn btn-link" href="@Url.Action("Login","Login")">Volver</a>
+                                    <button class="btn btn-primary" type="button" onclick="window.location.href='@Url.Action("Login", "Login")'">Volver</button>
+
                                 </div>
                             </div>
 

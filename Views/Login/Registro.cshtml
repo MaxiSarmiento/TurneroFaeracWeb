@@ -12,11 +12,15 @@
     <title>Registrar</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/bootstrap")
+    <!-- Agrega la referencia a SweetAlert2 desde su CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    <link rel="stylesheet" href="~/res/EstiloLogin.css">
 </head>
 <body>
-    <div class="row justify-content-center mt-5">
+    <img src="~/images/santaclogochico.jpg" />
+    <div class="wrapperstyle=width:600px ;">
         <div class="col-5">
-            <div class="card">
+            <div class="card" style="width:500px ;">
                 <div class="card-header">
                     <h3 class="text-center">Registrar cuenta</h3>
                 </div>
@@ -27,25 +31,29 @@
                         {
                             <div class="input-box">
                                 @Html.LabelFor(p => p.Usuario)
+                                <br />
                                 @Html.EditorFor(p => p.Usuario, new { @type = "text", @class = "form-control", @placeholder = "Ingrese Nombre de Usuario", @required = "required" })
                                 <span style="color: red;">@ViewBag.MensajeUsuario</span>
                             </div>
                             <div class="input-box">
                                 @Html.LabelFor(p => p.Contraseña)
+                                <br/>
                                 @Html.PasswordFor(p => p.Contraseña, new { @class = "form-control", @placeholder = "Crear Contraseña", @required = "required", @id = "Contraseña" })
                             </div>
                             <div class="input-box">
                                 @Html.Label("Confirmar Contraseña:")
+                                <br />
                                 @Html.Password("ConfirmarContraseña", null, new { @class = "form-control", @placeholder = "Confirmar Contraseña", @required = "required", @id = "ConfirmarContraseña" })
                                 <span style="color: red;" id="mensajeContraseña"></span>
                             </div>
                             <div class="input-box">
                                 @Html.LabelFor(p => p.Correo)
+                                <br />
                                 @Html.EditorFor(p => p.Correo, new { @type = "email", @class = "form-control", @placeholder = "Ingrese su Email", @required = "required" })
                                 <span style="color: red;">@ViewBag.MensajeCorreo</span>
                             </div>
                             <div class="mb-3">
-                                <label>Genero</label>
+                                @Html.LabelFor(p=> p.Genero)
                                 <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="Genero" name="IdGenero">
                                     <option selected>Seleccione su Genero</option>
                                     <option value="1">Masculino</option>
@@ -53,6 +61,9 @@
                                     <option value="3">Otro</option>
                                 </select>
                             </div>
+
+                            <!-- Agrega una sección para mensajes de notificación -->
+                            <div id="notificacion" class="d-none"></div>
 
                             if (ViewBag.Mensaje != null)
                             {
@@ -69,17 +80,12 @@
                             </div>
                         }
                     }
-                    else
-                    {
-                        <div class="alert alert-success">
-                            <p>@ViewBag.Mensaje="Registrado Correctamente"</p>
-                            <a class="btn btn-success" href="@Url.Action("Login","Login")">Ingresar</a>
-                        </div>
-                    }
                 </div>
             </div>
         </div>
     </div>
+    <!-- Agrega el script de SweetAlert2 desde su CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         function validarContraseñas() {
@@ -87,17 +93,33 @@
             var confirmarContraseña = document.getElementById('ConfirmarContraseña').value;
             var mensajeContraseña = document.getElementById('mensajeContraseña');
 
-            // Verificar si las contraseñas coinciden
             if (contraseña === confirmarContraseña) {
-                // Contraseñas coinciden, eliminar cualquier mensaje de error
                 mensajeContraseña.innerText = '';
-                return true; // Permitir el envío del formulario
+                return true;
             } else {
-                // Contraseñas no coinciden, establecer un mensaje de error
                 mensajeContraseña.innerText = 'Las contraseñas no coinciden';
-                return false; // Evitar el envío del formulario
+                return false;
             }
         }
+
+        function MostrarNotificacion() {
+            Swal.fire({
+                title: 'Registrado Correctamente',
+                text: 'Por favor, ingrese usuario y contraseña',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        }
+
+        // Agrega este script para mostrar la notificación después del redireccionamiento
+        window.onload = function () {
+            var notificacion = document.getElementById('notificacion');
+            if (notificacion.innerText.trim() !== '') {
+                MostrarNotificacion();
+                notificacion.classList.remove('d-none');
+            }
+        };
     </script>
+
 </body>
 </html>

@@ -20,5 +20,14 @@ namespace TurneroFaeracWeb.Models
         public Nullable<System.DateTime> inicio { get; set; }
         public string Estado { get; set; }
         public string NombrePaciente { get; set; }
+        public string NombreDoc { get; set; }
+        public string ApeDoc { get; set; }
+        public Nullable<int> IdDia { get; set; }
+        public string NombreDia { get; set; }
+        public string Fecha { get; set; }
+        public Nullable<int> EdadPac { get; set; }
+        public Nullable<int> IdDoc { get; set; }
+    
+        public virtual Doctores Doctores { get; set; }
     }
 }

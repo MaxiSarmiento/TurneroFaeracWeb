@@ -61,7 +61,6 @@
                 <div class="mb-3">
                     <label>Genero</label>
                     <div class="mb-3">
-                        <label>Genero</label>
                         <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="Genero" name="Genero">
                             <option value="1">Masculino</option>
                             <option value="2">Femenino</option>
@@ -147,7 +146,7 @@
     function Editar(id) {
         document.getElementById("divError").innerHTML = "";
         document.getElementById("titulo").value = id;
-
+        Limpiar();
         $.get("../Tablas/RellenarCampos/?titulo=" + id, function (data) {
             document.getElementById("Usuario").value = data.Usuario;
             document.getElementById("IdTipo").value = data.IdTipo;
@@ -155,12 +154,18 @@
 
             // Buscar el elemento select
             var generoSelect = document.getElementById("Genero");
-
+            var tipoSelect = document.getElementById("IdTipo");
             // Iterar sobre las opciones y seleccionar la correspondiente al valor recibido
             for (var i = 0; i < generoSelect.options.length; i++) {
                 if (generoSelect.options[i].value == data.IdGenero) {
                     generoSelect.options[i].selected = true;
                     break;
+                }
+            }
+            for (var i = 0; i < tipoSelect.options.length; i++) {
+                if (tipoSelect.options[i].value == data.IdTipo) {
+                    tipoSelect.options[i].selected = true;
+
                 }
             }
         });

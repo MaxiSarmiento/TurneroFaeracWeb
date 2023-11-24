@@ -33,7 +33,8 @@
     <link href="~/res/Homestilo.css" rel="stylesheet" />
 </head>
 
-<buody>
+
+<body>
     <!-- Topbar Start -->
     <div class="container-fluid py-2 border-bottom d-none d-lg-block">
         <div class="container">
@@ -50,12 +51,13 @@
         </div>
     </div>
     </div>
+
     <!-- Topbar End -->
     <!-- Navbar Start -->
     <div class="container-fluid sticky-top bg-white shadow-sm">
         <div class="container">
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0">
-                <a href="~/Views/LandingPage/Home.cshtml" class="navbar-brand">
+                <a href="~/LandingPage/Home" class="navbar-brand">
                     <h1 class="m-0 text-uppercase text-primary"><i class="fa fa-clinic-medical me-2"></i>Instituto Santa Catalina</h1>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -63,16 +65,79 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
-                        <a href="~/Views/LandingPage/Home.cshtml" class="nav-item nav-link active">Home</a>
-                        <a href="about.html" class="nav-item nav-link">Tus Turnos</a>
-                        <a href="#servicios" class="nav-item nav-link">Tus Análisis</a>
-                        <a href="#servicios" class="nav-item nav-link">Salir</a>
+                        <a href="~/LandingPage/Home" class="nav-item nav-link active">Home</a>
+                        <a href="~/Tablas/TablaTurnos" class="nav-item nav-link">Tus Turnos</a>
+                        <a href="~/Tablas/TablaAnalisis" class="nav-item nav-link">Tus Análisis</a>
+                        <a href="~/LandingPage/Home" class="nav-item nav-link">Salir</a>
 
                     </div>
-                    <a href="contact.html" class="nav-item nav-link">Contacto</a>
+         
+
                 </div>
+            </nav>
         </div>
-        </nav>
+
     </div>
     </div>
-    <!-- Navbar End -->
+<!-- Navbar End -->
+<!-- Centered Panel Start -->
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Mis Datos</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Display user information here -->
+                    <div class="mb-3">
+                        <label for="Usuario" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="Usuario" value="JohnDoe" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Contraseña" class="form-label">Contraseña</label>
+                        <input type="text" class="form-control" id="Contraseña" value="**********" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="NombreUser" value="Juan" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="ApeUser" value="Perez" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="NumeroContacto" class="form-label">Numero Contacto</label>
+                        <input type="text" class="form-control" id="NumeroContacto" value="2954519225" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Genero" class="form-label">Genero</label>
+                        <input type="text" class="form-control" id="Genero" value="Masculino" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="DNIUser" class="form-label">DNI</label>
+                        <input type="text" class="form-control" id="DNIUser" value="33.123.123" readonly>
+                    </div>
+                    <!-- Repeat the above structure for other user information fields -->
+                    <!-- Edit button -->
+                    <button type="button" class="btn btn-primary" onclick="enableEdit()">Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Centered Panel End -->
+<!-- Your other HTML content here -->
+<!-- Bootstrap JS (optional, if you need features like modal) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Your custom scripts (if any) -->
+<script>
+    function enableEdit() {
+        // Add JavaScript logic to enable editing of user information
+        // For example, you can toggle the readonly attribute of input fields
+    }
+</script>
+
+</body>
+</html>

@@ -50,7 +50,7 @@
                 @Html.Hidden("titulo")
                 <div class="modal-body">
                     <div>
-                        @Html.Label("ID Usuario")
+                        @Html.Label("ID User")
                         @Html.TextBox("IdUser", null, new { @class = "form-control" })
                     </div>
                     <div>
@@ -159,8 +159,7 @@
             document.getElementById("NombreDoc").value = data.NombreDoc;
             document.getElementById("ApeDoc").value = data.ApeDoc;
             document.getElementById("IDEspecializacion").value = data.IDEspecializacion;
-            document.getElementById("IdUser").value = data.IdUser;
-
+   
             // Buscar el elemento select
             var generoSelect = document.getElementById("IDEspecializacion");
 

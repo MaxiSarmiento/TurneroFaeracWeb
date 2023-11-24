@@ -1,0 +1,294 @@
+﻿@model List<TurneroFaeracWeb.Models.TablaTurnosCLS>
+@using System.Collections.Generic
+
+@{
+    Layout = null; // No usar un diseño específico para esta página
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Tabla de Turnos</title>
+
+    <!-- Asegúrate de incluir las referencias a jQuery y Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Asegúrate de incluir las referencias al plugin jQuery DateTimePicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+
+    <style>
+        /* Estilos para el DateTimePicker */
+        #fechaTurno {
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+    </style>
+    <script>
+        function obtenerDoctores(idEspecializacion) {
+            // Realiza una solicitud AJAX para obtener los doctores según la especialización seleccionada
+            $.ajax({
+                url: "../Tablas/ListarDocs",
+                type: "GET",
+                data: { idEspecializacion: idEspecializacion },
+                success: function (data) {
+                    // Limpia el segundo select
+                    $("#ddlDoctores").empty();
+
+                    // Agrega las opciones de doctores
+                    $.each(data, function (index, doctor) {
+                        // Concatena ApeDoc y NombreDoc en una cadena para mostrar
+                        var nombreCompleto = doctor.ApeDoc + ', ' + doctor.NombreDoc;
+
+                        // Utiliza la cadena concatenada como valor a mostrar en la opción
+                        $("#ddlDoctores").append('<option value="' + nombreCompleto + '</option>');
+                    });
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Muestra información de error en la consola
+                    console.error("Error en la llamada a ListarDocs:", textStatus, errorThrown);
+
+                    // Muestra un mensaje de error en la página (puedes ajustar esto según tus necesidades)
+                    $("#ddlDoctores").html('<option value="">Error al cargar doctores</option>');
+                }
+            });
+        }
+
+        function mostrarModal() {
+            $('#modalAgregarTurno').modal('show');
+        }
+
+        $(document).ready(function () {
+            // Evento cuando se cambia la especialización
+            $("#ddlEspecializacion").change(function () {
+                var idEspecializacion = $(this).val();
+
+                // Llama a la función para obtener doctores y pasa el idEspecializacion seleccionado
+                obtenerDoctores(idEspecializacion);
+            });
+
+            // Configuración del DateTimePicker
+            $("#fechaTurno").datetimepicker({
+                format: 'Y-m-d H:i:s', // Ajusta el formato según tus necesidades
+                step: 15 // Ajusta el intervalo de minutos según tus necesidades
+            });
+        });
+
+        function GuardarTurno() {
+            // Obtener los datos del formulario
+            var formData = {
+                especializacion: $("#ddlEspecializacion").val(),
+                doctor: $("#ddlDoctores").val(),
+                fechaTurno: $("#fechaTurno").val()
+                // Agrega aquí otros campos según sea necesario
+            };
+
+            // Realizar la solicitud Ajax para guardar el turno
+            $.ajax({
+                url: "../Tablas/GuardarTurno",
+                type: "POST",
+                data: formData,
+                success: function (resultado) {
+                    GuardarT(resultado);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error("Error en la llamada a GuardarTurno:", textStatus, errorThrown);
+                    $("#divError").html('<p>Error al guardar el turno</p>');
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Tabla de Turnos</h2>
+
+        <!-- Botón para abrir el modal -->
+        <button class="btn btn-primary" onclick="mostrarModal()">Agregar Turno</button>
+
+        <!-- Modal para agregar turno -->
+        <div class="modal" id="modalAgregarTurno">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Agregar Turno</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <!-- Formulario para agregar turno -->
+                        <form id="formAgregarTurno" onsubmit="event.preventDefault(); GuardarTurno();">
+                            <div class="form-group">
+                                <label for="especializacion"></label>
+                                <!-- Ajusta la lista de especializaciones según tus necesidades -->
+                                <select id="ddlEspecializacion" class="form-select bg-light border-0" style="height: 55px;">
+                                    <option selected> Seleccione Especialidad</option>
+                                    @foreach (var especializacion in ViewBag.Especializaciones)
+                                    {
+                                        <option value="@especializacion.Value">@especializacion.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="doctor">Doctor:</label>
+                                <!-- Ajusta la lista de doctores según tus necesidades -->
+                                <select class="form-control" id="ddlDoctores" name="doctor">
+                                    <!-- Las opciones de doctores se cargarán dinámicamente -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaTurno">Fecha del Turno:</label>
+                                <input type="text" class="form-control" id="fechaTurno" name="fechaTurno" />
+                            </div>
+                            <!-- Otros campos del turno según sea necesario -->
+
+                            <button type="submit" class="btn btn-primary">Guardar Turno</button>
+                        </form>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3"></div> <!-- Agrega un espacio hacia abajo del box de filtrar por apellido -->
+
+    @using (Ajax.BeginForm("FiltrarT", "", new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "divRol",
+        InsertionMode = InsertionMode.Replace
+    }, new { @id = "frmFiltrado" }))
+    {
+        @Html.Label("Filtrar por Apellido")
+        @Html.TextBox("nombreFiltro")
+        <div id="divRol">
+            @Html.Partial("_TablaTurnos", Model)
+        </div>
+    }
+    <hr />
+
+    <!-- Modal Eliminar -->
+    <div class="modal fade" id="EliminarConfirmacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header alert-danger">
+                    <h2 align="center" class="modal-title" id="exampleModalLabel"><b>Baja de Roles</b></h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <h4 align="center" class="modal-title alert-warning" id="exampleModalLabel"><b>¿Desea eliminar este ROL?</b></h4>
+                <div class="modal-footer alert-warning">
+                    <button type="button" id="btnCerrar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" onclick="EliminarRegistro()" class="btn btn-primary">Aceptar</button>
+                </div>
+                <div id="divError"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    var frmFiltrado = document.getElementById("frmFiltrado");
+    var nombreFiltro = document.getElementById("nombreFiltro");
+    nombreFiltro.onkeyup = function () {
+        $("#frmFiltrado").trigger("submit");
+    }
+
+    function AgregarT() {
+        Limpiar();
+        document.getElementById("divError").innerHTML = "";
+        document.getElementById("titulo").value = "-1";
+    }
+
+    function GuardarT(resultado) {
+        alert(resultado);
+        if (resultado == "1" || resultado == "0") {
+
+            $("#frmFiltrado").trigger("submit");
+            document.getElementById("btnclose").click();
+            alert("Se guardo correctamente");
+        } else {
+            if (resultado == "-1") {
+                alert("Ese Turno ya existe")
+                document.getElementById("divError").innerHTML = "";
+            } else
+                alert("ERROR->No se pudo guardar el Turno");
+        }
+    }
+
+    function editarp(id) {
+        document.getElementById("divError").innerHTML = "";
+        document.getElementById("titulo").value = id;
+        Limpiar();
+        $.get("../Tablas/RellenarTurnos/?titulo=" + id, function (data) {
+            document.getElementById("NombrePac").value = data.NombrePac;
+            document.getElementById("ApePac").value = data.ApePac;
+            document.getElementById("EdadPac").value = data.EdadPac;
+            document.getElementById("Doctor").value = data.IdDoc;
+            document.getElementById("inicio").value = data.inicio;
+
+            // Buscar el elemento select
+            var doctorSelect = document.getElementById("IdDoc");
+            var EspSelect = document.getElementById("IDEspecializacion");
+            // Iterar sobre las opciones y seleccionar la correspondiente al valor recibido
+            for (var i = 0; i < doctorSelect.options.length; i++) {
+                if (doctorSelect.options[i].value == data.IdDoc) {
+                    doctorSelect.options[i].selected = true;
+                    break;
+                }
+            }
+            for (var i = 0; i < EspSelect.options.length; i++) {
+                if (EspSelect.options[i].value == data.IDEspecializacion) {
+                    EspSelect.options[i].selected = true;
+                }
+            }
+        });
+    }
+
+    function EliminarT(IdTurno) {
+        var id = document.getElementById("titulo").value = IdPaciente;
+    }
+
+    function EliminarRegistro() {
+        var id = document.getElementById("titulo").value;
+        $.get("../Tablas/EliminarT/?IdTurno=" + id, function (data) {
+            if (data == "1") {
+                alert("Turno Eliminado");
+                $("#frmFiltrado").trigger("submit");
+                document.getElementById("btnCerrar").click();
+            }
+        })
+    }
+
+    function Limpiar() {
+        document.getElementById("NombrePac").value = data.NombrePac;
+        document.getElementById("ApePac").value = data.ApePac;
+        document.getElementById("EdadPac").value = data.EdadPac;
+        document.getElementById("Doctor").value = data.IdDoc;
+        document.getElementById("inicio").value = data.inicio;
+    }
+</script>

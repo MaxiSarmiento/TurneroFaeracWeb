@@ -34,7 +34,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Ajax.BeginForm("GuardarPacs","Tablas", null, new AjaxOptions
+            @using (Ajax.BeginForm("GuardarPacs", "Tablas", null, new AjaxOptions
             {
                 HttpMethod = "POST",
                 OnSuccess = "GuardarPacs",
@@ -44,68 +44,68 @@
             {
 
                 @Html.Hidden("titulo")
-        <div class="modal-body">
-            <div>
-                @Html.Label("IdUser")
-                @Html.TextBox("IdUser", null, new { @class = "form-control" })
-            </div>
-            <div>
-                @Html.Label("Nombre Paciente")
-                @Html.TextBox("NombrePac", null, new { @class = "form-control" })
-            </div>
-            <div>
-                @Html.Label("Apellido Paciente")
-                @Html.TextBox("ApePac", null, new { @class = "form-control" })
-            </div>
-            <div>
-                @Html.Label("Edad")
-                @Html.TextBox("EdadPac", null, new { @class = "form-control" })
-            </div>
-            <div>
-                <div class="mb-3">
+                <div class="modal-body">
+                    <div>
+                        @Html.Label("IdUser")
+                        @Html.TextBox("IdUser", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Nombre Paciente")
+                        @Html.TextBox("NombrePac", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Apellido Paciente")
+                        @Html.TextBox("ApePac", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Edad")
+                        @Html.TextBox("EdadPac", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        <div class="mb-3">
 
-                    <label>Genero</label>
-                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="Genero" name="Genero">
-                        <option value="1">Masculino</option>
-                        <option value="2">Femenino</option>
-                        <option value="3">Otro</option>
-                    </select>
+                            <label>Genero</label>
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="Genero" name="Genero">
+                                <option value="1">Masculino</option>
+                                <option value="2">Femenino</option>
+                                <option value="3">Otro</option>
+                            </select>
 
-                    <!-- Agrega un campo oculto para almacenar el valor seleccionado -->
-                    <input type="hidden" id="IdGenero" name="IdGenero" />
+                            <!-- Agrega un campo oculto para almacenar el valor seleccionado -->
+                            <input type="hidden" id="IdGenero" name="IdGenero" />
+                        </div>
+                        <script>
+                            // Agrega este script después de tu formulario
+                            document.getElementById("Genero").addEventListener("change", function () {
+                                var selectedValue = document.getElementById("Genero").value;
+                                document.getElementById("IdGenero").value = selectedValue;
+                            });
+                        </script>
+                    </div>
+
+                    <div>
+                        @Html.Label("Tipo DNI")
+                        @Html.TextBox("TipoDNI", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Numero DNI")
+                        @Html.TextBox("DNIPac", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Correo")
+                        @Html.TextBox("Correo", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Numero Contacto")
+                        @Html.TextBox("NumeroContacto", null, new { @class = "form-control" })
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="btnclose" class="btn btn-secondary" data-dismiss="modal"><b>Cancelar</b></button>
+                        <button type="submit" class="btn btn-primary"><b>GUARDAR</b></button>
+                    </div>
+                    <div id="divError" class="alert-warning"></div>
                 </div>
-                <script>
-                    // Agrega este script después de tu formulario
-                    document.getElementById("Genero").addEventListener("change", function () {
-                        var selectedValue = document.getElementById("Genero").value;
-                        document.getElementById("IdGenero").value = selectedValue;
-                    });
-                </script>
-            </div>
-
-            <div>
-                @Html.Label("Tipo DNI")
-                @Html.TextBox("TipoDNI", null, new { @class = "form-control" })
-            </div>
-            <div>
-                @Html.Label("Numero DNI")
-                @Html.TextBox("DNIPac", null, new { @class = "form-control" })
-            </div>
-            <div>
-                @Html.Label("Correo")
-                @Html.TextBox("Correo", null, new { @class = "form-control" })
-            </div>
-            <div>
-                @Html.Label("Numero Contacto")
-                @Html.TextBox("NumeroContacto", null, new { @class = "form-control" })
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" id="btnclose" class="btn btn-secondary" data-dismiss="modal"><b>Cancelar</b></button>
-                <button type="submit" class="btn btn-primary"><b>GUARDAR</b></button>
-            </div>
-            <div id="divError" class="alert-warning"></div>
-        </div>
             }
         </div>
     </div>
@@ -166,13 +166,12 @@
     function editarp(id) {
         document.getElementById("divError").innerHTML = "";
         document.getElementById("titulo").value = id;
-
+        Limpiar();
         $.get("../Tablas/RellenarPacs/?titulo=" + id, function (data) {
             document.getElementById("IdUser").value = data.IdUser;
             document.getElementById("NombrePac").value = data.NombrePac;
             document.getElementById("ApePac").value = data.ApePac;
             document.getElementById("EdadPac").value = data.EdadPac;
-           
             document.getElementById("TipoDNI").value = data.TipoDNI;
             document.getElementById("DNIPac").value = data.DNIPac;
             document.getElementById("Correo").value = data.Correo;
@@ -180,7 +179,6 @@
 
             // Buscar el elemento select
             var generoSelect = document.getElementById("Genero");
-
             // Iterar sobre las opciones y seleccionar la correspondiente al valor recibido
             for (var i = 0; i < generoSelect.options.length; i++) {
                 if (generoSelect.options[i].value == data.IdGenero) {
@@ -190,8 +188,6 @@
             }
         });
     }
-
-
 
     function Eliminar(IdPaciente) {
         var id = document.getElementById("titulo").value = IdPaciente;
@@ -206,19 +202,17 @@
                 document.getElementById("btnCerrar").click();
             }
         })
-
     }
+
     function Limpiar() {
-        document.getElementById("IdUser").value = data.IdUser;
-        document.getElementById("NombrePac").value = data.NombrePac;
-        document.getElementById("ApePac").value = data.ApePac;
-        document.getElementById("EdadPac").value = data.EdadPac;
-        document.getElementById("Genero").value = data.Genero;
-        document.getElementById("TipoDNI").value = data.TipoDNI;
-        document.getElementById("DNIPac").value = data.DNIPac;
-        document.getElementById("Correo").value = data.Correo;
-        document.getElementById("NumeroContacto").value = data.NumeroContacto;
-
+        document.getElementById("IdUser").value = "";
+        document.getElementById("NombrePac").value = "";
+        document.getElementById("ApePac").value = "";
+        document.getElementById("EdadPac").value = "";
+        document.getElementById("Genero").value = ""; // Asegúrate de que el campo de género sea correcto
+        document.getElementById("TipoDNI").value = "";
+        document.getElementById("DNIPac").value = "";
+        document.getElementById("Correo").value = "";
+        document.getElementById("NumeroContacto").value = "";
     }
-
 </script>

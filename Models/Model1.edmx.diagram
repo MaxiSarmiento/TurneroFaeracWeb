@@ -4,35 +4,44 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9d8d5dd4edcb4af7afdde6b1f3024628" Name="Diagram1" ZoomLevel="40">
-        <EntityTypeShape EntityType="FaeracTModel.Appointments" Width="1.5" PointX="10" PointY="1" />
-        <EntityTypeShape EntityType="FaeracTModel.Boxes" Width="1.5" PointX="9.75" PointY="8.75" />
-        <EntityTypeShape EntityType="FaeracTModel.Consultorios" Width="1.5" PointX="10.75" PointY="4.75" />
-        <EntityTypeShape EntityType="FaeracTModel.DoctorDetails" Width="1.5" PointX="7.75" PointY="8.75" />
-        <EntityTypeShape EntityType="FaeracTModel.Doctores" Width="1.5" PointX="3" PointY="2.75" />
-        <EntityTypeShape EntityType="FaeracTModel.Especializaciones" Width="1.5" PointX="0.75" PointY="11.75" />
-        <EntityTypeShape EntityType="FaeracTModel.HorariosDisponibles" Width="1.5" PointX="5.25" PointY="7.125" />
-        <EntityTypeShape EntityType="FaeracTModel.HorariosPredefinidos" Width="1.5" PointX="2.75" PointY="11.75" />
-        <EntityTypeShape EntityType="FaeracTModel.IndiceAnalisis" Width="1.5" PointX="4.75" PointY="11.75" />
-        <EntityTypeShape EntityType="FaeracTModel.IndiceGenero" Width="1.5" PointX="11.75" PointY="7.75" />
-        <EntityTypeShape EntityType="FaeracTModel.IndiceHorarios" Width="1.5" PointX="5.25" PointY="3.125" />
-        <EntityTypeShape EntityType="FaeracTModel.Pacientes" Width="1.5" PointX="3" PointY="6.5" />
-        <EntityTypeShape EntityType="FaeracTModel.PatientDetails" Width="1.5" PointX="7.75" PointY="1" />
-        <EntityTypeShape EntityType="FaeracTModel.sysdiagrams" Width="1.5" PointX="9.75" PointY="11.75" />
-        <EntityTypeShape EntityType="FaeracTModel.TablaTurnos" Width="1.5" PointX="11.75" PointY="10.75" />
-        <EntityTypeShape EntityType="FaeracTModel.TipoUsuarios" Width="1.5" PointX="12.75" PointY="0.75" />
-        <EntityTypeShape EntityType="FaeracTModel.TurnoBox" Width="1.5" PointX="12.75" PointY="3.75" />
-        <EntityTypeShape EntityType="FaeracTModel.Turnos" Width="1.5" PointX="8.25" PointY="5" />
-        <EntityTypeShape EntityType="FaeracTModel.UserIntegrada" Width="1.5" PointX="6.75" PointY="12.75" />
-        <EntityTypeShape EntityType="FaeracTModel.Usuarios" Width="1.5" PointX="0.75" PointY="4.875" />
+      <Diagram DiagramId="9d8d5dd4edcb4af7afdde6b1f3024628" Name="Diagram1" ZoomLevel="63">
+        <EntityTypeShape EntityType="FaeracTModel.Appointments" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="FaeracTModel.Boxes" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="FaeracTModel.Consultorios" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="FaeracTModel.DiasSemana" Width="1.5" PointX="5.25" PointY="7.5" />
+        <EntityTypeShape EntityType="FaeracTModel.DiasTrabajoDoc" Width="1.5" PointX="7.5" PointY="11.25" />
+        <EntityTypeShape EntityType="FaeracTModel.DoctorDetails" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="FaeracTModel.Doctores" Width="1.5" PointX="5.25" PointY="10.375" />
+        <EntityTypeShape EntityType="FaeracTModel.Especializaciones" Width="1.5" PointX="3" PointY="7.5" />
+        <EntityTypeShape EntityType="FaeracTModel.HorariosDisponibles" Width="1.5" PointX="7.5" PointY="22.25" />
+        <EntityTypeShape EntityType="FaeracTModel.HorariosPredefinidos" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="FaeracTModel.IndiceAnalisis" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="FaeracTModel.IndiceGenero" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="FaeracTModel.IndiceHorarios" Width="1.5" PointX="7.5" PointY="16.875" />
+        <EntityTypeShape EntityType="FaeracTModel.Pacientes" Width="1.5" PointX="5.25" PointY="21.625" />
+        <EntityTypeShape EntityType="FaeracTModel.PatientDetails" Width="1.5" PointX="0.75" PointY="5.125" />
+        <EntityTypeShape EntityType="FaeracTModel.ProgramaDoc" Width="1.5" PointX="7.5" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FaeracTModel.sysdiagrams" Width="1.5" PointX="8.75" PointY="3.75" />
+        <EntityTypeShape EntityType="FaeracTModel.TablaTurnos" Width="1.5" PointX="7.5" PointY="26" />
+        <EntityTypeShape EntityType="FaeracTModel.TipoUsuarios" Width="1.5" PointX="0.75" PointY="11.5" />
+        <EntityTypeShape EntityType="FaeracTModel.TurnoBox" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="FaeracTModel.Turnos" Width="1.5" PointX="10.5" PointY="16.375" />
+        <EntityTypeShape EntityType="FaeracTModel.UserIntegrada" Width="1.5" PointX="9.75" PointY="6.75" />
+        <EntityTypeShape EntityType="FaeracTModel.Usuarios" Width="1.5" PointX="3" PointY="10.625" />
         <AssociationConnector Association="FaeracTModel.FK__Appointme__Docto__5DCAEF64" />
         <AssociationConnector Association="FaeracTModel.FK__Appointme__Patie__5CD6CB2B" />
+        <AssociationConnector Association="FaeracTModel.FK_DiasTrabajoDoc_DiasSemana" />
+        <AssociationConnector Association="FaeracTModel.FK_DiasTrabajoDoc_Doctores" />
+        <AssociationConnector Association="FaeracTModel.FK_Doctores_Especializaciones" />
         <AssociationConnector Association="FaeracTModel.FK_Doctores_Usuarios" />
         <AssociationConnector Association="FaeracTModel.FK_IndiceHorarios_Doctores" />
+        <AssociationConnector Association="FaeracTModel.FK_ProgramaDoc_Doctores" />
+        <AssociationConnector Association="FaeracTModel.FK_TablaTurnos_Doctores" />
         <AssociationConnector Association="FaeracTModel.FK_Turnos_Doctores" />
         <AssociationConnector Association="FaeracTModel.FK_HorariosDisponibles_Pacientes" />
         <AssociationConnector Association="FaeracTModel.FK_Pacientes_Usuarios" />
         <AssociationConnector Association="FaeracTModel.FK_Turnos_Pacientes" />
+        <AssociationConnector Association="FaeracTModel.FK_Usuarios_TipoUsuarios" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

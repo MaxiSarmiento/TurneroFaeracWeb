@@ -17,7 +17,10 @@ namespace TurneroFaeracWeb.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Doctores()
         {
+            this.DiasTrabajoDoc = new HashSet<DiasTrabajoDoc>();
             this.IndiceHorarios = new HashSet<IndiceHorarios>();
+            this.ProgramaDoc = new HashSet<ProgramaDoc>();
+            this.TablaTurnos = new HashSet<TablaTurnos>();
             this.Turnos = new HashSet<Turnos>();
         }
     
@@ -29,9 +32,16 @@ namespace TurneroFaeracWeb.Models
         public Nullable<int> IDEspecializacion { get; set; }
         public Nullable<int> Flag { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DiasTrabajoDoc> DiasTrabajoDoc { get; set; }
+        public virtual Especializaciones Especializaciones { get; set; }
         public virtual Usuarios Usuarios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IndiceHorarios> IndiceHorarios { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProgramaDoc> ProgramaDoc { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TablaTurnos> TablaTurnos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Turnos> Turnos { get; set; }
     }

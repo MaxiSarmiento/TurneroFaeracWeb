@@ -12,8 +12,10 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace FaeracT.Controllers
 {
+
     public class IndicesController : Controller
     {
+
         public IndicesController()
         {
             // Constructor (si tienes lógica específica aquí).
@@ -98,6 +100,8 @@ namespace FaeracT.Controllers
 
         public ActionResult Filtrar(DoctoresCLS oDoctoresCLS)
         {
+            string userId = Session["UserID"] as string;
+
             string nombreDoc = oDoctoresCLS.nombreFiltro;
             List<DoctoresCLS> listaDocs = new List<DoctoresCLS>();
             using (var db = new TurneroFaeracEntities())
@@ -132,6 +136,8 @@ namespace FaeracT.Controllers
 
         public string GuardarTurno(TurnosCLS oTurnosCLS, int titulo)
         {
+            string userId = Session["UserID"] as string;
+
             //Error
             string rpta = "";
             try
@@ -225,8 +231,12 @@ namespace FaeracT.Controllers
 
         public ActionResult AgregarTurno(TurnosCLS oTurnosCLS)
         {
+            string userId = Session["UserID"] as string;
+
             if (!ModelState.IsValid)
             {
+               
+
                 llenarEspecializacion();
                 ViewBag.lista = listaEspecializacion;
                 return View(oTurnosCLS);

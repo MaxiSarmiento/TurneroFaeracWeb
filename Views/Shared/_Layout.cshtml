@@ -1,27 +1,103 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
+@model TurneroFaeracWeb.Models.Usuarios
+@using System.Collections.Generic
+@{
+    Layout = null;
+}
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title FAERAC</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <meta charset="utf-8">
+    <title>Hospicio Santa Catalina</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
+    <!-- Favicon -->
+    <link href="~/res/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="~/res/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="~/res/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/res/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <!-- Topbar Start -->
+    <div class="container-fluid py-2 border-bottom d-none d-lg-block">
         <div class="container">
-            <div class="navbar-header">
-                @Html.ActionLink("Faerac : Fundacion Ayuda Enfermos Renales y Alta Complejidad", "Index", "Alberdi1", new { area = "" }, new { @class = "navbar-brand" })
-
-
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                </ul>
+            <div class="row">
+                <div class="col-md-6 text-center text-lg-start mb-2 mb-lg-0">
+                    <div class="d-inline-flex align-items-center">
+                        <a class="text-decoration-none text-body pe-3" href=""><i class="bi bi-telephone me-2"></i>+54 2954 519228</a>
+                        <span class="text-body">|</span>
+                        <a class="text-decoration-none text-body px-3" href=""><i class="bi bi-envelope me-2"></i>HospicioCatalina@catalina.org</a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center text-lg-end">
+                    <div class="d-inline-flex align-items-center">
+                        <a class="text-body px-2" href="">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="text-body px-2" href="">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a class="text-body px-2" href="">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a class="text-body px-2" href="">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a class="text-body ps-2" href="">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <!-- Topbar End -->
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top bg-white shadow-sm">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0">
+                <a href="~/Views/LandingPage/Home.cshtml" class="navbar-brand">
+                    <h1 class="m-0 text-uppercase text-primary"><i class="fa fa-clinic-medical me-2"></i>Instituto Santa Catalina</h1>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto py-0">
+                        <a href="~/LandingPage/Home" class="nav-item nav-link active">Home</a>
+                        <a href="about.html" class="nav-item nav-link">Sobre nosotros</a>
+                        <a href="#servicios" class="nav-item nav-link">Servicios</a>
+
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu m-0">
+                                <a href="#team" class="dropdown-item">El equipo</a>
+                                <a href="#testimonios" class="dropdown-item">Testimonios</a>
+                                <a href="#turnos" class="dropdown-item">Turnos</a>
+                                <a href="#busqueda" class="dropdown-item">Búsqueda</a>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="nav-item nav-link">Contacto</a>
+                        <a href="~/Login/Login" class="nav-item nav-link">Login/Registro</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
 
     <div class="container body-content">
         @RenderBody()
@@ -38,12 +114,13 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @Scripts.Render("~/bundles/jquery")
 
+    <!-- Additional Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"></script>
-    <!-- No es necesario cargar jQuery dos veces, puedes eliminar la línea siguiente -->
-    <!-- <script src="~/Scripts/jquery-3.4.1.js"></script> -->
+
+    <!-- Render Section Scripts -->
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
+
 </html>

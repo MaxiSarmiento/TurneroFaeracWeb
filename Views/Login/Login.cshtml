@@ -10,16 +10,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="~/res/style.css">
+    <link rel="stylesheet" href="~/res/EstiloLogin.css">
 </head>
 <body>
-    <img src="~/res/banner.jpg" />
+    <img src="~/images/santaclogochico.jpg" />
     <div class="wrapper">
         <h2>Login</h2>
         @using (Html.BeginForm("Login", "Login", FormMethod.Post))
         {
             <div class="input-box">
-
                 @Html.EditorFor(model => model.Usuario, new { @type = "text", @placeholder = "Nombre de Usuario", @required = "" })
             </div>
             <div class="input-box">
@@ -29,20 +28,23 @@
                 <input type="submit" class="btn btn-primary" value="Login">
                 <span style="color: red;">@ViewBag.ErrorMessage </span>
             </div>
-            if (@ViewBag.Mensaje != null)
+           if (@ViewBag.Mensaje != null)
+            {
+                <div class="alert alert-success">
+                    @ViewBag.Mensaje
+                </div>
+            }
+            else if (@ViewBag.ErrorMessage != null)
             {
                 <div class="alert alert-danger">
                     @ViewBag.ErrorMessage
                 </div>
             }
             <div class="text">
-                <h3>No tienes una cuenta? <a class=" btn btn-link" href="@Url.Action("Registro","Login")">Registrarse</a></h3>
-                <h3>Te Olvidaste tu Contraseña? <a class=" btn btn-link" href="@Url.Action("Restablecer","Login")">Restablecer Contraseña</a></h3>
-
+                <h3>No tienes una cuenta? <a class="btn btn-link" href="@Url.Action("Registro","Login")">Registrarse</a></h3>
+                <h3>Te Olvidaste tu Contraseña? <a class="btn btn-link" href="@Url.Action("Restablecer","Login")">Restablecer Contraseña</a></h3>
             </div>
         }
-
-
     </div>
 </body>
 </html>

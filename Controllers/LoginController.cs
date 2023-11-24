@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using TurneroFaeracWeb.Models;
 using System.Text;
 using System.Security.Cryptography;
+using Google.Apis.Logging;
 
 
 namespace Progweb1.Controllers
@@ -13,15 +14,17 @@ namespace Progweb1.Controllers
     {
         TurneroFaeracEntities db = new TurneroFaeracEntities();
 
+
         public ActionResult Login()
         {
             return View();
+           
         }
 
         public ActionResult Registro()
         {
             Agregartipo();
-            
+
             return View();
         }
         public ActionResult Restablecer()
@@ -39,82 +42,98 @@ namespace Progweb1.Controllers
             return View();
         }
         [HttpPost]
-      
+
         public ActionResult Registro(UsuarioCLS oUsuarioCLS)
         {
-          using (var db = new TurneroFaeracEntities())
+            string mensaje = "";
+            string tipoMensaje = "success";
+
+            try
             {
-                // Verifica si ya existe un usuario con el mismo nombre de usuario o correo
-                var usuarioExistente = db.Usuarios.FirstOrDefault(u => u.Usuario == oUsuarioCLS.Usuario || u.Correo == oUsuarioCLS.Correo);
-
-                if (usuarioExistente != null)
+                using (var db = new TurneroFaeracEntities())
                 {
-                    // Usuario ya existe en la base de datos
-                    if (usuarioExistente.Usuario == oUsuarioCLS.Usuario)
-                    {
-                        ViewBag.MensajeUsuario = "El usuario ya está registrado";
-                        Agregartipo();
-                        ViewBag.lista = listaUsr;
+                    // Verifica si ya existe un usuario con el mismo nombre de usuario o correo
+                    var usuarioExistente = db.Usuarios.FirstOrDefault(u => u.Usuario == oUsuarioCLS.Usuario || u.Correo == oUsuarioCLS.Correo);
 
-                        Usuarios usuarioExistenteModel = new Usuarios
+                    if (usuarioExistente != null)
+                    {
+                        // Usuario ya existe en la base de datos
+                        if (usuarioExistente.Usuario == oUsuarioCLS.Usuario)
                         {
-                            Usuario = usuarioExistente.Usuario,
-                        };
-                        return View(usuarioExistenteModel);
-                    }
-                    else if (usuarioExistente.Correo == oUsuarioCLS.Correo)
-                    {
-                        // Correo ya existe en la base de datos
-                        ViewBag.MensajeCorreo = "Correo ya existente";
-                        Agregartipo();
-                        ViewBag.lista = listaUsr;
+                            ViewBag.MensajeUsuario = "El usuario ya está registrado";
+                            Agregartipo();
+                            ViewBag.lista = listaUsr;
 
-                        Usuarios correoExistenteModel = new Usuarios
+                            Usuarios usuarioExistenteModel = new Usuarios
+                            {
+                                Usuario = usuarioExistente.Usuario,
+                            };
+                            return View(usuarioExistenteModel);
+                        }
+                        else if (usuarioExistente.Correo == oUsuarioCLS.Correo)
                         {
-                            Correo = usuarioExistente.Correo,
-                        };
-                        return View(correoExistenteModel);
+                            // Correo ya existe en la base de datos
+                            ViewBag.MensajeCorreo = "Correo ya existente";
+                            Agregartipo();
+                            ViewBag.lista = listaUsr;
+
+                            Usuarios correoExistenteModel = new Usuarios
+                            {
+                                Correo = usuarioExistente.Correo,
+                            };
+                            return View(correoExistenteModel);
+                        }
                     }
-                }
 
-                // Si no existen registros con el mismo usuario ni correo, procede a registrar al nuevo usuario
-                Usuarios nuevoUsuario = new Usuarios
-                {
-                    Usuario = oUsuarioCLS.Usuario,
-                    Contraseña = HashPassword(oUsuarioCLS.Contraseña),
-                    IdTipo = 2,
-                    Correo = oUsuarioCLS.Correo,
-                    NumeroContacto = oUsuarioCLS.NumeroContacto,
-                    Descripcion = "Usuario Registrado",
-                    Genero = oUsuarioCLS.Genero,
-                    Token = Guid.NewGuid().ToString(),
-                };
-
-                // Agrega el nuevo usuario a la base de datos
-                db.Usuarios.Add(nuevoUsuario);
-                db.SaveChanges();
-                if (nuevoUsuario.IdTipo == 2)
-                {
-                    // Agrega el nuevo paciente a la tabla de pacientes
-                    Pacientes nuevoPaciente = new Pacientes
+                    // Si no existen registros con el mismo usuario ni correo, procede a registrar al nuevo usuario
+                    Usuarios nuevoUsuario = new Usuarios
                     {
-                        Correo = nuevoUsuario.Correo,
-                        NumeroContacto = nuevoUsuario.NumeroContacto,
-                        IdUser = nuevoUsuario.IdUser // Asigna el IdUser del nuevo usuario al IdUser del paciente
+                        Usuario = oUsuarioCLS.Usuario,
+                        Contraseña = HashPassword(oUsuarioCLS.Contraseña),
+                        IdTipo = 2,
+                        Correo = oUsuarioCLS.Correo,
+                        NumeroContacto = oUsuarioCLS.NumeroContacto,
+                        Descripcion = "Usuario Registrado",
+                        Genero = oUsuarioCLS.Genero,
+                        Token = Guid.NewGuid().ToString(),
                     };
 
-                    db.Pacientes.Add(nuevoPaciente);
+                    // Agrega el nuevo usuario a la base de datos
+                    db.Usuarios.Add(nuevoUsuario);
                     db.SaveChanges();
+
+                    if (nuevoUsuario.IdTipo == 2)
+                    {
+                        // Agrega el nuevo paciente a la tabla de pacientes
+                        Pacientes nuevoPaciente = new Pacientes
+                        {
+                            Correo = nuevoUsuario.Correo,
+                            NumeroContacto = nuevoUsuario.NumeroContacto,
+                            IdUser = nuevoUsuario.IdUser // Asigna el IdUser del nuevo usuario al IdUser del paciente
+                        };
+
+                        db.Pacientes.Add(nuevoPaciente);
+                        db.SaveChanges();
+                    }
                 }
-                // Envía un correo electrónico de confirmación aquí
-                //EnviarCorreoConfirmacion(nuevoUsuario.Correo, nuevoUsuario.Token);
+
+                mensaje = "Registrado correctamente! Redirigiendo a login, por favor ingrese con Usuario y Contraseña.";
             }
+            catch (Exception ex)
+            {
+                mensaje = "Ocurrió un error durante el registro.";
+                tipoMensaje = "error";
+            }
+
+            // Muestra la notificación al usuario
+            TempData["NotificacionScript"] = $"<script>MostrarNotificacion('{mensaje}', '{tipoMensaje}');</script>";
 
             return RedirectToAction("Login");
         }
 
 
-            public UsuarioCLS Validar(UsuarioCLS oUsuarioCLS)
+
+        public UsuarioCLS Validar(UsuarioCLS oUsuarioCLS)
         {
             UsuarioCLS usuario = null;
             try
@@ -268,7 +287,7 @@ namespace Progweb1.Controllers
 
 
 
-       
+
         public ActionResult Login(Usuarios objUser)
         {
             if (ModelState.IsValid)
@@ -324,7 +343,7 @@ namespace Progweb1.Controllers
             return RedirectToAction("Index");
         }
 
-       
+
 
         private int ObtenerIdUsuario(string username)
         {
@@ -345,7 +364,7 @@ namespace Progweb1.Controllers
             using (var db = new TurneroFaeracEntities())
             {
                 listaUsr = (from usuario in db.Usuarios
-                            
+
                             select new SelectListItem
                             {
                                 Text = usuario.Descripcion,
@@ -355,8 +374,8 @@ namespace Progweb1.Controllers
                 listaUsr.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
 
             }
-                   }
-      
+        }
+
 
         List<SelectListItem> listaGenero;
         private void llenarGenero()
@@ -375,8 +394,10 @@ namespace Progweb1.Controllers
 
             }
         }
-      
+
+
+
+
 
     }
-
 }

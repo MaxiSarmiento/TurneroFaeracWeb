@@ -17,5 +17,6 @@ namespace TurneroFaeracWeb.Models
 
         public virtual Doctores Doctores { get; set; }
         public virtual Pacientes Pacientes { get; set; }
+        public string nombreFiltro { get; set; }
     }
 }

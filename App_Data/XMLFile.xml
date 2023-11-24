@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UsersAndEvents>
+  <User UserID="1" UserName="Waqas" Password="111" AccessToken="" RefreshToken="">
+  </User>
+  <Event EventID="1" EventTitle="New test4" EventStartTime="10/4/2015 4:38:31 PM" EventEndTime="1/1/0001 12:00:00 AM" EventLocation="Johar Town, Lahore, Pakistan" EventDetails="asdas">
+  </Event>
+</UsersAndEvents>

@@ -28,6 +28,8 @@ namespace TurneroFaeracWeb.Models
         public virtual DbSet<Appointments> Appointments { get; set; }
         public virtual DbSet<Boxes> Boxes { get; set; }
         public virtual DbSet<Consultorios> Consultorios { get; set; }
+        public virtual DbSet<DiasSemana> DiasSemana { get; set; }
+        public virtual DbSet<DiasTrabajoDoc> DiasTrabajoDoc { get; set; }
         public virtual DbSet<DoctorDetails> DoctorDetails { get; set; }
         public virtual DbSet<Doctores> Doctores { get; set; }
         public virtual DbSet<Especializaciones> Especializaciones { get; set; }
@@ -38,6 +40,7 @@ namespace TurneroFaeracWeb.Models
         public virtual DbSet<IndiceHorarios> IndiceHorarios { get; set; }
         public virtual DbSet<Pacientes> Pacientes { get; set; }
         public virtual DbSet<PatientDetails> PatientDetails { get; set; }
+        public virtual DbSet<ProgramaDoc> ProgramaDoc { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<TablaTurnos> TablaTurnos { get; set; }
         public virtual DbSet<TipoUsuarios> TipoUsuarios { get; set; }

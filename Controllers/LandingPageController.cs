@@ -32,32 +32,18 @@ namespace FaeracT.Controllers
             // Obtén la lista de especializaciones desde tu modelo (puedes consultar tu base de datos aquí)
             var especializaciones = new List<EspecializacionesCLS>
     {
-        new EspecializacionesCLS { IDEspecializacion = 1, Descripcion = "Generalista" },
-        new EspecializacionesCLS { IDEspecializacion = 2, Descripcion = "Traumatologia" },
-        new EspecializacionesCLS { IDEspecializacion = 3, Descripcion = "Neumo Infantil" },
-        new EspecializacionesCLS { IDEspecializacion = 4, Descripcion = "Urologia" },
-        new EspecializacionesCLS { IDEspecializacion = 5, Descripcion = "Dermatologia" },
-        new EspecializacionesCLS { IDEspecializacion = 6, Descripcion = "Laboral" },
-        new EspecializacionesCLS { IDEspecializacion = 7, Descripcion = "Dermatologo Infantil" },
-        new EspecializacionesCLS { IDEspecializacion = 8, Descripcion = "Cardiologo" },
-        new EspecializacionesCLS { IDEspecializacion = 9, Descripcion = "Pediatra" },
-        new EspecializacionesCLS { IDEspecializacion = 10, Descripcion = "Cirujano" },
-        new EspecializacionesCLS { IDEspecializacion = 11, Descripcion = "Clinico" },
-        new EspecializacionesCLS { IDEspecializacion = 12, Descripcion = "Nutricionista" },
-        new EspecializacionesCLS { IDEspecializacion = 13, Descripcion = "Gastroenterologo" },
-        new EspecializacionesCLS { IDEspecializacion = 14, Descripcion = "Neurocirujano" },
-        new EspecializacionesCLS { IDEspecializacion = 15, Descripcion = "Infectologia" },
-        new EspecializacionesCLS { IDEspecializacion = 16, Descripcion = "Cuidados Paliativos" },
-        new EspecializacionesCLS { IDEspecializacion = 17, Descripcion = "Alergista" },
-        new EspecializacionesCLS { IDEspecializacion = 18, Descripcion = "Endocrinologia" },
-        new EspecializacionesCLS { IDEspecializacion = 10, Descripcion = "Neo/Pediatra" },
-        new EspecializacionesCLS { IDEspecializacion = 21, Descripcion = "Nefrologia" },
-        new EspecializacionesCLS { IDEspecializacion = 22, Descripcion = "Ginecologia" },
-        new EspecializacionesCLS { IDEspecializacion = 23, Descripcion = "Traumatologia" },
-        new EspecializacionesCLS { IDEspecializacion = 24, Descripcion = "Otorrino" },
-        new EspecializacionesCLS { IDEspecializacion = 25, Descripcion = "Hematologia" },
-        new EspecializacionesCLS { IDEspecializacion = 26, Descripcion = "Psiquiatra" },
-        new EspecializacionesCLS { IDEspecializacion = 27, Descripcion = "Flebologia" }
+          new EspecializacionesCLS { IDEspecializacion = 2, Descripcion = "Generalista" },
+        new EspecializacionesCLS { IDEspecializacion = 3, Descripcion = "Gastroenterologia" },
+        new EspecializacionesCLS { IDEspecializacion = 4, Descripcion = "Neurologia" },
+        new EspecializacionesCLS { IDEspecializacion = 5, Descripcion = "Cirujano" },
+        new EspecializacionesCLS { IDEspecializacion = 6, Descripcion = "Cuidados Paleativos" },
+        new EspecializacionesCLS { IDEspecializacion = 7, Descripcion = "Pediatra" },
+        new EspecializacionesCLS { IDEspecializacion = 8, Descripcion = "Ginecologo" },
+        new EspecializacionesCLS { IDEspecializacion = 9, Descripcion = "Otorrinolaringologo" },
+        new EspecializacionesCLS { IDEspecializacion = 10, Descripcion = "Oncologo" },
+        new EspecializacionesCLS { IDEspecializacion = 11, Descripcion = "Obstetra" },
+        new EspecializacionesCLS { IDEspecializacion = 12, Descripcion = "Proctologo" },
+        new EspecializacionesCLS { IDEspecializacion = 1, Descripcion = "Nutricionista" },
      
         
         // Agrega más especializaciones según sea necesario
@@ -69,7 +55,7 @@ namespace FaeracT.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult BuscarDocs(int idEspecializacion, string nombreFiltro)
         {
             List<DoctoresCLS> listaDocs = new List<DoctoresCLS>();

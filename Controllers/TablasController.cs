@@ -1,196 +1,321 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using TurneroFaeracWeb.Controllers;
-using System.Text;
-using System.Security.Cryptography;
-using FaeracT.Controllers;
-using Microsoft.Ajax.Utilities;
-using System.Web.Security;
-using System.Data.Entity;
-using TurneroFaeracWeb.Datos;
-using TurneroFaeracWeb.Models;
-using System.Drawing;
 using System.Web.UI.WebControls;
+using TurneroFaeracWeb.Models;
+
 
 namespace FaeracT.Controllers
 {
     public class TablasController : Controller
     {
-
-
         public ActionResult TablaEmpleados(UsuarioCLS oUsuarioCLS)
         {
-            string nombreUSR = oUsuarioCLS.Usuario;
-            llenarGenero();
-            GetTipoUsuarioList();
-            GetGeneroUsuarioList();
-            List<UsuarioCLS> listaUsuario = new List<UsuarioCLS>();
-            using (var db = new TurneroFaeracEntities())
-
+            try
             {
-                if (oUsuarioCLS.Usuario == null) {
-                    listaUsuario = (from Usuario in db.Usuarios
-                                    select new UsuarioCLS
-                                    {
-                                        IdUser = Usuario.IdUser,
-                                        Usuario = Usuario.Usuario,
-                                        Contraseña = Usuario.Contraseña,
-                                        IdTipo = Usuario.IdTipo,
-                                        Genero = Usuario.Genero,
-                                        NumeroContacto = Usuario.NumeroContacto
-
-
-                                    }).ToList();
-                    Session["lista"] = listaUsuario;
+                if (Session["UserID"] == null)
+                {
+                    return RedirectToAction("Login", "Login");
                 }
                 else
                 {
-                    listaUsuario = (from Usuario in db.Usuarios
-                                    where Usuario.IdTipo != 4
-                                    select new UsuarioCLS
-                                    {
-                                        IdUser = Usuario.IdUser,
-                                        Usuario = Usuario.Usuario,
-                                        Contraseña = Usuario.Contraseña,
-                                        IdTipo = Usuario.IdTipo,
-                                        Genero = Usuario.Genero,
-                                        NumeroContacto = Usuario.NumeroContacto
-                                    }).ToList();
+                    string nombreUSR = oUsuarioCLS.Usuario;
+                    llenarGenero();
+                    GetTipoUsuarioList();
+                    GetGeneroUsuarioList();
+                    List<UsuarioCLS> listaUsuario = new List<UsuarioCLS>();
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        if (oUsuarioCLS.Usuario == null)
+                        {
+                            listaUsuario = (from Usuario in db.Usuarios
+                                            select new UsuarioCLS
+                                            {
+                                                IdUser = Usuario.IdUser,
+                                                Usuario = Usuario.Usuario,
+                                                Contraseña = Usuario.Contraseña,
+                                                IdTipo = Usuario.IdTipo,
+                                                Genero = Usuario.Genero,
+                                                NumeroContacto = Usuario.NumeroContacto
+                                            }).ToList();
+                            Session["lista"] = listaUsuario;
+                        }
+                        else
+                        {
+                            listaUsuario = (from Usuario in db.Usuarios
+                                            where Usuario.IdTipo != 4
+                                            select new UsuarioCLS
+                                            {
+                                                IdUser = Usuario.IdUser,
+                                                Usuario = Usuario.Usuario,
+                                                Contraseña = Usuario.Contraseña,
+                                                IdTipo = Usuario.IdTipo,
+                                                Genero = Usuario.Genero,
+                                                NumeroContacto = Usuario.NumeroContacto
+                                            }).ToList();
 
-                    Session["lista"] = listaUsuario;
+                            Session["lista"] = listaUsuario;
+                        }
+                    }
+                    return View(listaUsuario);
                 }
-
             }
-            return View(listaUsuario);
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
+
         public ActionResult TablaDoctores(DoctoresCLS oDoctoresCLS)
         {
-            llenarEspecializacion();
-            ViewBag.Lista = listaEspecializacion;
-            string apeDoc = oDoctoresCLS.ApeDoc;
-          
-            List<DoctoresCLS> listaDocs = new List<DoctoresCLS>();
-            using (var db = new TurneroFaeracEntities())
-
+            try
             {
-                if (oDoctoresCLS.ApeDoc == null)
+                if (Session["UserID"] == null)
                 {
-                    listaDocs = (from doctores in db.Doctores
-                                    select new DoctoresCLS
-                                    {
-                                        IdDoc = doctores.IdDoc,
-                                        IdUser = doctores.IdUser,
-                                        ApeDoc = doctores.ApeDoc,
-                                        NombreDoc = doctores.NombreDoc,
-                                        IDEspecializacion = doctores.IDEspecializacion,
-
-
-
-                                    }).ToList();
-                    Session["lista"] = listaDocs;
+                    return RedirectToAction("Login", "Login");
                 }
                 else
                 {
-                    listaDocs = (from doctores in db.Doctores
-                                    
-                                    select new DoctoresCLS
-                                    {
-                                        IdDoc = doctores.IdDoc,
-                                        IdUser = doctores.IdUser,
-                                        ApeDoc = doctores.ApeDoc,
-                                        NombreDoc = doctores.NombreDoc,
-                                        IDEspecializacion = doctores.IDEspecializacion,
-                                    }).ToList();
+                    llenarEspecializacion();
+                    ViewBag.Lista = listaEspecializacion;
+                    string apeDoc = oDoctoresCLS.ApeDoc;
 
-                    Session["lista"] = listaDocs;
+                    List<DoctoresCLS> listaDocs = new List<DoctoresCLS>();
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        if (oDoctoresCLS.ApeDoc == null)
+                        {
+                            listaDocs = (from doctores in db.Doctores
+                                         select new DoctoresCLS
+                                         {
+                                             IdDoc = doctores.IdDoc,
+                                             IdUser = doctores.IdUser,
+                                             ApeDoc = doctores.ApeDoc,
+                                             NombreDoc = doctores.NombreDoc,
+                                             IDEspecializacion = doctores.IDEspecializacion
+                                         }).ToList();
+                            Session["lista"] = listaDocs;
+                        }
+                        else
+                        {
+                            listaDocs = (from doctores in db.Doctores
+                                         select new DoctoresCLS
+                                         {
+                                             IdDoc = doctores.IdDoc,
+                                             IdUser = doctores.IdUser,
+                                             ApeDoc = doctores.ApeDoc,
+                                             NombreDoc = doctores.NombreDoc,
+                                             IDEspecializacion = doctores.IDEspecializacion
+                                         }).ToList();
+
+                            Session["lista"] = listaDocs;
+                        }
+                    }
+                    return View(listaDocs);
                 }
-
             }
-            return View(listaDocs);
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
+
         public ActionResult TablaPacientes(PacientesCLS oPacientesCLS)
         {
-            llenarEspecializacion();
-            ViewBag.Lista = listaEspecializacion;
-            string dnipac = oPacientesCLS.NombrePac;
-
-            List<PacientesCLS> listaPacs = new List<PacientesCLS>();
-            using (var db = new TurneroFaeracEntities())
-
+            try
             {
-                if (oPacientesCLS.NombrePac == null)
+                if (Session["UserID"] == null)
                 {
-                    listaPacs = (from pacientes in db.Pacientes
-                                 select new PacientesCLS
-                                 {
-                                     IdPaciente= pacientes.IdPaciente,
-                                     NombrePac = pacientes.NombrePac,
-                                     ApePac = pacientes.ApePac,
-                                     DNIPac = pacientes.DNIPac,
-                                     TipoDNI = pacientes.TipoDNI,
-                                     EdadPac = pacientes.EdadPac,
-                                     Genero = pacientes.Genero,
-                                     IdUser = pacientes.IdUser,
-                                     Correo = pacientes.Correo,
-                                     NumeroContacto = pacientes.NumeroContacto
-
-
-
-                                 }).ToList();
-                    Session["lista"] = listaPacs;
+                    return RedirectToAction("Login", "Login");
                 }
                 else
                 {
-                    listaPacs = (from pacientes in db.Pacientes
+                    llenarEspecializacion();
+                    ViewBag.Lista = listaEspecializacion;
+                    string dnipac = oPacientesCLS.NombrePac;
 
-                                 select new PacientesCLS
-                                 {
-                                     IdPaciente = pacientes.IdPaciente,
-                                     NombrePac = pacientes.NombrePac,
-                                     ApePac = pacientes.ApePac,
-                                     DNIPac = pacientes.DNIPac,
-                                     TipoDNI = pacientes.TipoDNI,
-                                     EdadPac = (int)pacientes.EdadPac,
-                                     Genero = (int)pacientes.Genero,
-                                     IdUser = (int)pacientes.IdUser,
-                                     Correo = pacientes.Correo,
-                                     NumeroContacto = pacientes.NumeroContacto
-
-                                 }).ToList();
-
-                    Session["lista"] = listaPacs;
-                }
-
-            }
-            return View(listaPacs);
-        }
-            public ActionResult TablaTurnosAdmin()
-        {
-            return View();
-        }
-        public ActionResult ListarAnalisisUsr()
-        {
-            List<AnalisisPacientesCLS> listaAnalisis = ObtenerListaAnalisis();
-            List<PacientesCLS> listaPacientes = ObtenerListaPacientes();
-
-            // Combinar datos de ambas listas en una lista de TablaViewModel
-            List<TablaAnalisisCLS> listaCombinada = listaAnalisis
-                .Join(listaPacientes,
-                    a => a.IdPaciente,
-                    p => p.IdPaciente,
-                    (a, p) => new TablaAnalisisCLS
+                    List<PacientesCLS> listaPacs = new List<PacientesCLS>();
+                    using (var db = new TurneroFaeracEntities())
                     {
-                        NombrePaciente = p.NombrePac,
-                        LinkAnalisis = a.LinkAnalisis,
-                        FechaAnalisis = a.FechaAnalisis
-                    })
-                .ToList();
+                        if (oPacientesCLS.NombrePac == null)
+                        {
+                            listaPacs = (from pacientes in db.Pacientes
+                                         select new PacientesCLS
+                                         {
+                                             IdPaciente = pacientes.IdPaciente,
+                                             NombrePac = pacientes.NombrePac,
+                                             ApePac = pacientes.ApePac,
+                                             DNIPac = pacientes.DNIPac,
+                                             TipoDNI = pacientes.TipoDNI,
+                                             EdadPac = pacientes.EdadPac,
+                                             Genero = pacientes.Genero,
+                                             IdUser = pacientes.IdUser,
+                                             Correo = pacientes.Correo,
+                                             NumeroContacto = pacientes.NumeroContacto
+                                         }).ToList();
+                            Session["lista"] = listaPacs;
+                        }
+                        else
+                        {
+                            listaPacs = (from pacientes in db.Pacientes
+                                         select new PacientesCLS
+                                         {
+                                             IdPaciente = pacientes.IdPaciente,
+                                             NombrePac = pacientes.NombrePac,
+                                             ApePac = pacientes.ApePac,
+                                             DNIPac = pacientes.DNIPac,
+                                             TipoDNI = pacientes.TipoDNI,
+                                             EdadPac = (int)pacientes.EdadPac,
+                                             Genero = (int)pacientes.Genero,
+                                             IdUser = (int)pacientes.IdUser,
+                                             Correo = pacientes.Correo,
+                                             NumeroContacto = pacientes.NumeroContacto
+                                         }).ToList();
 
-            return View(listaCombinada);
+                            Session["lista"] = listaPacs;
+                        }
+                    }
+                    return View(listaPacs);
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
+
+        public ActionResult TablaAuxiliar(PacientesCLS oPacientesCLS)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    string nombreUSR = oPacientesCLS.NombrePac;
+                    llenarGenero();
+                    GetTipoUsuarioList();
+                    GetGeneroUsuarioList();
+                    List<PacientesCLS> listaUsuario = new List<PacientesCLS>();
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        if (oPacientesCLS.NombrePac == null)
+                        {
+                            listaUsuario = (from pacientes in db.Pacientes
+                                            select new PacientesCLS
+                                            {
+                                                IdPaciente = pacientes.IdPaciente,
+                                                NombrePac = pacientes.NombrePac,
+                                                ApePac = pacientes.ApePac,
+                                                DNIPac = pacientes.DNIPac,
+                                                TipoDNI = pacientes.TipoDNI,
+                                                EdadPac = pacientes.EdadPac,
+                                                Genero = pacientes.Genero,
+                                                IdUser = pacientes.IdUser,
+                                                Correo = pacientes.Correo,
+                                                NumeroContacto = pacientes.NumeroContacto
+                                            }).ToList();
+                            Session["lista"] = listaUsuario;
+                        }
+                        else
+                        {
+                            listaUsuario = (from pacientes in db.Pacientes
+                                            select new PacientesCLS
+                                            {
+                                                IdPaciente = pacientes.IdPaciente,
+                                                NombrePac = pacientes.NombrePac,
+                                                ApePac = pacientes.ApePac,
+                                                DNIPac = pacientes.DNIPac,
+                                                TipoDNI = pacientes.TipoDNI,
+                                                EdadPac = (int)pacientes.EdadPac,
+                                                Genero = (int)pacientes.Genero,
+                                                IdUser = (int)pacientes.IdUser,
+                                                Correo = pacientes.Correo,
+                                                NumeroContacto = pacientes.NumeroContacto
+                                            }).ToList();
+
+                            Session["lista"] = listaUsuario;
+                        }
+                    }
+                    return View(listaUsuario);
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        public ActionResult TablaTurnos(TablaTurnosCLS oTablaTurnosCLS)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    ListarEsp();
+                    ObtenerListaDoctores();
+                    llenarEspecializacion();
+                    ViewBag.Lista = listaEspecializacion;
+                    int turnosPac = oTablaTurnosCLS.IdPaciente;
+
+                    List<TablaTurnosCLS> turnosPacs = new List<TablaTurnosCLS>();
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        if (oTablaTurnosCLS.Estado == null)
+                        {
+                            turnosPacs = (from turnos in db.TablaTurnos
+                                          select new TablaTurnosCLS
+                                          {
+                                              IdTurno = turnos.IdTurno,
+                                              IdPaciente = turnos.IdPaciente,
+                                              inicio = (DateTime)turnos.inicio,
+                                              Fin = (DateTime)turnos.Fin,
+                                              Estado = turnos.Estado,
+                                              IdDoc = (int)turnos.IdDoc,
+                                              NombrePaciente = turnos.NombrePaciente,
+                                              ApeDoc = turnos.ApeDoc
+                                          }).ToList();
+                            Session["lista"] = turnosPacs;
+                        }
+                        else
+                        {
+                            turnosPacs = (from turnos in db.TablaTurnos
+                                          select new TablaTurnosCLS
+                                          {
+                                              IdTurno = turnos.IdTurno,
+                                              IdPaciente = turnos.IdPaciente,
+                                              inicio = (DateTime)turnos.inicio,
+                                              Fin = (DateTime)turnos.Fin,
+                                              Estado = turnos.Estado,
+                                              IdDoc = (int)turnos.IdDoc,
+                                              NombrePaciente = turnos.NombrePaciente,
+                                              ApeDoc = turnos.ApeDoc
+                                          }).ToList();
+
+                            Session["lista"] = turnosPacs;
+                        }
+                    }
+
+                    // Ajustar la lógica para establecer la fecha de inicio y fin en 20 minutos después de inicio
+                    oTablaTurnosCLS.inicio = DateTime.Now;
+                    oTablaTurnosCLS.Fin = oTablaTurnosCLS.inicio.AddMinutes(20);
+
+                    return View(turnosPacs); // Cambiar "TablaTurnos" por el nombre correcto de tu vista
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
 
         [HttpGet]
         public ActionResult Agregar()
@@ -304,8 +429,8 @@ namespace FaeracT.Controllers
                     else
                     {
                         // El Usuario no existe, proceder con el agregado
-                       Doctores oDoctores = new Doctores();
-                       
+                        Doctores oDoctores = new Doctores();
+
                         oDoctores.IdUser = oDoctoresCLS.IdUser;
                         oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
                         oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;
@@ -318,7 +443,6 @@ namespace FaeracT.Controllers
 
             return RedirectToAction("Index");
         }
-
         public ActionResult AgregarP()
         {
             if (Session["UserID"] == null)
@@ -386,32 +510,110 @@ namespace FaeracT.Controllers
 
             return RedirectToAction("Index");
         }
-        private List<PacientesCLS> ObtenerListaPacientes()
+
+        public ActionResult AgregarT()
         {
-            List<PacientesCLS> listaPacientes = new List<PacientesCLS>();
-            using (var db = new TurneroFaeracEntities())
+            if (Session["UserID"] == null)
             {
-                listaPacientes = (from Pacientes in db.Pacientes
-                                  select new PacientesCLS
-                                  {
-                                      IdPaciente = Pacientes.IdPaciente,
-                                      NombrePac = Pacientes.NombrePac
 
-
-                                  }).ToList();
-                return listaPacientes;
+                return RedirectToAction("Login", "Login");
+            }
+            else
+            {
+                llenarGenero();
+                ViewBag.lista = listaGenero;
+                llenarEspecializacion();
+                ViewBag.Lista = listaEspecializacion;
+                return View();
             }
 
-
-
         }
+        public ActionResult AgregarT(TablaTurnos oTablaTurnosCLS)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    llenarGenero();
+                    ViewBag.lista = listaGenero;
+                    llenarEspecializacion();
+                    ViewBag.Lista = listaEspecializacion;
+                    return View(oTablaTurnosCLS);
+                }
+                else
+                {
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        // Verificar si el Turno ya existe
+                        bool turnoExistente = db.TablaTurnos.Any(e => e.IdTurno == oTablaTurnosCLS.IdTurno && e.inicio == oTablaTurnosCLS.inicio && e.IdDoc == oTablaTurnosCLS.IdDoc);
+
+                        if (turnoExistente)
+                        {
+                            // Turno existente, mostrar mensaje de error
+                            ModelState.AddModelError("Turnos", "Turno ya Otorgado, intente con otra hora");
+                            llenarGenero();
+                            ViewBag.lista = listaGenero;
+                            llenarEspecializacion();
+                            ViewBag.Lista = listaEspecializacion;
+                            return View(oTablaTurnosCLS);
+                        }
+                        else
+                        {
+                            // Obtener datos asociados al IdPaciente
+                            Pacientes oPaciente = db.Pacientes.FirstOrDefault(p => p.IdPaciente == oTablaTurnosCLS.IdPaciente);
+                            if (oPaciente == null)
+                            {
+                                // Manejar el caso en que no se encuentre el paciente
+                                ModelState.AddModelError("Turnos", "Paciente no encontrado");
+                                llenarGenero();
+                                ViewBag.lista = listaGenero;
+                                llenarEspecializacion();
+                                ViewBag.Lista = listaEspecializacion;
+                                return View(oTablaTurnosCLS);
+                            }
+
+                            // Obtener datos asociados al IdDoc
+                            Doctores oDoctor = db.Doctores.FirstOrDefault(d => d.IdDoc == oTablaTurnosCLS.IdDoc);
+                            if (oDoctor == null)
+                            {
+                                // Manejar el caso en que no se encuentre el doctor
+                                ModelState.AddModelError("Turnos", "Doctor no encontrado");
+                                llenarGenero();
+                                ViewBag.lista = listaGenero;
+                                llenarEspecializacion();
+                                ViewBag.Lista = listaEspecializacion;
+                                return View(oTablaTurnosCLS);
+                            }
+
+                            // Agregar el turno
+                            TablaTurnos oTurnos = new TablaTurnos();
+                            oTurnos.IdTurno = oTablaTurnosCLS.IdTurno;
+                            oTurnos.IdPaciente = oTablaTurnosCLS.IdPaciente;
+                            oTurnos.inicio = oTablaTurnosCLS.inicio;
+                            oTurnos.IdDoc = oTablaTurnosCLS.IdDoc;
+
+                            // Agregar el turno a la base de datos
+                            db.TablaTurnos.Add(oTurnos);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
         public ActionResult editar(int id)
         {
             try
             {
                 if (Session["UserID"] == null)
                 {
-
                     return RedirectToAction("Login", "Login");
                 }
                 else
@@ -431,7 +633,6 @@ namespace FaeracT.Controllers
                         oUsuarioCLS.Descripcion = oUsuario.Descripcion;
                         oUsuarioCLS.Correo = oUsuario.Correo;
                         oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
-
                     }
                     return View(oUsuarioCLS);
                 }
@@ -440,8 +641,8 @@ namespace FaeracT.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-
         }
+
         [HttpPost]
         public ActionResult editar(UsuarioCLS oUsuarioCLS)
         {
@@ -454,7 +655,6 @@ namespace FaeracT.Controllers
                 llenarEspecializacion();
                 ViewBag.Lista = listaEspecializacion;
                 return View(oUsuarioCLS);
-
             }
 
             using (var db = new TurneroFaeracEntities())
@@ -467,203 +667,12 @@ namespace FaeracT.Controllers
                 oUsuarioCLS.Correo = oUsuario.Correo;
                 oUsuarioCLS.NumeroContacto = oUsuario.NumeroContacto;
                 db.SaveChanges();
-
-            
-        }
-
-    return RedirectToAction("Home");
-    }
-        public ActionResult editard(int id)
-        {
-            try
-            {
-                if (Session["UserID"] == null)
-                {
-
-                    return RedirectToAction("Login", "Login");
-                }
-                else
-                {
-                    llenarGenero();
-                    ViewBag.lista = listaGenero;
-                    llenarEspecializacion();
-                    ViewBag.Lista = listaEspecializacion;
-
-                    DoctoresCLS oDoctoresCLS = new DoctoresCLS();
-                    using (var db = new TurneroFaeracEntities())
-                    {
-                        Doctores oDoctores = db.Doctores.Where(p => p.IdDoc.Equals(id)).First();
-                        oDoctores.IdDoc = oDoctoresCLS.IdDoc;
-                        oDoctores.IdUser = oDoctoresCLS.IdUser;
-                        oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
-                        oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;
-                        oDoctores.IDEspecializacion = oDoctoresCLS.IDEspecializacion;
-                        
-
-                    }
-                    return View(oDoctoresCLS);
-                }
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Error", "Home");
-            }
-
-        }
-        [HttpPost]
-
-
-        public ActionResult editard(DoctoresCLS oDoctoresCLS)
-        {
-            int id = oDoctoresCLS.IdDoc;
-
-            if (!ModelState.IsValid)
-            {
-                llenarGenero();
-                ViewBag.lista = listaGenero;
-                llenarEspecializacion();
-                ViewBag.Lista = listaEspecializacion;
-                return View(oDoctoresCLS);
-
-            }
-
-            using (var db = new TurneroFaeracEntities())
-            {
-                Doctores oDoctores = db.Doctores.Where(p => p.IdDoc.Equals(id)).First();
-                oDoctores.IdDoc = oDoctoresCLS.IdDoc;
-                oDoctores.IdUser = oDoctoresCLS.IdUser;
-                oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
-                oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;
-                oDoctores.IDEspecializacion = oDoctoresCLS.IDEspecializacion;
-                db.SaveChanges();
-
-
-            }
-
-            return RedirectToAction("Home");
-        }
-        [HttpGet]
-        public ActionResult editarp(int id)
-        {
-            try
-            {
-                if (Session["UserID"] == null)
-                {
-
-                    return RedirectToAction("Login", "Login");
-                }
-                else
-                {
-                    llenarGenero();
-                    ViewBag.lista = listaGenero;
-                    llenarEspecializacion();
-                    ViewBag.Lista = listaEspecializacion;
-
-                    PacientesCLS oPacientesCLS = new PacientesCLS();
-                    using (var db = new TurneroFaeracEntities())
-                    {
-                        Pacientes oPacientes = db.Pacientes.Where(p => p.IdPaciente.Equals(id)).First();
-
-                        oPacientes.IdPaciente = oPacientesCLS.IdPaciente;
-                        oPacientes.NombrePac = oPacientesCLS.NombrePac;
-                        oPacientes.ApePac = oPacientesCLS.ApePac;
-                        oPacientes.DNIPac = oPacientesCLS.DNIPac;
-                        oPacientes.TipoDNI = oPacientesCLS.TipoDNI;
-                        oPacientes.EdadPac = oPacientesCLS.EdadPac;
-                        oPacientes.Genero = oPacientesCLS.Genero;
-                        oPacientes.IdUser = oPacientesCLS.IdUser;
-                        oPacientes.Correo = oPacientesCLS.Correo;
-                        oPacientes.NumeroContacto = oPacientesCLS.NumeroContacto;
-
-
-                    }
-                    return View(oPacientesCLS);
-                }
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Error", "Home");
-            }
-
-        }
-        [HttpPost]
-        public ActionResult editarp(PacientesCLS oPacientesCLS)
-        {
-            int id = oPacientesCLS.IdPaciente;
-
-            if (!ModelState.IsValid)
-            {
-                llenarGenero();
-                ViewBag.lista = listaGenero;
-                llenarEspecializacion();
-                ViewBag.Lista = listaEspecializacion;
-                return View(oPacientesCLS);
-
-            }
-
-            using (var db = new TurneroFaeracEntities())
-            {
-                Pacientes oPacientes = db.Pacientes.Where(p => p.IdPaciente.Equals(id)).First();
-
-                oPacientes.IdPaciente = oPacientesCLS.IdPaciente;
-                oPacientes.NombrePac = oPacientesCLS.NombrePac;
-                oPacientes.ApePac = oPacientesCLS.ApePac;
-                oPacientes.DNIPac = oPacientesCLS.DNIPac;
-                oPacientes.TipoDNI = oPacientesCLS.TipoDNI;
-                oPacientes.EdadPac = oPacientesCLS.EdadPac;
-                oPacientes.Genero = oPacientesCLS.Genero;
-                oPacientes.IdUser = oPacientesCLS.IdUser;
-                oPacientes.Correo = oPacientesCLS.Correo;
-                oPacientes.NumeroContacto = oPacientesCLS.NumeroContacto;
-                db.SaveChanges();
-
-
             }
 
             return RedirectToAction("Home");
         }
 
 
-
-
-        public ActionResult FiltrarEmpleados(UsuarioCLS oUsuariosCLS)
-    {
-        string nombreUsr = oUsuariosCLS.nombreFiltro;
-        List<UsuarioCLS> listaUsr = new List<UsuarioCLS>();
-        using (var db = new TurneroFaeracEntities())
-
-                if (nombreUsr == null)
-                {
-                    listaUsr = (from Usuarios in db.Usuarios
-                                 select new UsuarioCLS
-
-                                 {
-                                     IdUser = Usuarios.IdUser,
-                                     Usuario = Usuarios.Usuario,
-                                     Contraseña = Usuarios.Contraseña,
-                                     IdTipo = Usuarios.IdTipo,
-                                     NumeroContacto = Usuarios.NumeroContacto,
-                                     Genero = (int)Usuarios.Genero
-
-                                 }).ToList();
-
-                }
-                else
-                {
-                    listaUsr = (from Usuarios in db.Usuarios
-                                 where Usuarios.Usuario.Contains(nombreUsr)
-                                 select new UsuarioCLS
-                                 {
-                                     IdUser = Usuarios.IdUser,
-                                     Usuario = Usuarios.Usuario,
-                                     Contraseña = Usuarios.Contraseña,
-                                     IdTipo = Usuarios.IdTipo,
-                                     NumeroContacto = Usuarios.NumeroContacto,
-                                     Genero = (int)Usuarios.Genero
-                                 }).ToList();
-                }
-            return PartialView("_TablaEmpleados", listaUsr);
-        }
 
 
         private List<UsuarioCLS> ObtenerListaUsuarios()
@@ -671,19 +680,19 @@ namespace FaeracT.Controllers
             llenarEspecializacion();
             List<UsuarioCLS> listaUsuarios = new List<UsuarioCLS>();
             using (var db = new TurneroFaeracEntities())
-               
+
             {
                 listaUsuarios = (from Usuarios in db.Usuarios
-                                  select new UsuarioCLS
-                                  {
-                                      IdUser = Usuarios.IdUser,
-                                      Usuario = Usuarios.Usuario,
-                                      Contraseña = Usuarios.Contraseña,
-                                      IdTipo = Usuarios.IdTipo,
-                                      NumeroContacto = Usuarios.NumeroContacto,
-                                      Genero = (int)Usuarios.Genero
+                                 select new UsuarioCLS
+                                 {
+                                     IdUser = Usuarios.IdUser,
+                                     Usuario = Usuarios.Usuario,
+                                     Contraseña = Usuarios.Contraseña,
+                                     IdTipo = Usuarios.IdTipo,
+                                     NumeroContacto = Usuarios.NumeroContacto,
+                                     Genero = (int)Usuarios.Genero
 
-                                  }).ToList();
+                                 }).ToList();
                 return listaUsuarios;
             }
 
@@ -710,8 +719,28 @@ namespace FaeracT.Controllers
                 return listaAnalisis;
             }
         }
+        private List<TablaTurnosCLS> ObtenerListaTurnos()
+        {
+            List<TablaTurnosCLS> listaTurnos = new List<TablaTurnosCLS>();
+            using (var db = new TurneroFaeracEntities())
+            {
+                listaTurnos = (from ia in db.TablaTurnos
+                                 join p in db.Doctores on ia.IdDoc equals p.IdDoc
+                                 select new TablaTurnosCLS
+                                 {
+                                     IdTurno = ia.IdTurno,
+                                     IdPaciente = ia.IdPaciente,
+                                     inicio = (DateTime)ia.inicio,
+                                     Fin = (DateTime)ia.Fin,
+                                     Estado = ia.Estado,
+                                     IdDoc = (int)ia.IdDoc,
+                                     NombrePaciente = ia.NombrePaciente,
+                                     ApeDoc = ia.ApeDoc
+                                 }).ToList();
 
-
+                return listaTurnos;
+            }
+        }
         public ActionResult TablaTurnosUserDoc1()
         {
             List<PacientesCLS> pacientes = ObtenerListaPacientes(); // Obtén tus datos de pacientes
@@ -721,7 +750,44 @@ namespace FaeracT.Controllers
             return PartialView("_TablaTurnosUserDoc", pacientes);
         }
 
+        public ActionResult FiltrarEmpleados(UsuarioCLS oUsuariosCLS)
+        {
+            string nombreUsr = oUsuariosCLS.nombreFiltro;
+            List<UsuarioCLS> listaUsr = new List<UsuarioCLS>();
+            using (var db = new TurneroFaeracEntities())
 
+                if (nombreUsr == null)
+                {
+                    listaUsr = (from Usuarios in db.Usuarios
+                                select new UsuarioCLS
+
+                                {
+                                    IdUser = Usuarios.IdUser,
+                                    Usuario = Usuarios.Usuario,
+                                    Contraseña = Usuarios.Contraseña,
+                                    IdTipo = Usuarios.IdTipo,
+                                    NumeroContacto = Usuarios.NumeroContacto,
+                                    Genero = (int)Usuarios.Genero
+
+                                }).ToList();
+
+                }
+                else
+                {
+                    listaUsr = (from Usuarios in db.Usuarios
+                                where Usuarios.Usuario.Contains(nombreUsr)
+                                select new UsuarioCLS
+                                {
+                                    IdUser = Usuarios.IdUser,
+                                    Usuario = Usuarios.Usuario,
+                                    Contraseña = Usuarios.Contraseña,
+                                    IdTipo = Usuarios.IdTipo,
+                                    NumeroContacto = Usuarios.NumeroContacto,
+                                    Genero = (int)Usuarios.Genero
+                                }).ToList();
+                }
+            return PartialView("_TablaEmpleados", listaUsr);
+        }
         public ActionResult Filtrar(UsuarioCLS oUsuarioCLS)
         {
             string nombreUsuario = oUsuarioCLS.nombreFiltro;
@@ -763,27 +829,27 @@ namespace FaeracT.Controllers
                 if (nombreDoc == null)
                 {
                     listaDocs = (from doctores in db.Doctores
-                                    select new DoctoresCLS
-                                    {
-                                        IdDoc = doctores.IdDoc,
-                                        ApeDoc = doctores.ApeDoc,
-                                        IdUser = doctores.IdUser,
-                                        NombreDoc = doctores.NombreDoc,
-                                        IDEspecializacion = doctores.IDEspecializacion,
-                                    }).ToList();
+                                 select new DoctoresCLS
+                                 {
+                                     IdDoc = doctores.IdDoc,
+                                     ApeDoc = doctores.ApeDoc,
+                                     IdUser = doctores.IdUser,
+                                     NombreDoc = doctores.NombreDoc,
+                                     IDEspecializacion = doctores.IDEspecializacion,
+                                 }).ToList();
                 }
                 else
                 {
                     listaDocs = (from doctores in db.Doctores
-                                    where doctores.NombreDoc.Contains(nombreDoc)
-                                    select new DoctoresCLS
-                                    {
-                                        IdDoc = doctores.IdDoc,
-                                        IdUser = doctores.IdUser,
-                                        ApeDoc = doctores.ApeDoc,
-                                        NombreDoc = doctores.NombreDoc,
-                                        IDEspecializacion = doctores.IDEspecializacion,
-                                    }).ToList();
+                                 where doctores.NombreDoc.ToLower().Contains(nombreDoc.ToLower())
+                                 select new DoctoresCLS
+                                 {
+                                     IdDoc = doctores.IdDoc,
+                                     IdUser = doctores.IdUser,
+                                     ApeDoc = doctores.ApeDoc,
+                                     NombreDoc = doctores.NombreDoc,
+                                     IDEspecializacion = doctores.IDEspecializacion,
+                                 }).ToList();
                 }
             }
             return PartialView("_TablaDoctores", listaDocs);
@@ -832,6 +898,43 @@ namespace FaeracT.Controllers
             }
             return PartialView("_TablaPacientes", listaPacs);
         }
+        public ActionResult FiltrarT(TurnosCLS oTurnosCLS)
+        {
+            string turnoPac = oTurnosCLS.nombreFiltro;
+            List<TurnosCLS> turnoPacs = new List<TurnosCLS>();
+
+            using (var db = new TurneroFaeracEntities())
+            {
+                // Obtener el IdUser del paciente logueado
+                int idUser = Convert.ToInt32(Session["UserID"]);
+
+                // Filtrar por defecto los turnos del paciente logueado
+                turnoPacs = (from turnos in db.Turnos
+                             where turnos.IdPaciente == idUser
+                             select new TurnosCLS
+                             {
+                                 IdTurno = turnos.IdTurno,
+                                 IdPaciente = turnos.IdPaciente,
+                                 Fecha = turnos.Fecha,
+                                 Hora = turnos.Hora,
+                                 TurnoRealizado = turnos.TurnoRealizado,
+                                 ComentarioDoctor = turnos.ComentarioDoctor,
+                                 IdDoc = turnos.IdDoc,
+                             }).ToList();
+
+                // Si el filtro por nombre no está vacío, aplicar filtro adicional
+                if (!string.IsNullOrEmpty(turnoPac))
+                {
+                    turnoPacs = turnoPacs.Where(t => t.nombreFiltro.Contains(turnoPac)).ToList();
+                }
+
+             
+            }
+
+            return PartialView("_TablaTurnos", turnoPacs);
+        }
+
+
         public int Guardar(UsuarioCLS oUsuarioCLS, int titulo)
         {
             int rpta = 0;
@@ -883,23 +986,46 @@ namespace FaeracT.Controllers
                     Pacientes oPacientes = new Pacientes
                     {
 
-                     IdPaciente = oPacientesCLS.IdPaciente,
-                     NombrePac = oPacientesCLS.NombrePac,
-                     ApePac = oPacientesCLS.ApePac,
-                     DNIPac = oPacientesCLS.DNIPac,
-                     TipoDNI = oPacientesCLS.TipoDNI,
-                     EdadPac = oPacientesCLS.EdadPac,
-                     Genero = (int)oPacientesCLS.Genero,
-                     IdUser = oPacientesCLS.IdUser,
-                     Correo = oPacientesCLS.Correo,
-                     NumeroContacto = oPacientesCLS.NumeroContacto,
-                };
+                        IdPaciente = oPacientesCLS.IdPaciente,
+                        NombrePac = oPacientesCLS.NombrePac,
+                        ApePac = oPacientesCLS.ApePac,
+                        DNIPac = oPacientesCLS.DNIPac,
+                        TipoDNI = oPacientesCLS.TipoDNI,
+                        EdadPac = oPacientesCLS.EdadPac,
+                        Genero = (int)oPacientesCLS.Genero,
+                        IdUser = oPacientesCLS.IdUser,
+                        Correo = oPacientesCLS.Correo,
+                        NumeroContacto = oPacientesCLS.NumeroContacto,
+                    };
                     db.Pacientes.Add(oPacientes);
                     rpta = db.SaveChanges();
                 }
             }
             return rpta;
         }
+        public int GuardarT(TablaTurnosCLS oTablaTurnosCLS, int titulo)
+        {
+            int rpta = 0;
+            using (var db = new TurneroFaeracEntities())
+            {
+                if (titulo == 1)
+                {
+                    TablaTurnos oTurnos = new TablaTurnos
+                    {
+                   IdTurno = oTablaTurnosCLS.IdTurno,
+                   IdPaciente = oTablaTurnosCLS.IdPaciente,
+                   inicio = oTablaTurnosCLS.inicio,
+                   Fin = oTablaTurnosCLS.Fin,
+                   EdadPac = oTablaTurnosCLS.EdadPac,
+                   IdDoc = oTablaTurnosCLS.IdDoc,
+                };
+                    db.TablaTurnos.Add(oTurnos);
+                    rpta = db.SaveChanges();
+                }
+            }
+            return rpta;
+        }
+
         public string Eliminar(UsuarioCLS oUsuarioCLS)
         {
             string rpta = "";
@@ -948,6 +1074,44 @@ namespace FaeracT.Controllers
                 {
                     Pacientes oPacientes = db.Pacientes.Where(p => p.IdPaciente == id).First();
                     db.Pacientes.Remove(oPacientes);
+                    rpta = db.SaveChanges().ToString();
+                }
+            }
+            catch (Exception)
+            {
+                rpta = "";
+            }
+            return rpta;
+        }
+        public string EliminarT(TurnosCLS oTurnosCLS)
+        {
+            string rpta = "";
+            try
+            {
+                int id = oTurnosCLS.IdTurno;
+                using (var db = new TurneroFaeracEntities())
+                {
+                    Turnos oTurnos = db.Turnos.Where(p => p.IdTurno == id).First();
+                    db.Turnos.Remove(oTurnos);
+                    rpta = db.SaveChanges().ToString();
+                }
+            }
+            catch (Exception)
+            {
+                rpta = "";
+            }
+            return rpta;
+        }
+        public string Tatendido(TurnosCLS oTurnosCLS)
+        {
+            string rpta = "";
+            try
+            {
+                int id = oTurnosCLS.IdTurno;
+                using (var db = new TurneroFaeracEntities())
+                {
+                    Turnos oTurnos = db.Turnos.Where(p => p.IdTurno == id).First();
+                    oTurnos.TurnoRealizado = true;
                     rpta = db.SaveChanges().ToString();
                 }
             }
@@ -1016,7 +1180,6 @@ namespace FaeracT.Controllers
 
             return rpta;
         }
-
         public string GuardarDocs(DoctoresCLS oDoctoresCLS, int titulo)
         {
             string rpta = "";
@@ -1037,11 +1200,11 @@ namespace FaeracT.Controllers
                             // Agregar nuevo usuario
                             Doctores oDoctores = new Doctores
                             {
-                            
-                            IdUser = oDoctoresCLS.IdUser,
-                            ApeDoc = oDoctoresCLS.ApeDoc,
-                            NombreDoc = oDoctoresCLS.NombreDoc,
-                            IDEspecializacion = oDoctoresCLS.IDEspecializacion,
+
+                                IdUser = oDoctoresCLS.IdUser,
+                                ApeDoc = oDoctoresCLS.ApeDoc,
+                                NombreDoc = oDoctoresCLS.NombreDoc,
+                                IDEspecializacion = oDoctoresCLS.IDEspecializacion,
                             };
 
                             db.Doctores.Add(oDoctores);
@@ -1055,7 +1218,7 @@ namespace FaeracT.Controllers
 
                             if (oDoctores != null)
                             {
-                               
+
                                 oDoctores.IdUser = oDoctoresCLS.IdUser;
                                 oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
                                 oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;
@@ -1078,7 +1241,6 @@ namespace FaeracT.Controllers
 
             return rpta;
         }
-
         public string GuardarPacs(PacientesCLS oPacientesCLS, int titulo)
         {
             string rpta = "";
@@ -1100,7 +1262,7 @@ namespace FaeracT.Controllers
                             Pacientes oPacientes = new Pacientes
                             {
 
-                                
+
                                 NombrePac = oPacientesCLS.NombrePac,
                                 ApePac = oPacientesCLS.ApePac,
                                 DNIPac = oPacientesCLS.DNIPac,
@@ -1124,7 +1286,7 @@ namespace FaeracT.Controllers
                             if (oPacientes != null)
                             {
 
-                              
+
                                 oPacientes.NombrePac = oPacientesCLS.NombrePac;
                                 oPacientes.ApePac = oPacientesCLS.ApePac;
                                 oPacientes.DNIPac = oPacientesCLS.DNIPac;
@@ -1134,6 +1296,78 @@ namespace FaeracT.Controllers
                                 oPacientes.IdUser = oPacientesCLS.IdUser;
                                 oPacientes.Correo = oPacientesCLS.Correo;
                                 oPacientes.NumeroContacto = oPacientesCLS.NumeroContacto;
+
+                                rpta = db.SaveChanges().ToString();
+                            }
+                            else
+                            {
+                                // Manejar el caso en el que el usuario no se encuentra
+                                rpta = "Paciente no encontrado";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                rpta = "Error en otra cosa: " + ex.Message;
+            }
+
+            return rpta;
+        }
+        public string GuardarTurnos(TablaTurnosCLS oTablaTurnosCLS, int titulo)
+        {
+            string rpta = "";
+
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    // Manejo de errores de validación del modelo
+                    // Puedes agregar el código necesario para manejar esto según tus requisitos
+                }
+                else
+                {
+                    using (var db = new TurneroFaeracEntities())
+                    {
+                        if (titulo == -1)
+                        {
+                            // Agregar nuevo usuario
+                            TablaTurnos oTablaTurnos = new TablaTurnos
+                            {
+
+
+                                IdTurno = oTablaTurnosCLS.IdTurno,
+                                IdPaciente = oTablaTurnosCLS.IdPaciente,
+                                inicio = oTablaTurnosCLS.inicio,
+                                 Fin = oTablaTurnosCLS.Fin,
+                                NombrePaciente = oTablaTurnosCLS.NombrePaciente,
+                                IdDoc = oTablaTurnosCLS.IdDoc,
+                            };
+
+                            db.TablaTurnos.Add(oTablaTurnos);
+                            rpta = db.SaveChanges().ToString();
+                            if (rpta == "0") rpta = "";
+                        }
+                        else
+                        {
+                            // Actualizar usuario existente
+
+                            TablaTurnos oTablaTurnos = db.TablaTurnos.Where(p => p.IdTurno == titulo).FirstOrDefault();
+                            if (oTablaTurnos != null)
+                            {
+
+
+
+
+                                oTablaTurnos.IdTurno = oTablaTurnosCLS.IdTurno;
+                                oTablaTurnos.IdPaciente = oTablaTurnosCLS.IdPaciente;
+                                oTablaTurnos.inicio = oTablaTurnosCLS.inicio;
+                                oTablaTurnos.Fin = oTablaTurnosCLS.Fin;
+                                oTablaTurnos.NombrePaciente = oTablaTurnosCLS.NombrePaciente;
+                                oTablaTurnos.IdDoc = oTablaTurnosCLS.IdDoc;
+                                
+
 
                                 rpta = db.SaveChanges().ToString();
                             }
@@ -1153,12 +1387,13 @@ namespace FaeracT.Controllers
 
             return rpta;
         }
+
         public JsonResult RellenarCampos(int titulo)
 
         {
-            
+
             GetTipoUsuarioList();
-          GetGeneroUsuarioList();
+            GetGeneroUsuarioList();
             UsuarioCLS oUsuarioCLS = new UsuarioCLS();
             using (var db = new TurneroFaeracEntities())
             {
@@ -1180,8 +1415,9 @@ namespace FaeracT.Controllers
             DoctoresCLS oDoctoresCLS = new DoctoresCLS();
             using (var db = new TurneroFaeracEntities())
             {
+                
                 Doctores oDoctores = db.Doctores.Where(p => p.IdDoc == titulo).First();
-                oDoctores.IdDoc = oDoctoresCLS.IdDoc;
+               
                 oDoctores.IdUser = oDoctoresCLS.IdUser;
                 oDoctores.ApeDoc = oDoctoresCLS.ApeDoc;
                 oDoctores.NombreDoc = oDoctoresCLS.NombreDoc;
@@ -1200,7 +1436,6 @@ namespace FaeracT.Controllers
             {
                 Pacientes oPacientes = db.Pacientes.Where(p => p.IdPaciente == titulo).First();
 
-                oPacientes.IdPaciente = oPacientesCLS.IdPaciente;
                 oPacientes.NombrePac = oPacientesCLS.NombrePac;
                 oPacientes.ApePac = oPacientesCLS.ApePac;
                 oPacientes.DNIPac = oPacientesCLS.DNIPac;
@@ -1214,6 +1449,63 @@ namespace FaeracT.Controllers
             }
             return Json(oPacientesCLS, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult RellenarTurno(int titulo)
+
+        {
+            ObtenerListaPacientes();
+            ObtenerListaDoctores();
+            TurnosCLS oTurnosCLS = new TurnosCLS();
+            using (var db = new TurneroFaeracEntities())
+            {
+                Turnos oTurnos = db.Turnos.Where(p => p.IdTurno == titulo).First();
+
+                oTurnos.IdPaciente = oTurnosCLS.IdPaciente;
+                oTurnos.Fecha = oTurnosCLS.Fecha;
+                oTurnos.Hora = oTurnosCLS.Hora;
+                oTurnos.TurnoRealizado = oTurnosCLS.TurnoRealizado;
+                oTurnos.ComentarioDoctor = oTurnosCLS.ComentarioDoctor;
+                oTurnos.IdDoc = oTurnosCLS.IdDoc;
+
+            }
+            return Json(oTurnosCLS, JsonRequestBehavior.AllowGet);
+        }
+        private List<PacientesCLS> ObtenerListaPacientes()
+        {
+            List<PacientesCLS> listaPacientes = new List<PacientesCLS>();
+            using (var db = new TurneroFaeracEntities())
+            {
+                listaPacientes = (from Pacientes in db.Pacientes
+                                  select new PacientesCLS
+                                  {
+                                      IdPaciente = Pacientes.IdPaciente,
+                                      NombrePac = Pacientes.NombrePac
+
+
+                                  }).ToList();
+                return listaPacientes;
+            }
+
+
+
+        }
+        private List<DoctoresCLS> ObtenerListaDoctores()
+        {
+            List<DoctoresCLS> listaDoctores = new List<DoctoresCLS>();
+            using (var db = new TurneroFaeracEntities())
+            {
+                listaDoctores = (from doctores in db.Doctores
+                                 join especializacion in db.Especializaciones on doctores.IDEspecializacion equals especializacion.IDEspecializacion
+                                 select new DoctoresCLS
+                                 {
+                                     IdDoc = doctores.IdDoc,
+                                     NombreDoc = doctores.NombreDoc,
+                                     ApeDoc = doctores.ApeDoc,
+                                     IDEspecializacion = doctores.IDEspecializacion,
+                                     Descripcion = especializacion.Descripcion
+                                 }).ToList();
+                return listaDoctores;
+            }
+        }
 
         [HttpGet]
         public static List<SelectListItem> GetTipoUsuarioList()
@@ -1225,9 +1517,9 @@ namespace FaeracT.Controllers
         new SelectListItem { Value = "3", Text = "Doctor" },
         new SelectListItem { Value = "4", Text ="Deshabilitado"}
     };
-        
 
-                return tipoUsuarioList;
+
+            return tipoUsuarioList;
         }
         public static List<SelectListItem> GetGeneroUsuarioList()
         {
@@ -1262,17 +1554,21 @@ namespace FaeracT.Controllers
         }
 
         List<SelectListItem> listaGenero;
-        private void llenarGenero()
+        private object txtDateTime;
+
+        public IEnumerable<string> Scopes { get; private set; }
+
+        public void llenarGenero()
         {
             using (var db = new TurneroFaeracEntities())
             {
                 listaGenero = (from Genero in db.IndiceGenero
-                             where Genero.Habilitado != 0
-                             select new SelectListItem
-                             {
-                                 Text = Genero.Descripcion,
-                                 Value = Genero.IdGenero.ToString()
-                             }).ToList();
+                               where Genero.Habilitado != 0
+                               select new SelectListItem
+                               {
+                                   Text = Genero.Descripcion,
+                                   Value = Genero.IdGenero.ToString()
+                               }).ToList();
 
                 listaGenero.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
 
@@ -1299,7 +1595,144 @@ namespace FaeracT.Controllers
                 return View(usuariosConGenero);
             }
         }
+        public ActionResult ListarAnalisisUsr()
+        {
+            List<AnalisisPacientesCLS> listaAnalisis = ObtenerListaAnalisis();
+            List<PacientesCLS> listaPacientes = ObtenerListaPacientes();
+
+            // Combinar datos de ambas listas en una lista de TablaViewModel
+            List<TablaAnalisisCLS> listaCombinada = listaAnalisis
+                .Join(listaPacientes,
+                    a => a.IdPaciente,
+                    p => p.IdPaciente,
+                    (a, p) => new TablaAnalisisCLS
+                    {
+                        NombrePaciente = p.NombrePac,
+                        LinkAnalisis = a.LinkAnalisis,
+                        FechaAnalisis = a.FechaAnalisis
+                    })
+                .ToList();
+
+            return View(listaCombinada);
+        }
+        public ActionResult BuscarDocs(int idEspecializacion, string nombreFiltro)
+        {
+            List<DoctoresCLS> listaDocs = new List<DoctoresCLS>();
+
+            using (var db = new TurneroFaeracEntities())
+            {
+                if (string.IsNullOrWhiteSpace(nombreFiltro))
+                {
+                    listaDocs = (from Doctores in db.Doctores
+                                 where Doctores.IDEspecializacion == idEspecializacion
+                                 select new DoctoresCLS
+                                 {
+                                     IDEspecializacion = Doctores.IDEspecializacion,
+                                     ApeDoc = Doctores.ApeDoc,
+                                     NombreDoc = Doctores.NombreDoc
+                                 }).ToList();
+                }
+                else
+                {
+                    listaDocs = (from Doctores in db.Doctores
+                                 where Doctores.IDEspecializacion == idEspecializacion && Doctores.ApeDoc.Contains(nombreFiltro)
+                                 select new DoctoresCLS
+                                 {
+                                     IDEspecializacion = Doctores.IDEspecializacion,
+                                     ApeDoc = Doctores.ApeDoc,
+                                     NombreDoc = Doctores.NombreDoc
+
+                                 }).ToList();
+                }
+            }
+
+            return PartialView("_ListaDoctores", listaDocs);
+        }
+
+        [HttpPost]
+        public ActionResult ObtenerDoctores(int idEspecializacion)
+        {
+            using (var db = new TurneroFaeracEntities())
+            {
+                var doctores = db.Doctores
+                                 .Where(d => d.IDEspecializacion == idEspecializacion)
+                                 
+                                 .Select(d => new SelectListItem
+                                 {
+                                     Value = d.IdDoc.ToString(),
+                                     Text = d.ApeDoc
+                                 })
+                                 .ToList();
+
+                return Json(doctores);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ObtenerEspecializaciones()
+        {
+            using (var db = new TurneroFaeracEntities())
+            {
+                var especializaciones = db.Especializaciones
+                                           .Select(e => new SelectListItem
+                                           {
+                                               Value = e.IDEspecializacion.ToString(),
+                                               Text = e.Descripcion
+                                           })
+                                           .ToList();
+
+                return Json(especializaciones);
+            }
+        }
+        [HttpGet]
+        public ActionResult ListarDocs(int idEspecializacion)
+        {
+            using (var db = new TurneroFaeracEntities())
+            {
+                var doctores = db.Doctores
+                                 .Where(d => d.IDEspecializacion == idEspecializacion)
+                                 .Select(d => new
+                                 {
+                                     d.IdDoc,
+                                     d.ApeDoc,
+                                     d.NombreDoc
+                                 })
+                                 .ToList();
+
+                return Json(doctores);
+            }
+        }
+
+
+        public ActionResult ListarEsp()
+        {
+            // Obtén la lista de especializaciones desde tu modelo (puedes consultar tu base de datos aquí)
+            var especializaciones = new List<EspecializacionesCLS>
+    {
+        new EspecializacionesCLS { IDEspecializacion = 2, Descripcion = "Generalista" },
+        new EspecializacionesCLS { IDEspecializacion = 3, Descripcion = "Gastroenterologia" },
+        new EspecializacionesCLS { IDEspecializacion = 4, Descripcion = "Neurologia" },
+        new EspecializacionesCLS { IDEspecializacion = 5, Descripcion = "Cirujano" },
+        new EspecializacionesCLS { IDEspecializacion = 6, Descripcion = "Cuidados Paleativos" },
+        new EspecializacionesCLS { IDEspecializacion = 7, Descripcion = "Pediatra" },
+        new EspecializacionesCLS { IDEspecializacion = 8, Descripcion = "Ginecologo" },
+        new EspecializacionesCLS { IDEspecializacion = 9, Descripcion = "Otorrinolaringologo" },
+        new EspecializacionesCLS { IDEspecializacion = 10, Descripcion = "Oncologo" },
+        new EspecializacionesCLS { IDEspecializacion = 11, Descripcion = "Obstetra" },
+        new EspecializacionesCLS { IDEspecializacion = 12, Descripcion = "Proctologo" },
+        new EspecializacionesCLS { IDEspecializacion = 1, Descripcion = "Nutricionista" },
+      
+     
+        
+        // Agrega más especializaciones según sea necesario
+    };
+
+            // Pasa la lista de especializaciones a la vista
+            ViewBag.Especializaciones = new SelectList(especializaciones, "IDEspecializacion", "Descripcion");
+            
+            return View();
+        }
 
     }
-
 }
+

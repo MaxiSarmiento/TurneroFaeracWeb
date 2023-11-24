@@ -35,5 +35,6 @@ namespace TurneroFaeracWeb.Models
         public virtual ICollection<Doctores> Doctores { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pacientes> Pacientes { get; set; }
+        public virtual TipoUsuarios TipoUsuarios { get; set; }
     }
 }

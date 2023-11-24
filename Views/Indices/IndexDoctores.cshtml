@@ -1,409 +1,126 @@
-﻿@model TurneroFaeracWeb.Models.TurneroFaeracEntities
-<!DOCTYPE html>
+﻿<html lang="en">
+@model TurneroFaeracWeb.Models.Usuarios
+@using System.Collections.Generic
 @{
-    ViewData["Title"] = "Doctor";
+    Layout = null;
 }
 
-<script src="~/lib/daypilot/daypilot-all.min.js"></script>
+<head>
+    <meta charset="utf-8">
+    <title>Bienvenido </title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-<div class="columns">
-    <div class="column-left">
-        <div id="nav"></div>
-    </div>
-    <div class="column-main">
-        <div class="view-toolbar">
-            <button id="buttonDay">Dia</button>
-            <button id="buttonWeek">Semana</button>
-            <button id="buttonMonth">Mes</button>
+
+    <!-- Favicon -->
+    <link href="~/res/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="~/res/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="~/res/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/res/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="~/res/Homestilo.css" rel="stylesheet" />
+</head>
+
+<buody>
+    <!-- Topbar Start -->
+    <div class="container-fluid py-2 border-bottom d-none d-lg-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-lg-start mb-2 mb-lg-0">
+                    <div class="d-inline-flex align-items-center">
+                        <a class="text-decoration-none text-body pe-3" href=""><i class="bi bi-telephone me-2"></i>+54 2954 519228</a>
+                        <span class="text-body">|</span>
+                        <a class="text-decoration-none text-body px-3" href=""><i class="bi bi-envelope me-2"></i>HospicioCatalina@catalina.org</a>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div class="toolbar">
-            <button id="buttonPrevious">&lt;</button>
-            <button id="buttonToday">Hoy</button>
-            <button id="buttonNext">&gt;</button>
-
-            Appointment slots:
-
-            <button id="buttonGenerate">Generar</button>
-            <button id="buttonClear">Limpiar</button>
-        </div>
-        <div id="day"></div>
-        <div id="week"></div>
-        <div id="month"></div>
     </div>
-</div>
+    </div>
+    <!-- Topbar End -->
+    <!-- Navbar Start -->
+    <div>
+        <div class="container-fluid sticky-top bg-white shadow-sm">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0">
+                    <a href="~/LandingPage/Home" class="navbar-brand">
+                        <h1 class="m-0 text-uppercase text-primary"><i class="fa fa-clinic-medical me-2"></i>Instituto Santa Catalina</h1>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <div class="navbar-nav ms-auto py-0">
 
-<script>
-    const app = {
-        elements: {
-            buttonDay: document.querySelector("#buttonDay"),
-            buttonWeek: document.querySelector("#buttonWeek"),
-            buttonMonth: document.querySelector("#buttonMonth"),
-            buttonPrevious: document.querySelector("#buttonPrevious"),
-            buttonToday: document.querySelector("#buttonToday"),
-            buttonNext: document.querySelector("#buttonNext"),
-            buttonClear: document.querySelector("#buttonClear"),
-            buttonGenerate: document.querySelector("#buttonGenerate"),
-        },
-        colors: {
-            blue: "#6fa8dc",
-            blueDarker: "#3d85c6",
-            orange: "#f6b26b",
-            orangeDarker: "#d49049",
-            green: "#93c47d",
-            greenDarker: "#71a25b",
-            text: "white"
-        },
-        range() {
-            switch (nav.selectMode) {
-                case "Day":
-                    return {
-                        start: day.visibleStart(),
-                        end: day.visibleEnd()
-                    };
-                case "Week":
-                    return {
-                        start: week.visibleStart(),
-                        end: week.visibleEnd()
-                    };
-                case "Month":
-                    return {
-                        start: month.startDate.firstDayOfMonth(),
-                        end: month.startDate.firstDayOfMonth().addMonths(1)
-                    };
-            }
-        },
-        active() {
-            switch (nav.selectMode) {
-                case "Day":
-                    return day;
-                case "Week":
-                    return week;
-                case "Month":
-                    return month;
-            }
-        },
-        async createespTurno(args) {
-            const appointment = {
-                status: "free",
-                start: args.start,
-                end: args.end
-            };
-            const { data } = await DayPilot.Http.post(`/api/appointments`, appointment);
-            args.control.events.add(data);
+                            <a href="~/Tablas/TablaTurnos" class="nav-item nav-link">Tabla Doctores</a>
+                            <a href="~/Tablas/TablaPacientes" class="nav-item nav-link">Tabla Estudios</a>
+                            <a href="~/Tablas/TablaPacientes" class="nav-item nav-link">Tabla Pacientes</a>
+                            <a href="~/LandingPage/Home" class="nav-item nav-link active">Salir</a>
+                        </div>
 
-        },
-        async moveespTurno(args) {
-            const appointment = {
-                ...args.e.data,
-                start: args.newStart,
-                end: args.newEnd
-            };
-            const { data } = await DayPilot.Http.put(`/api/appointments/${appointment.id}`, appointment);
-        },
-        async deleteAppointmentSlot(args) {
-            const id = args.e.data.id;
-            await DayPilot.Http.delete(`/api/appointments/${id}`);
-        },
-        renderAppointmentSlot(args) {
-            switch (args.data.status) {
-                case "free":
-                    args.data.backColor = app.colors.blue;
-                    args.data.barColor = app.colors.blueDarker;
-                    args.data.borderColor = "darker";
-                    args.data.fontColor = app.colors.text;
-                    args.data.text = "Available";
-                    break;
-                case "waiting":
-                    args.data.backColor = app.colors.orange;
-                    args.data.barColor = app.colors.orangeDarker;
-                    args.data.borderColor = "darker";
-                    args.data.fontColor = app.colors.text;
-                    args.data.text = args.data.patientName;
-                    break;
-                case "confirmed":
-                    args.data.backColor = app.colors.green;
-                    args.data.barColor = app.colors.greenDarker;
-                    args.data.borderColor = "darker";
-                    args.data.fontColor = app.colors.text;
-                    args.data.text = args.data.patientName;
-                    break;
-            }
-        },
-        async editAppointmentSlot(args) {
-            const form = [
-                { name: "Edit Appointment" },
-                { name: "Name", id: "patientName" },
-                {
-                    name: "Status", id: "status", type: "select", options: [
-                        { name: "Free", id: "free" },
-                        { name: "Waiting", id: "waiting" },
-                        { name: "Confirmed", id: "confirmed" },
-                    ]
-                },
-                { name: "From", id: "start", dateFormat: "MMMM d, yyyy h:mm tt", disabled: true },
-                { name: "To", id: "end", dateFormat: "MMMM d, yyyy h:mm tt", disabled: true },
-            ];
+                    </div>
+                </nav>
+            </div>
 
-            const data = args.e.data;
-
-            const options = {
-                focus: "patientName"
-            };
-
-            const modal = await DayPilot.Modal.form(form, data, options);
-            if (modal.canceled) {
-                return;
-            }
-
-            const params = {
-                ...args.e.data,
-                name: modal.result.patientName,
-                status: modal.result.status
-            };
-
-            await DayPilot.Http.put(`/api/appointments/${params.id}`, params);
-            args.control.events.update(modal.result);
-
-        },
-        async loadEvents(date) {
-            const start = nav.visibleStart();
-            const end = nav.visibleEnd();
-
-            const { data } = await DayPilot.Http.get(`/api/appointments?start=${start}&end=${end}`);
-
-            const options = {
-                visible: true,
-                events: data
-            };
-
-            if (date) {
-                options.startDate = date;
-            }
-
-            day.hide();
-            week.hide();
-            month.hide();
-
-            const active = app.active();
-            active.update(options);
-
-            nav.update({
-                events: data
-            });
-        },
-        init() {
-
-            app.elements.buttonDay.addEventListener("click", ev => {
-                nav.update({
-                    selectMode: "Day"
-                });
-            });
-
-            app.elements.buttonWeek.addEventListener("click", ev => {
-                nav.update({
-                    selectMode: "Week"
-                });
-            });
-
-            app.elements.buttonMonth.addEventListener("click", ev => {
-                nav.update({
-                    selectMode: "Month"
-                });
-            });
-
-            app.elements.buttonPrevious.addEventListener("click", ev => {
-                const current = nav.selectionDay;
-                let updated;
-                switch (nav.selectMode) {
-                    case "Day":
-                        updated = current.addDays(-1);
-                        break;
-                    case "Week":
-                        updated = current.addDays(-7);
-                        break;
-                    case "Month":
-                        updated = current.addMonths(-1);
-                        break;
-                }
-                nav.select(updated);
-            });
-
-            app.elements.buttonNext.addEventListener("click", ev => {
-                const current = nav.selectionDay;
-                let updated;
-                switch (nav.selectMode) {
-                    case "Day":
-                        updated = current.addDays(1);
-                        break;
-                    case "Week":
-                        updated = current.addDays(7);
-                        break;
-                    case "Month":
-                        updated = current.addMonths(1);
-                        break;
-                }
-                nav.select(updated);
-            });
-
-            app.elements.buttonToday.addEventListener("click", ev => {
-                nav.select(DayPilot.Date.today());
-            });
-
-            app.elements.buttonClear.addEventListener("click", async ev => {
-
-                const modal = await DayPilot.Modal.confirm("Do you want to delete all free slots in the current view?");
-                if (modal.canceled) {
-                    return;
-                }
-
-                const params = app.range();
-
-                const { data } = await DayPilot.Http.post("/api/appointments/clear", params);
-                app.loadEvents();
-            });
-
-            app.elements.buttonGenerate.addEventListener("click", async ev => {
-                const current = nav.selectMode.toLowerCase();
-                const form = [
-                    { text: `Generate slots for the current ${current}?` },
-                ];
-
-                if (current === "week" || current === "month") {
-                    form.push({
-                        name: "Include weekends",
-                        type: "checkbox",
-                        id: "weekends"
-                    });
-                }
-
-                form.push({
-                    text: "In the month view, you can also generate slots by selecting days using drag and drop."
-                });
-
-                const modal = await DayPilot.Modal.form(form, {});
-                if (modal.canceled) {
-                    return;
-                }
-
-                let range = app.range();
-
-                const params = {
-                    start: range.start,
-                    end: range.end,
-                    weekends: modal.result.weekends,
-                };
-
-                const { data } = await DayPilot.Http.post("/api/appointments/create", params);
-                app.loadEvents();
-
-
-            });
-
-
-            app.loadEvents();
-        }
-    };
-
-    const nav = new DayPilot.Navigator("nav", {
-        selectMode: "Week",
-        showMonths: 3,
-        skipMonths: 3,
-        onTimeRangeSelected: (args) => {
-            app.loadEvents(args.day);
-        }
-    });
-    nav.init();
-
-    const day = new DayPilot.Calendar("day", {
-        viewType: "Day",
-        visible: false,
-        eventDeleteHandling: "Update",
-        onTimeRangeSelected: (args) => {
-            app.createAppointmentSlot(args);
-        },
-        onEventMoved: (args) => {
-            app.moveAppointmentSlot(args);
-        },
-        onEventResized: (args) => {
-            app.moveAppointmentSlot(args);
-        },
-        onEventDeleted: (args) => {
-            app.deleteAppointmentSlot(args);
-        },
-        onBeforeEventRender: (args) => {
-            app.renderAppointmentSlot(args);
-        },
-        onEventClick: (args) => {
-            app.editAppointmentSlot(args);
-        }
-    });
-    day.init();
-
-    const week = new DayPilot.Calendar("week", {
-        viewType: "Week",
-        eventDeleteHandling: "Update",
-        onTimeRangeSelected: (args) => {
-            app.createAppointmentSlot(args);
-        },
-        onEventMoved: (args) => {
-            app.moveAppointmentSlot(args);
-        },
-        onEventResized: (args) => {
-            app.moveAppointmentSlot(args);
-        },
-        onEventDeleted: (args) => {
-            app.deleteAppointmentSlot(args);
-        },
-        onBeforeEventRender: (args) => {
-            app.renderAppointmentSlot(args);
-        },
-        onEventClick: (args) => {
-            app.editAppointmentSlot(args);
-        }
-    });
-    week.init();
-
-
-    const month = new DayPilot.Month("month", {
-        visible: false,
-        eventDeleteHandling: "Update",
-        eventMoveHandling: "Disabled",
-        eventResizeHandling: "Disabled",
-        cellHeight: 150,
-        onCellHeaderClick: args => {
-            nav.selectMode = "Day";
-            nav.select(args.start);
-        },
-        onEventDelete: args => {
-            app.deleteAppointmentSlot(args);
-        },
-        onBeforeEventRender: args => {
-            app.renderAppointmentSlot(args);
-
-            // customize content
-            const locale = DayPilot.Locale.find(month.locale);
-            const start = new DayPilot.Date(args.data.start).toString(locale.timePattern);
-            const name = DayPilot.Util.escapeHtml(args.data.patientName || "");
-            args.data.html = `<span class='month-time'>${start}</span> ${name}`;
-        },
-        onTimeRangeSelected: async (args) => {
-            const params = {
-                start: args.start.toString(),
-                end: args.end.toString(),
-                weekends: true
-            };
-
-            args.control.clearSelection();
-
-            const { data } = await DayPilot.Http.post("/api/appointments/create", params);
-            app.loadEvents();
-        },
-        onEventClick: (args) => {
-            app.editAppointmentSlot(args);
-        }
-    });
-    month.init();
-
-    app.init();
-
-</script>
+        </div>
+    </div>
+    <!-- Navbar End -->
+    <!-- Centered Panel Start -->
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2>Mis Datos</h2>
+                    </div>
+                    <div class="card-body">
+                        <!-- Display user information here -->
+                        <div class="mb-3">
+                            <label for="Usuario" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="Usuario" value="JohnDoe" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Contraseña" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="Contraseña" value="**********" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="NombreUser" value="Juan" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Apellido" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="ApeUser" value="Perez" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="NumeroContacto" class="form-label">Numero Contacto</label>
+                            <input type="number" class="form-control" id="NumeroContacto" value="2954519225" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Genero" class="form-label">Genero</label>
+                            <input type="text" class="form-control" id="Genero" value="Masculino" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Especializacion" class="form-label">Especializacion</label>
+                            <input type="text" class="form-control" id="IDEspecializacion" value="Gastroenterologia" readonly>
+                        </div>
+                        <!-- Repeat the above structure for other user information fields -->
+                        <!-- Edit button -->
+                        <button type="button" class="btn btn-primary" onclick="enableEdit()">Editar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
