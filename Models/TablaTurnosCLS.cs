@@ -25,8 +25,8 @@ namespace TurneroFaeracWeb.Models
         public string Fecha { get; set; }
         [Range(minimum: 0, maximum: 85)]
         public int EdadPac { get; set; }
-       
 
+        public virtual string NombreEspecializacion { get; set; }
         public virtual Doctores Doctores { get; set; }
     }
 }

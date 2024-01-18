@@ -12,7 +12,7 @@ namespace Progweb1.Controllers
 {
     public class LoginController : Controller
     {
-        TurneroFaeracEntities db = new TurneroFaeracEntities();
+        TurneroNewEntities db = new TurneroNewEntities();
 
 
         public ActionResult Login()
@@ -50,7 +50,7 @@ namespace Progweb1.Controllers
 
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     // Verifica si ya existe un usuario con el mismo nombre de usuario o correo
                     var usuarioExistente = db.Usuarios.FirstOrDefault(u => u.Usuario == oUsuarioCLS.Usuario || u.Correo == oUsuarioCLS.Correo);
@@ -138,7 +138,7 @@ namespace Progweb1.Controllers
             UsuarioCLS usuario = null;
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     var usuarioDB = db.Usuarios
                         .Where(u => u.Correo == oUsuarioCLS.Correo && u.Contraseña == oUsuarioCLS.Contraseña)
@@ -168,7 +168,7 @@ namespace Progweb1.Controllers
             UsuarioCLS usuario = null;
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     var usuarioDB = db.Usuarios
                         .Where(u => u.Correo == correo)
@@ -198,7 +198,7 @@ namespace Progweb1.Controllers
             bool respuesta = false;
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     var usuario = db.Usuarios
                         .Where(u => u.Token == token)
@@ -227,7 +227,7 @@ namespace Progweb1.Controllers
             bool respuesta = false;
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     var usuario = db.Usuarios
                         .Where(u => u.Token == token)
@@ -270,7 +270,7 @@ namespace Progweb1.Controllers
             }
             else
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     Usuarios oUsuario = new Usuarios();
                     oUsuario.Usuario = oUsuarioCLS.Usuario;
@@ -292,7 +292,7 @@ namespace Progweb1.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     // Hasheamos la contraseña ingresada por el usuario
                     string hashedPassword = HashPassword(objUser.Contraseña);
@@ -319,7 +319,8 @@ namespace Progweb1.Controllers
                         }
                         else if (obj.IdTipo == 3)
                         {
-                            return RedirectToAction("IndexDoctores", "Indices");
+                            return RedirectToAction("IndexDoctores","Indices");
+
                         }
                     }
                 }
@@ -361,7 +362,7 @@ namespace Progweb1.Controllers
         List<SelectListItem> listaUsr;
         private void TipoUsr()
         {
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 listaUsr = (from usuario in db.Usuarios
 
@@ -380,7 +381,7 @@ namespace Progweb1.Controllers
         List<SelectListItem> listaGenero;
         private void llenarGenero()
         {
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 listaGenero = (from Genero in db.IndiceGenero
                                where Genero.Habilitado != 0

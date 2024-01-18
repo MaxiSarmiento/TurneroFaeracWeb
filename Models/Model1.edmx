@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="FaeracTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="TurneroNewModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Appointments">
           <Key>
             <PropertyRef Name="AppointmentId" />
@@ -179,6 +179,14 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="TablaHorarios">
+          <Key>
+            <PropertyRef Name="IdHorario" />
+          </Key>
+          <Property Name="IdHorario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IniHorario" Type="time" Precision="4" />
+          <Property Name="FinHorario" Type="time" Precision="4" />
+        </EntityType>
         <EntityType Name="TablaTurnos">
           <Key>
             <PropertyRef Name="IdTurno" />
@@ -224,6 +232,18 @@
           <Property Name="Hora" Type="time" Precision="7" />
           <Property Name="TurnoRealizado" Type="bit" />
           <Property Name="ComentarioDoctor" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="TurnosMod">
+          <Key>
+            <PropertyRef Name="IdTurno" />
+          </Key>
+          <Property Name="IdTurno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdDoc" Type="int" Nullable="false" />
+          <Property Name="IdPaciente" Type="int" Nullable="false" />
+          <Property Name="IdHorario" Type="int" Nullable="false" />
+          <Property Name="Atendido" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="IdDia" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserIntegrada">
           <Key>
@@ -411,6 +431,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TurnosMod_DiasSemana">
+          <End Role="DiasSemana" Type="Self.DiasSemana" Multiplicity="1" />
+          <End Role="TurnosMod" Type="Self.TurnosMod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiasSemana">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TurnosMod">
+              <PropertyRef Name="IdDia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TurnosMod_Doctores">
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="1" />
+          <End Role="TurnosMod" Type="Self.TurnosMod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctores">
+              <PropertyRef Name="IdDoc" />
+            </Principal>
+            <Dependent Role="TurnosMod">
+              <PropertyRef Name="IdDoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TurnosMod_Pacientes">
+          <End Role="Pacientes" Type="Self.Pacientes" Multiplicity="1" />
+          <End Role="TurnosMod" Type="Self.TurnosMod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pacientes">
+              <PropertyRef Name="IdPaciente" />
+            </Principal>
+            <Dependent Role="TurnosMod">
+              <PropertyRef Name="IdPaciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TurnosMod_TablaHorarios">
+          <End Role="TablaHorarios" Type="Self.TablaHorarios" Multiplicity="1" />
+          <End Role="TurnosMod" Type="Self.TurnosMod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TablaHorarios">
+              <PropertyRef Name="IdHorario" />
+            </Principal>
+            <Dependent Role="TurnosMod">
+              <PropertyRef Name="IdHorario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Usuarios_TipoUsuarios">
           <End Role="TipoUsuarios" Type="Self.TipoUsuarios" Multiplicity="1" />
           <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
@@ -423,7 +491,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="FaeracTModelStoreContainer">
+        <EntityContainer Name="TurneroNewModelStoreContainer">
           <EntitySet Name="Appointments" EntityType="Self.Appointments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Boxes" EntityType="Self.Boxes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Consultorios" EntityType="Self.Consultorios" Schema="dbo" store:Type="Tables" />
@@ -441,10 +509,12 @@
           <EntitySet Name="PatientDetails" EntityType="Self.PatientDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProgramaDoc" EntityType="Self.ProgramaDoc" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TablaHorarios" EntityType="Self.TablaHorarios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TablaTurnos" EntityType="Self.TablaTurnos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoUsuarios" EntityType="Self.TipoUsuarios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TurnoBox" EntityType="Self.TurnoBox" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Turnos" EntityType="Self.Turnos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TurnosMod" EntityType="Self.TurnosMod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserIntegrada" EntityType="Self.UserIntegrada" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Appointme__Docto__5DCAEF64" Association="Self.FK__Appointme__Docto__5DCAEF64">
@@ -499,96 +569,32 @@
             <End Role="Pacientes" EntitySet="Pacientes" />
             <End Role="Turnos" EntitySet="Turnos" />
           </AssociationSet>
+          <AssociationSet Name="FK_TurnosMod_DiasSemana" Association="Self.FK_TurnosMod_DiasSemana">
+            <End Role="DiasSemana" EntitySet="DiasSemana" />
+            <End Role="TurnosMod" EntitySet="TurnosMod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurnosMod_Doctores" Association="Self.FK_TurnosMod_Doctores">
+            <End Role="Doctores" EntitySet="Doctores" />
+            <End Role="TurnosMod" EntitySet="TurnosMod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurnosMod_Pacientes" Association="Self.FK_TurnosMod_Pacientes">
+            <End Role="Pacientes" EntitySet="Pacientes" />
+            <End Role="TurnosMod" EntitySet="TurnosMod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurnosMod_TablaHorarios" Association="Self.FK_TurnosMod_TablaHorarios">
+            <End Role="TablaHorarios" EntitySet="TablaHorarios" />
+            <End Role="TurnosMod" EntitySet="TurnosMod" />
+          </AssociationSet>
           <AssociationSet Name="FK_Usuarios_TipoUsuarios" Association="Self.FK_Usuarios_TipoUsuarios">
             <End Role="TipoUsuarios" EntitySet="TipoUsuarios" />
             <End Role="Usuarios" EntitySet="Usuarios" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="FaeracTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="TurneroFaeracEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Appointments" EntityType="FaeracTModel.Appointments" />
-          <EntitySet Name="Boxes" EntityType="FaeracTModel.Boxes" />
-          <EntitySet Name="Consultorios" EntityType="FaeracTModel.Consultorios" />
-          <EntitySet Name="DiasSemana" EntityType="FaeracTModel.DiasSemana" />
-          <EntitySet Name="DiasTrabajoDoc" EntityType="FaeracTModel.DiasTrabajoDoc" />
-          <EntitySet Name="DoctorDetails" EntityType="FaeracTModel.DoctorDetails" />
-          <EntitySet Name="Doctores" EntityType="FaeracTModel.Doctores" />
-          <EntitySet Name="Especializaciones" EntityType="FaeracTModel.Especializaciones" />
-          <EntitySet Name="HorariosDisponibles" EntityType="FaeracTModel.HorariosDisponibles" />
-          <EntitySet Name="HorariosPredefinidos" EntityType="FaeracTModel.HorariosPredefinidos" />
-          <EntitySet Name="IndiceAnalisis" EntityType="FaeracTModel.IndiceAnalisis" />
-          <EntitySet Name="IndiceGenero" EntityType="FaeracTModel.IndiceGenero" />
-          <EntitySet Name="IndiceHorarios" EntityType="FaeracTModel.IndiceHorarios" />
-          <EntitySet Name="Pacientes" EntityType="FaeracTModel.Pacientes" />
-          <EntitySet Name="PatientDetails" EntityType="FaeracTModel.PatientDetails" />
-          <EntitySet Name="ProgramaDoc" EntityType="FaeracTModel.ProgramaDoc" />
-          <EntitySet Name="sysdiagrams" EntityType="FaeracTModel.sysdiagrams" />
-          <EntitySet Name="TablaTurnos" EntityType="FaeracTModel.TablaTurnos" />
-          <EntitySet Name="TipoUsuarios" EntityType="FaeracTModel.TipoUsuarios" />
-          <EntitySet Name="TurnoBox" EntityType="FaeracTModel.TurnoBox" />
-          <EntitySet Name="Turnos" EntityType="FaeracTModel.Turnos" />
-          <EntitySet Name="UserIntegrada" EntityType="FaeracTModel.UserIntegrada" />
-          <EntitySet Name="Usuarios" EntityType="FaeracTModel.Usuarios" />
-          <AssociationSet Name="FK__Appointme__Docto__5DCAEF64" Association="FaeracTModel.FK__Appointme__Docto__5DCAEF64">
-            <End Role="DoctorDetails" EntitySet="DoctorDetails" />
-            <End Role="Appointments" EntitySet="Appointments" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Appointme__Patie__5CD6CB2B" Association="FaeracTModel.FK__Appointme__Patie__5CD6CB2B">
-            <End Role="PatientDetails" EntitySet="PatientDetails" />
-            <End Role="Appointments" EntitySet="Appointments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DiasTrabajoDoc_DiasSemana" Association="FaeracTModel.FK_DiasTrabajoDoc_DiasSemana">
-            <End Role="DiasSemana" EntitySet="DiasSemana" />
-            <End Role="DiasTrabajoDoc" EntitySet="DiasTrabajoDoc" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DiasTrabajoDoc_Doctores" Association="FaeracTModel.FK_DiasTrabajoDoc_Doctores">
-            <End Role="Doctores" EntitySet="Doctores" />
-            <End Role="DiasTrabajoDoc" EntitySet="DiasTrabajoDoc" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Doctores_Especializaciones" Association="FaeracTModel.FK_Doctores_Especializaciones">
-            <End Role="Especializaciones" EntitySet="Especializaciones" />
-            <End Role="Doctores" EntitySet="Doctores" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Doctores_Usuarios" Association="FaeracTModel.FK_Doctores_Usuarios">
-            <End Role="Usuarios" EntitySet="Usuarios" />
-            <End Role="Doctores" EntitySet="Doctores" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndiceHorarios_Doctores" Association="FaeracTModel.FK_IndiceHorarios_Doctores">
-            <End Role="Doctores" EntitySet="Doctores" />
-            <End Role="IndiceHorarios" EntitySet="IndiceHorarios" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProgramaDoc_Doctores" Association="FaeracTModel.FK_ProgramaDoc_Doctores">
-            <End Role="Doctores" EntitySet="Doctores" />
-            <End Role="ProgramaDoc" EntitySet="ProgramaDoc" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TablaTurnos_Doctores" Association="FaeracTModel.FK_TablaTurnos_Doctores">
-            <End Role="Doctores" EntitySet="Doctores" />
-            <End Role="TablaTurnos" EntitySet="TablaTurnos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Turnos_Doctores" Association="FaeracTModel.FK_Turnos_Doctores">
-            <End Role="Doctores" EntitySet="Doctores" />
-            <End Role="Turnos" EntitySet="Turnos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HorariosDisponibles_Pacientes" Association="FaeracTModel.FK_HorariosDisponibles_Pacientes">
-            <End Role="Pacientes" EntitySet="Pacientes" />
-            <End Role="HorariosDisponibles" EntitySet="HorariosDisponibles" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Pacientes_Usuarios" Association="FaeracTModel.FK_Pacientes_Usuarios">
-            <End Role="Usuarios" EntitySet="Usuarios" />
-            <End Role="Pacientes" EntitySet="Pacientes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Turnos_Pacientes" Association="FaeracTModel.FK_Turnos_Pacientes">
-            <End Role="Pacientes" EntitySet="Pacientes" />
-            <End Role="Turnos" EntitySet="Turnos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Usuarios_TipoUsuarios" Association="FaeracTModel.FK_Usuarios_TipoUsuarios">
-            <End Role="TipoUsuarios" EntitySet="TipoUsuarios" />
-            <End Role="Usuarios" EntitySet="Usuarios" />
-          </AssociationSet>
-        </EntityContainer>
+      <Schema Namespace="TurneroNewModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Appointments">
           <Key>
             <PropertyRef Name="AppointmentId" />
@@ -600,15 +606,15 @@
           <Property Name="StartTime" Type="Time" Precision="7" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="Details" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DoctorDetails" Relationship="FaeracTModel.FK__Appointme__Docto__5DCAEF64" FromRole="Appointments" ToRole="DoctorDetails" />
-          <NavigationProperty Name="PatientDetails" Relationship="FaeracTModel.FK__Appointme__Patie__5CD6CB2B" FromRole="Appointments" ToRole="PatientDetails" />
+          <NavigationProperty Name="DoctorDetails" Relationship="Self.FK__Appointme__Docto__5DCAEF64" FromRole="Appointments" ToRole="DoctorDetails" />
+          <NavigationProperty Name="PatientDetails" Relationship="Self.FK__Appointme__Patie__5CD6CB2B" FromRole="Appointments" ToRole="PatientDetails" />
         </EntityType>
         <EntityType Name="Boxes">
           <Key>
             <PropertyRef Name="IdBox" />
           </Key>
           <Property Name="IdBox" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IdUser" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Consultorios">
@@ -616,7 +622,7 @@
             <PropertyRef Name="IdConsultorio" />
           </Key>
           <Property Name="IdConsultorio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IdDoc" Type="Int32" Nullable="false" />
           <Property Name="IdPaciente" Type="Int32" Nullable="false" />
         </EntityType>
@@ -626,7 +632,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Dia" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DiasTrabajoDoc" Relationship="FaeracTModel.FK_DiasTrabajoDoc_DiasSemana" FromRole="DiasSemana" ToRole="DiasTrabajoDoc" />
+          <NavigationProperty Name="DiasTrabajoDoc" Relationship="Self.FK_DiasTrabajoDoc_DiasSemana" FromRole="DiasSemana" ToRole="DiasTrabajoDoc" />
+          <NavigationProperty Name="TurnosMod" Relationship="Self.FK_TurnosMod_DiasSemana" FromRole="DiasSemana" ToRole="TurnosMod" />
         </EntityType>
         <EntityType Name="DiasTrabajoDoc">
           <Key>
@@ -635,8 +642,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdDia" Type="Int32" Nullable="false" />
           <Property Name="IdDoc" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DiasSemana" Relationship="FaeracTModel.FK_DiasTrabajoDoc_DiasSemana" FromRole="DiasTrabajoDoc" ToRole="DiasSemana" />
-          <NavigationProperty Name="Doctores" Relationship="FaeracTModel.FK_DiasTrabajoDoc_Doctores" FromRole="DiasTrabajoDoc" ToRole="Doctores" />
+          <NavigationProperty Name="DiasSemana" Relationship="Self.FK_DiasTrabajoDoc_DiasSemana" FromRole="DiasTrabajoDoc" ToRole="DiasSemana" />
+          <NavigationProperty Name="Doctores" Relationship="Self.FK_DiasTrabajoDoc_Doctores" FromRole="DiasTrabajoDoc" ToRole="Doctores" />
         </EntityType>
         <EntityType Name="DoctorDetails">
           <Key>
@@ -652,7 +659,7 @@
           <Property Name="Pwd" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Specialization" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ProfileImage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Appointments" Relationship="FaeracTModel.FK__Appointme__Docto__5DCAEF64" FromRole="DoctorDetails" ToRole="Appointments" />
+          <NavigationProperty Name="Appointments" Relationship="Self.FK__Appointme__Docto__5DCAEF64" FromRole="DoctorDetails" ToRole="Appointments" />
         </EntityType>
         <EntityType Name="Doctores">
           <Key>
@@ -665,21 +672,22 @@
           <Property Name="ApeDoc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IDEspecializacion" Type="Int32" />
           <Property Name="Flag" Type="Int32" />
-          <NavigationProperty Name="DiasTrabajoDoc" Relationship="FaeracTModel.FK_DiasTrabajoDoc_Doctores" FromRole="Doctores" ToRole="DiasTrabajoDoc" />
-          <NavigationProperty Name="Especializaciones" Relationship="FaeracTModel.FK_Doctores_Especializaciones" FromRole="Doctores" ToRole="Especializaciones" />
-          <NavigationProperty Name="Usuarios" Relationship="FaeracTModel.FK_Doctores_Usuarios" FromRole="Doctores" ToRole="Usuarios" />
-          <NavigationProperty Name="IndiceHorarios" Relationship="FaeracTModel.FK_IndiceHorarios_Doctores" FromRole="Doctores" ToRole="IndiceHorarios" />
-          <NavigationProperty Name="ProgramaDoc" Relationship="FaeracTModel.FK_ProgramaDoc_Doctores" FromRole="Doctores" ToRole="ProgramaDoc" />
-          <NavigationProperty Name="TablaTurnos" Relationship="FaeracTModel.FK_TablaTurnos_Doctores" FromRole="Doctores" ToRole="TablaTurnos" />
-          <NavigationProperty Name="Turnos" Relationship="FaeracTModel.FK_Turnos_Doctores" FromRole="Doctores" ToRole="Turnos" />
+          <NavigationProperty Name="DiasTrabajoDoc" Relationship="Self.FK_DiasTrabajoDoc_Doctores" FromRole="Doctores" ToRole="DiasTrabajoDoc" />
+          <NavigationProperty Name="Especializaciones" Relationship="Self.FK_Doctores_Especializaciones" FromRole="Doctores" ToRole="Especializaciones" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Doctores_Usuarios" FromRole="Doctores" ToRole="Usuarios" />
+          <NavigationProperty Name="IndiceHorarios" Relationship="Self.FK_IndiceHorarios_Doctores" FromRole="Doctores" ToRole="IndiceHorarios" />
+          <NavigationProperty Name="ProgramaDoc" Relationship="Self.FK_ProgramaDoc_Doctores" FromRole="Doctores" ToRole="ProgramaDoc" />
+          <NavigationProperty Name="TablaTurnos" Relationship="Self.FK_TablaTurnos_Doctores" FromRole="Doctores" ToRole="TablaTurnos" />
+          <NavigationProperty Name="Turnos" Relationship="Self.FK_Turnos_Doctores" FromRole="Doctores" ToRole="Turnos" />
+          <NavigationProperty Name="TurnosMod" Relationship="Self.FK_TurnosMod_Doctores" FromRole="Doctores" ToRole="TurnosMod" />
         </EntityType>
         <EntityType Name="Especializaciones">
           <Key>
             <PropertyRef Name="IDEspecializacion" />
           </Key>
           <Property Name="IDEspecializacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Doctores" Relationship="FaeracTModel.FK_Doctores_Especializaciones" FromRole="Especializaciones" ToRole="Doctores" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Doctores" Relationship="Self.FK_Doctores_Especializaciones" FromRole="Especializaciones" ToRole="Doctores" />
         </EntityType>
         <EntityType Name="HorariosDisponibles">
           <Key>
@@ -690,7 +698,7 @@
           <Property Name="Hora" Type="Time" Nullable="false" Precision="7" />
           <Property Name="Disponible" Type="Boolean" Nullable="false" />
           <Property Name="IdPaciente" Type="Int32" />
-          <NavigationProperty Name="Pacientes" Relationship="FaeracTModel.FK_HorariosDisponibles_Pacientes" FromRole="HorariosDisponibles" ToRole="Pacientes" />
+          <NavigationProperty Name="Pacientes" Relationship="Self.FK_HorariosDisponibles_Pacientes" FromRole="HorariosDisponibles" ToRole="Pacientes" />
         </EntityType>
         <EntityType Name="HorariosPredefinidos">
           <Key>
@@ -705,7 +713,7 @@
           </Key>
           <Property Name="IdAnalisis" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdPaciente" Type="Int32" Nullable="false" />
-          <Property Name="LinkAnalisis" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="LinkAnalisis" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FechaAnalisis" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="IndiceGenero">
@@ -726,7 +734,7 @@
           <Property Name="DesdeTiempo" Type="Time" Precision="7" />
           <Property Name="HastaTiempo" Type="Time" Precision="7" />
           <Property Name="Activo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Doctores" Relationship="FaeracTModel.FK_IndiceHorarios_Doctores" FromRole="IndiceHorarios" ToRole="Doctores" />
+          <NavigationProperty Name="Doctores" Relationship="Self.FK_IndiceHorarios_Doctores" FromRole="IndiceHorarios" ToRole="Doctores" />
         </EntityType>
         <EntityType Name="Pacientes">
           <Key>
@@ -742,9 +750,10 @@
           <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="NumeroContacto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Genero" Type="Int32" />
-          <NavigationProperty Name="HorariosDisponibles" Relationship="FaeracTModel.FK_HorariosDisponibles_Pacientes" FromRole="Pacientes" ToRole="HorariosDisponibles" />
-          <NavigationProperty Name="Usuarios" Relationship="FaeracTModel.FK_Pacientes_Usuarios" FromRole="Pacientes" ToRole="Usuarios" />
-          <NavigationProperty Name="Turnos" Relationship="FaeracTModel.FK_Turnos_Pacientes" FromRole="Pacientes" ToRole="Turnos" />
+          <NavigationProperty Name="HorariosDisponibles" Relationship="Self.FK_HorariosDisponibles_Pacientes" FromRole="Pacientes" ToRole="HorariosDisponibles" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Pacientes_Usuarios" FromRole="Pacientes" ToRole="Usuarios" />
+          <NavigationProperty Name="Turnos" Relationship="Self.FK_Turnos_Pacientes" FromRole="Pacientes" ToRole="Turnos" />
+          <NavigationProperty Name="TurnosMod" Relationship="Self.FK_TurnosMod_Pacientes" FromRole="Pacientes" ToRole="TurnosMod" />
         </EntityType>
         <EntityType Name="PatientDetails">
           <Key>
@@ -758,7 +767,7 @@
           <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="EmailId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Pwd" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Appointments" Relationship="FaeracTModel.FK__Appointme__Patie__5CD6CB2B" FromRole="PatientDetails" ToRole="Appointments" />
+          <NavigationProperty Name="Appointments" Relationship="Self.FK__Appointme__Patie__5CD6CB2B" FromRole="PatientDetails" ToRole="Appointments" />
         </EntityType>
         <EntityType Name="ProgramaDoc">
           <Key>
@@ -772,17 +781,26 @@
           <Property Name="NombrePac" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="EdadPac" Type="Int32" />
           <Property Name="Fecha" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Doctores" Relationship="FaeracTModel.FK_ProgramaDoc_Doctores" FromRole="ProgramaDoc" ToRole="Doctores" />
+          <NavigationProperty Name="Doctores" Relationship="Self.FK_ProgramaDoc_Doctores" FromRole="ProgramaDoc" ToRole="Doctores" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="principal_id" Type="Int32" Nullable="false" />
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TablaHorarios">
+          <Key>
+            <PropertyRef Name="IdHorario" />
+          </Key>
+          <Property Name="IdHorario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IniHorario" Type="Time" Precision="4" />
+          <Property Name="FinHorario" Type="Time" Precision="4" />
+          <NavigationProperty Name="TurnosMod" Relationship="Self.FK_TurnosMod_TablaHorarios" FromRole="TablaHorarios" ToRole="TurnosMod" />
         </EntityType>
         <EntityType Name="TablaTurnos">
           <Key>
@@ -801,22 +819,22 @@
           <Property Name="Fecha" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EdadPac" Type="Int32" />
           <Property Name="IdDoc" Type="Int32" />
-          <NavigationProperty Name="Doctores" Relationship="FaeracTModel.FK_TablaTurnos_Doctores" FromRole="TablaTurnos" ToRole="Doctores" />
+          <NavigationProperty Name="Doctores" Relationship="Self.FK_TablaTurnos_Doctores" FromRole="TablaTurnos" ToRole="Doctores" />
         </EntityType>
         <EntityType Name="TipoUsuarios">
           <Key>
             <PropertyRef Name="IdTipo" />
           </Key>
           <Property Name="IdTipo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Usuarios" Relationship="FaeracTModel.FK_Usuarios_TipoUsuarios" FromRole="TipoUsuarios" ToRole="Usuarios" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_Usuarios_TipoUsuarios" FromRole="TipoUsuarios" ToRole="Usuarios" />
         </EntityType>
         <EntityType Name="TurnoBox">
           <Key>
             <PropertyRef Name="idTurno" />
           </Key>
           <Property Name="NumTurnoBox" Type="Int32" Nullable="false" />
-          <Property Name="TipoturnoBox" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="TipoturnoBox" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="IdBox" Type="Int32" Nullable="false" />
           <Property Name="idTurno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
@@ -831,16 +849,32 @@
           <Property Name="Hora" Type="Time" Precision="7" />
           <Property Name="TurnoRealizado" Type="Boolean" />
           <Property Name="ComentarioDoctor" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Doctores" Relationship="FaeracTModel.FK_Turnos_Doctores" FromRole="Turnos" ToRole="Doctores" />
-          <NavigationProperty Name="Pacientes" Relationship="FaeracTModel.FK_Turnos_Pacientes" FromRole="Turnos" ToRole="Pacientes" />
+          <NavigationProperty Name="Doctores" Relationship="Self.FK_Turnos_Doctores" FromRole="Turnos" ToRole="Doctores" />
+          <NavigationProperty Name="Pacientes" Relationship="Self.FK_Turnos_Pacientes" FromRole="Turnos" ToRole="Pacientes" />
+        </EntityType>
+        <EntityType Name="TurnosMod">
+          <Key>
+            <PropertyRef Name="IdTurno" />
+          </Key>
+          <Property Name="IdTurno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdDoc" Type="Int32" Nullable="false" />
+          <Property Name="IdPaciente" Type="Int32" Nullable="false" />
+          <Property Name="IdHorario" Type="Int32" Nullable="false" />
+          <Property Name="Atendido" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="0" />
+          <Property Name="IdDia" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DiasSemana" Relationship="Self.FK_TurnosMod_DiasSemana" FromRole="TurnosMod" ToRole="DiasSemana" />
+          <NavigationProperty Name="Doctores" Relationship="Self.FK_TurnosMod_Doctores" FromRole="TurnosMod" ToRole="Doctores" />
+          <NavigationProperty Name="Pacientes" Relationship="Self.FK_TurnosMod_Pacientes" FromRole="TurnosMod" ToRole="Pacientes" />
+          <NavigationProperty Name="TablaHorarios" Relationship="Self.FK_TurnosMod_TablaHorarios" FromRole="TurnosMod" ToRole="TablaHorarios" />
         </EntityType>
         <EntityType Name="UserIntegrada">
           <Key>
             <PropertyRef Name="IdUsuario" />
           </Key>
           <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nusuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Nusuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Especializacion" Type="Int32" />
           <Property Name="DNIUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -855,21 +889,21 @@
             <PropertyRef Name="IdUser" />
           </Key>
           <Property Name="IdUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Contraseña" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Contraseña" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IdTipo" Type="Int32" Nullable="false" />
           <Property Name="Correo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="NumeroContacto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Token" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Token" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Genero" Type="Int32" />
-          <NavigationProperty Name="Doctores" Relationship="FaeracTModel.FK_Doctores_Usuarios" FromRole="Usuarios" ToRole="Doctores" />
-          <NavigationProperty Name="Pacientes" Relationship="FaeracTModel.FK_Pacientes_Usuarios" FromRole="Usuarios" ToRole="Pacientes" />
-          <NavigationProperty Name="TipoUsuarios" Relationship="FaeracTModel.FK_Usuarios_TipoUsuarios" FromRole="Usuarios" ToRole="TipoUsuarios" />
+          <NavigationProperty Name="Doctores" Relationship="Self.FK_Doctores_Usuarios" FromRole="Usuarios" ToRole="Doctores" />
+          <NavigationProperty Name="Pacientes" Relationship="Self.FK_Pacientes_Usuarios" FromRole="Usuarios" ToRole="Pacientes" />
+          <NavigationProperty Name="TipoUsuarios" Relationship="Self.FK_Usuarios_TipoUsuarios" FromRole="Usuarios" ToRole="TipoUsuarios" />
         </EntityType>
         <Association Name="FK__Appointme__Docto__5DCAEF64">
-          <End Type="FaeracTModel.DoctorDetails" Role="DoctorDetails" Multiplicity="0..1" />
-          <End Type="FaeracTModel.Appointments" Role="Appointments" Multiplicity="*" />
+          <End Role="DoctorDetails" Type="Self.DoctorDetails" Multiplicity="0..1" />
+          <End Role="Appointments" Type="Self.Appointments" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DoctorDetails">
               <PropertyRef Name="DId" />
@@ -880,8 +914,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Appointme__Patie__5CD6CB2B">
-          <End Type="FaeracTModel.PatientDetails" Role="PatientDetails" Multiplicity="0..1" />
-          <End Type="FaeracTModel.Appointments" Role="Appointments" Multiplicity="*" />
+          <End Role="PatientDetails" Type="Self.PatientDetails" Multiplicity="0..1" />
+          <End Role="Appointments" Type="Self.Appointments" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PatientDetails">
               <PropertyRef Name="PId" />
@@ -892,8 +926,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_DiasTrabajoDoc_DiasSemana">
-          <End Type="FaeracTModel.DiasSemana" Role="DiasSemana" Multiplicity="1" />
-          <End Type="FaeracTModel.DiasTrabajoDoc" Role="DiasTrabajoDoc" Multiplicity="*" />
+          <End Role="DiasSemana" Type="Self.DiasSemana" Multiplicity="1" />
+          <End Role="DiasTrabajoDoc" Type="Self.DiasTrabajoDoc" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DiasSemana">
               <PropertyRef Name="Id" />
@@ -903,9 +937,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TurnosMod_DiasSemana">
+          <End Role="DiasSemana" Type="Self.DiasSemana" Multiplicity="1" />
+          <End Role="TurnosMod" Type="Self.TurnosMod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiasSemana">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TurnosMod">
+              <PropertyRef Name="IdDia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_DiasTrabajoDoc_Doctores">
-          <End Type="FaeracTModel.Doctores" Role="Doctores" Multiplicity="1" />
-          <End Type="FaeracTModel.DiasTrabajoDoc" Role="DiasTrabajoDoc" Multiplicity="*" />
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="1" />
+          <End Role="DiasTrabajoDoc" Type="Self.DiasTrabajoDoc" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Doctores">
               <PropertyRef Name="IdDoc" />
@@ -916,8 +962,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Doctores_Especializaciones">
-          <End Type="FaeracTModel.Especializaciones" Role="Especializaciones" Multiplicity="0..1" />
-          <End Type="FaeracTModel.Doctores" Role="Doctores" Multiplicity="*" />
+          <End Role="Especializaciones" Type="Self.Especializaciones" Multiplicity="0..1" />
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Especializaciones">
               <PropertyRef Name="IDEspecializacion" />
@@ -928,8 +974,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Doctores_Usuarios">
-          <End Type="FaeracTModel.Usuarios" Role="Usuarios" Multiplicity="0..1" />
-          <End Type="FaeracTModel.Doctores" Role="Doctores" Multiplicity="*" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuarios">
               <PropertyRef Name="IdUser" />
@@ -940,8 +986,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_IndiceHorarios_Doctores">
-          <End Type="FaeracTModel.Doctores" Role="Doctores" Multiplicity="1" />
-          <End Type="FaeracTModel.IndiceHorarios" Role="IndiceHorarios" Multiplicity="*" />
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="1" />
+          <End Role="IndiceHorarios" Type="Self.IndiceHorarios" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Doctores">
               <PropertyRef Name="IdDoc" />
@@ -952,8 +998,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ProgramaDoc_Doctores">
-          <End Type="FaeracTModel.Doctores" Role="Doctores" Multiplicity="1" />
-          <End Type="FaeracTModel.ProgramaDoc" Role="ProgramaDoc" Multiplicity="*" />
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="1" />
+          <End Role="ProgramaDoc" Type="Self.ProgramaDoc" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Doctores">
               <PropertyRef Name="IdDoc" />
@@ -964,8 +1010,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TablaTurnos_Doctores">
-          <End Type="FaeracTModel.Doctores" Role="Doctores" Multiplicity="0..1" />
-          <End Type="FaeracTModel.TablaTurnos" Role="TablaTurnos" Multiplicity="*" />
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="0..1" />
+          <End Role="TablaTurnos" Type="Self.TablaTurnos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Doctores">
               <PropertyRef Name="IdDoc" />
@@ -976,8 +1022,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Turnos_Doctores">
-          <End Type="FaeracTModel.Doctores" Role="Doctores" Multiplicity="1" />
-          <End Type="FaeracTModel.Turnos" Role="Turnos" Multiplicity="*" />
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="1" />
+          <End Role="Turnos" Type="Self.Turnos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Doctores">
               <PropertyRef Name="IdDoc" />
@@ -987,9 +1033,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TurnosMod_Doctores">
+          <End Role="Doctores" Type="Self.Doctores" Multiplicity="1" />
+          <End Role="TurnosMod" Type="Self.TurnosMod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctores">
+              <PropertyRef Name="IdDoc" />
+            </Principal>
+            <Dependent Role="TurnosMod">
+              <PropertyRef Name="IdDoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_HorariosDisponibles_Pacientes">
-          <End Type="FaeracTModel.Pacientes" Role="Pacientes" Multiplicity="0..1" />
-          <End Type="FaeracTModel.HorariosDisponibles" Role="HorariosDisponibles" Multiplicity="*" />
+          <End Role="Pacientes" Type="Self.Pacientes" Multiplicity="0..1" />
+          <End Role="HorariosDisponibles" Type="Self.HorariosDisponibles" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Pacientes">
               <PropertyRef Name="IdPaciente" />
@@ -1000,8 +1058,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Pacientes_Usuarios">
-          <End Type="FaeracTModel.Usuarios" Role="Usuarios" Multiplicity="0..1" />
-          <End Type="FaeracTModel.Pacientes" Role="Pacientes" Multiplicity="*" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="Pacientes" Type="Self.Pacientes" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuarios">
               <PropertyRef Name="IdUser" />
@@ -1012,8 +1070,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Turnos_Pacientes">
-          <End Type="FaeracTModel.Pacientes" Role="Pacientes" Multiplicity="1" />
-          <End Type="FaeracTModel.Turnos" Role="Turnos" Multiplicity="*" />
+          <End Role="Pacientes" Type="Self.Pacientes" Multiplicity="1" />
+          <End Role="Turnos" Type="Self.Turnos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Pacientes">
               <PropertyRef Name="IdPaciente" />
@@ -1023,9 +1081,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TurnosMod_Pacientes">
+          <End Role="Pacientes" Type="Self.Pacientes" Multiplicity="1" />
+          <End Role="TurnosMod" Type="Self.TurnosMod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pacientes">
+              <PropertyRef Name="IdPaciente" />
+            </Principal>
+            <Dependent Role="TurnosMod">
+              <PropertyRef Name="IdPaciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TurnosMod_TablaHorarios">
+          <End Role="TablaHorarios" Type="Self.TablaHorarios" Multiplicity="1" />
+          <End Role="TurnosMod" Type="Self.TurnosMod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TablaHorarios">
+              <PropertyRef Name="IdHorario" />
+            </Principal>
+            <Dependent Role="TurnosMod">
+              <PropertyRef Name="IdHorario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Usuarios_TipoUsuarios">
-          <End Type="FaeracTModel.TipoUsuarios" Role="TipoUsuarios" Multiplicity="1" />
-          <End Type="FaeracTModel.Usuarios" Role="Usuarios" Multiplicity="*" />
+          <End Role="TipoUsuarios" Type="Self.TipoUsuarios" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TipoUsuarios">
               <PropertyRef Name="IdTipo" />
@@ -1035,282 +1117,403 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        </Schema>
+        <EntityContainer Name="TurneroNewEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Appointments" EntityType="Self.Appointments" />
+          <EntitySet Name="Boxes" EntityType="Self.Boxes" />
+          <EntitySet Name="Consultorios" EntityType="Self.Consultorios" />
+          <EntitySet Name="DiasSemana" EntityType="Self.DiasSemana" />
+          <EntitySet Name="DiasTrabajoDoc" EntityType="Self.DiasTrabajoDoc" />
+          <EntitySet Name="DoctorDetails" EntityType="Self.DoctorDetails" />
+          <EntitySet Name="Doctores" EntityType="Self.Doctores" />
+          <EntitySet Name="Especializaciones" EntityType="Self.Especializaciones" />
+          <EntitySet Name="HorariosDisponibles" EntityType="Self.HorariosDisponibles" />
+          <EntitySet Name="HorariosPredefinidos" EntityType="Self.HorariosPredefinidos" />
+          <EntitySet Name="IndiceAnalisis" EntityType="Self.IndiceAnalisis" />
+          <EntitySet Name="IndiceGenero" EntityType="Self.IndiceGenero" />
+          <EntitySet Name="IndiceHorarios" EntityType="Self.IndiceHorarios" />
+          <EntitySet Name="Pacientes" EntityType="Self.Pacientes" />
+          <EntitySet Name="PatientDetails" EntityType="Self.PatientDetails" />
+          <EntitySet Name="ProgramaDoc" EntityType="Self.ProgramaDoc" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="TablaHorarios" EntityType="Self.TablaHorarios" />
+          <EntitySet Name="TablaTurnos" EntityType="Self.TablaTurnos" />
+          <EntitySet Name="TipoUsuarios" EntityType="Self.TipoUsuarios" />
+          <EntitySet Name="TurnoBox" EntityType="Self.TurnoBox" />
+          <EntitySet Name="Turnos" EntityType="Self.Turnos" />
+          <EntitySet Name="TurnosMod" EntityType="Self.TurnosMod" />
+          <EntitySet Name="UserIntegrada" EntityType="Self.UserIntegrada" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <AssociationSet Name="FK__Appointme__Docto__5DCAEF64" Association="Self.FK__Appointme__Docto__5DCAEF64">
+            <End Role="DoctorDetails" EntitySet="DoctorDetails" />
+            <End Role="Appointments" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Appointme__Patie__5CD6CB2B" Association="Self.FK__Appointme__Patie__5CD6CB2B">
+            <End Role="PatientDetails" EntitySet="PatientDetails" />
+            <End Role="Appointments" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DiasTrabajoDoc_DiasSemana" Association="Self.FK_DiasTrabajoDoc_DiasSemana">
+            <End Role="DiasSemana" EntitySet="DiasSemana" />
+            <End Role="DiasTrabajoDoc" EntitySet="DiasTrabajoDoc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurnosMod_DiasSemana" Association="Self.FK_TurnosMod_DiasSemana">
+            <End Role="DiasSemana" EntitySet="DiasSemana" />
+            <End Role="TurnosMod" EntitySet="TurnosMod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DiasTrabajoDoc_Doctores" Association="Self.FK_DiasTrabajoDoc_Doctores">
+            <End Role="Doctores" EntitySet="Doctores" />
+            <End Role="DiasTrabajoDoc" EntitySet="DiasTrabajoDoc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Doctores_Especializaciones" Association="Self.FK_Doctores_Especializaciones">
+            <End Role="Especializaciones" EntitySet="Especializaciones" />
+            <End Role="Doctores" EntitySet="Doctores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Doctores_Usuarios" Association="Self.FK_Doctores_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Doctores" EntitySet="Doctores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IndiceHorarios_Doctores" Association="Self.FK_IndiceHorarios_Doctores">
+            <End Role="Doctores" EntitySet="Doctores" />
+            <End Role="IndiceHorarios" EntitySet="IndiceHorarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProgramaDoc_Doctores" Association="Self.FK_ProgramaDoc_Doctores">
+            <End Role="Doctores" EntitySet="Doctores" />
+            <End Role="ProgramaDoc" EntitySet="ProgramaDoc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TablaTurnos_Doctores" Association="Self.FK_TablaTurnos_Doctores">
+            <End Role="Doctores" EntitySet="Doctores" />
+            <End Role="TablaTurnos" EntitySet="TablaTurnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Turnos_Doctores" Association="Self.FK_Turnos_Doctores">
+            <End Role="Doctores" EntitySet="Doctores" />
+            <End Role="Turnos" EntitySet="Turnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurnosMod_Doctores" Association="Self.FK_TurnosMod_Doctores">
+            <End Role="Doctores" EntitySet="Doctores" />
+            <End Role="TurnosMod" EntitySet="TurnosMod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HorariosDisponibles_Pacientes" Association="Self.FK_HorariosDisponibles_Pacientes">
+            <End Role="Pacientes" EntitySet="Pacientes" />
+            <End Role="HorariosDisponibles" EntitySet="HorariosDisponibles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pacientes_Usuarios" Association="Self.FK_Pacientes_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Pacientes" EntitySet="Pacientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Turnos_Pacientes" Association="Self.FK_Turnos_Pacientes">
+            <End Role="Pacientes" EntitySet="Pacientes" />
+            <End Role="Turnos" EntitySet="Turnos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurnosMod_Pacientes" Association="Self.FK_TurnosMod_Pacientes">
+            <End Role="Pacientes" EntitySet="Pacientes" />
+            <End Role="TurnosMod" EntitySet="TurnosMod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurnosMod_TablaHorarios" Association="Self.FK_TurnosMod_TablaHorarios">
+            <End Role="TablaHorarios" EntitySet="TablaHorarios" />
+            <End Role="TurnosMod" EntitySet="TurnosMod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuarios_TipoUsuarios" Association="Self.FK_Usuarios_TipoUsuarios">
+            <End Role="TipoUsuarios" EntitySet="TipoUsuarios" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="FaeracTModelStoreContainer" CdmEntityContainer="TurneroFaeracEntities">
+        <EntityContainerMapping StorageEntityContainer="TurneroNewModelStoreContainer" CdmEntityContainer="TurneroNewEntities">
           <EntitySetMapping Name="Appointments">
-            <EntityTypeMapping TypeName="FaeracTModel.Appointments">
+            <EntityTypeMapping TypeName="TurneroNewModel.Appointments">
               <MappingFragment StoreEntitySet="Appointments">
-                <ScalarProperty Name="Details" ColumnName="Details" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-                <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
-                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
-                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
                 <ScalarProperty Name="AppointmentId" ColumnName="AppointmentId" />
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+                <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Boxes">
-            <EntityTypeMapping TypeName="FaeracTModel.Boxes">
+            <EntityTypeMapping TypeName="TurneroNewModel.Boxes">
               <MappingFragment StoreEntitySet="Boxes">
-                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="IdBox" ColumnName="IdBox" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Consultorios">
-            <EntityTypeMapping TypeName="FaeracTModel.Consultorios">
+            <EntityTypeMapping TypeName="TurneroNewModel.Consultorios">
               <MappingFragment StoreEntitySet="Consultorios">
-                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
-                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="IdConsultorio" ColumnName="IdConsultorio" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
+                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DiasSemana">
-            <EntityTypeMapping TypeName="FaeracTModel.DiasSemana">
+            <EntityTypeMapping TypeName="TurneroNewModel.DiasSemana">
               <MappingFragment StoreEntitySet="DiasSemana">
-                <ScalarProperty Name="Dia" ColumnName="Dia" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Dia" ColumnName="Dia" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DiasTrabajoDoc">
-            <EntityTypeMapping TypeName="FaeracTModel.DiasTrabajoDoc">
+            <EntityTypeMapping TypeName="TurneroNewModel.DiasTrabajoDoc">
               <MappingFragment StoreEntitySet="DiasTrabajoDoc">
-                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
-                <ScalarProperty Name="IdDia" ColumnName="IdDia" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdDia" ColumnName="IdDia" />
+                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DoctorDetails">
-            <EntityTypeMapping TypeName="FaeracTModel.DoctorDetails">
+            <EntityTypeMapping TypeName="TurneroNewModel.DoctorDetails">
               <MappingFragment StoreEntitySet="DoctorDetails">
-                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
-                <ScalarProperty Name="Specialization" ColumnName="Specialization" />
-                <ScalarProperty Name="Pwd" ColumnName="Pwd" />
-                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="DId" ColumnName="DId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="Pwd" ColumnName="Pwd" />
+                <ScalarProperty Name="Specialization" ColumnName="Specialization" />
+                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Doctores">
-            <EntityTypeMapping TypeName="FaeracTModel.Doctores">
+            <EntityTypeMapping TypeName="TurneroNewModel.Doctores">
               <MappingFragment StoreEntitySet="Doctores">
-                <ScalarProperty Name="Flag" ColumnName="Flag" />
-                <ScalarProperty Name="IDEspecializacion" ColumnName="IDEspecializacion" />
-                <ScalarProperty Name="ApeDoc" ColumnName="ApeDoc" />
-                <ScalarProperty Name="NombreDoc" ColumnName="NombreDoc" />
-                <ScalarProperty Name="idConsultorio" ColumnName="idConsultorio" />
-                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
                 <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="idConsultorio" ColumnName="idConsultorio" />
+                <ScalarProperty Name="NombreDoc" ColumnName="NombreDoc" />
+                <ScalarProperty Name="ApeDoc" ColumnName="ApeDoc" />
+                <ScalarProperty Name="IDEspecializacion" ColumnName="IDEspecializacion" />
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Especializaciones">
-            <EntityTypeMapping TypeName="FaeracTModel.Especializaciones">
+            <EntityTypeMapping TypeName="TurneroNewModel.Especializaciones">
               <MappingFragment StoreEntitySet="Especializaciones">
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="IDEspecializacion" ColumnName="IDEspecializacion" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HorariosDisponibles">
-            <EntityTypeMapping TypeName="FaeracTModel.HorariosDisponibles">
+            <EntityTypeMapping TypeName="TurneroNewModel.HorariosDisponibles">
               <MappingFragment StoreEntitySet="HorariosDisponibles">
-                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
-                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
-                <ScalarProperty Name="Hora" ColumnName="Hora" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
+                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HorariosPredefinidos">
-            <EntityTypeMapping TypeName="FaeracTModel.HorariosPredefinidos">
+            <EntityTypeMapping TypeName="TurneroNewModel.HorariosPredefinidos">
               <MappingFragment StoreEntitySet="HorariosPredefinidos">
-                <ScalarProperty Name="Hora" ColumnName="Hora" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="IndiceAnalisis">
-            <EntityTypeMapping TypeName="FaeracTModel.IndiceAnalisis">
+            <EntityTypeMapping TypeName="TurneroNewModel.IndiceAnalisis">
               <MappingFragment StoreEntitySet="IndiceAnalisis">
-                <ScalarProperty Name="FechaAnalisis" ColumnName="FechaAnalisis" />
-                <ScalarProperty Name="LinkAnalisis" ColumnName="LinkAnalisis" />
-                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
                 <ScalarProperty Name="IdAnalisis" ColumnName="IdAnalisis" />
+                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
+                <ScalarProperty Name="LinkAnalisis" ColumnName="LinkAnalisis" />
+                <ScalarProperty Name="FechaAnalisis" ColumnName="FechaAnalisis" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="IndiceGenero">
-            <EntityTypeMapping TypeName="FaeracTModel.IndiceGenero">
+            <EntityTypeMapping TypeName="TurneroNewModel.IndiceGenero">
               <MappingFragment StoreEntitySet="IndiceGenero">
-                <ScalarProperty Name="Habilitado" ColumnName="Habilitado" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="IdGenero" ColumnName="IdGenero" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Habilitado" ColumnName="Habilitado" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="IndiceHorarios">
-            <EntityTypeMapping TypeName="FaeracTModel.IndiceHorarios">
+            <EntityTypeMapping TypeName="TurneroNewModel.IndiceHorarios">
               <MappingFragment StoreEntitySet="IndiceHorarios">
-                <ScalarProperty Name="Activo" ColumnName="Activo" />
-                <ScalarProperty Name="HastaTiempo" ColumnName="HastaTiempo" />
-                <ScalarProperty Name="DesdeTiempo" ColumnName="DesdeTiempo" />
-                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
-                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
                 <ScalarProperty Name="IdHorarioDoc" ColumnName="IdHorarioDoc" />
+                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="DesdeTiempo" ColumnName="DesdeTiempo" />
+                <ScalarProperty Name="HastaTiempo" ColumnName="HastaTiempo" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Pacientes">
-            <EntityTypeMapping TypeName="FaeracTModel.Pacientes">
+            <EntityTypeMapping TypeName="TurneroNewModel.Pacientes">
               <MappingFragment StoreEntitySet="Pacientes">
-                <ScalarProperty Name="Genero" ColumnName="Genero" />
-                <ScalarProperty Name="NumeroContacto" ColumnName="NumeroContacto" />
-                <ScalarProperty Name="Correo" ColumnName="Correo" />
-                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
-                <ScalarProperty Name="TipoDNI" ColumnName="TipoDNI" />
-                <ScalarProperty Name="EdadPac" ColumnName="EdadPac" />
-                <ScalarProperty Name="DNIPac" ColumnName="DNIPac" />
-                <ScalarProperty Name="ApePac" ColumnName="ApePac" />
-                <ScalarProperty Name="NombrePac" ColumnName="NombrePac" />
                 <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
+                <ScalarProperty Name="NombrePac" ColumnName="NombrePac" />
+                <ScalarProperty Name="ApePac" ColumnName="ApePac" />
+                <ScalarProperty Name="DNIPac" ColumnName="DNIPac" />
+                <ScalarProperty Name="EdadPac" ColumnName="EdadPac" />
+                <ScalarProperty Name="TipoDNI" ColumnName="TipoDNI" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="NumeroContacto" ColumnName="NumeroContacto" />
+                <ScalarProperty Name="Genero" ColumnName="Genero" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PatientDetails">
-            <EntityTypeMapping TypeName="FaeracTModel.PatientDetails">
+            <EntityTypeMapping TypeName="TurneroNewModel.PatientDetails">
               <MappingFragment StoreEntitySet="PatientDetails">
-                <ScalarProperty Name="Pwd" ColumnName="Pwd" />
-                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="PId" ColumnName="PId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="Pwd" ColumnName="Pwd" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProgramaDoc">
-            <EntityTypeMapping TypeName="FaeracTModel.ProgramaDoc">
+            <EntityTypeMapping TypeName="TurneroNewModel.ProgramaDoc">
               <MappingFragment StoreEntitySet="ProgramaDoc">
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="EdadPac" ColumnName="EdadPac" />
-                <ScalarProperty Name="NombrePac" ColumnName="NombrePac" />
-                <ScalarProperty Name="Fin" ColumnName="Fin" />
-                <ScalarProperty Name="Inicio" ColumnName="Inicio" />
-                <ScalarProperty Name="DiaSemana" ColumnName="DiaSemana" />
-                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
                 <ScalarProperty Name="IdPrograma" ColumnName="IdPrograma" />
+                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
+                <ScalarProperty Name="DiaSemana" ColumnName="DiaSemana" />
+                <ScalarProperty Name="Inicio" ColumnName="Inicio" />
+                <ScalarProperty Name="Fin" ColumnName="Fin" />
+                <ScalarProperty Name="NombrePac" ColumnName="NombrePac" />
+                <ScalarProperty Name="EdadPac" ColumnName="EdadPac" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="FaeracTModel.sysdiagrams">
+            <EntityTypeMapping TypeName="TurneroNewModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TablaHorarios">
+            <EntityTypeMapping TypeName="TurneroNewModel.TablaHorarios">
+              <MappingFragment StoreEntitySet="TablaHorarios">
+                <ScalarProperty Name="IdHorario" ColumnName="IdHorario" />
+                <ScalarProperty Name="IniHorario" ColumnName="IniHorario" />
+                <ScalarProperty Name="FinHorario" ColumnName="FinHorario" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TablaTurnos">
-            <EntityTypeMapping TypeName="FaeracTModel.TablaTurnos">
+            <EntityTypeMapping TypeName="TurneroNewModel.TablaTurnos">
               <MappingFragment StoreEntitySet="TablaTurnos">
-                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
-                <ScalarProperty Name="EdadPac" ColumnName="EdadPac" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="NombreDia" ColumnName="NombreDia" />
-                <ScalarProperty Name="IdDia" ColumnName="IdDia" />
-                <ScalarProperty Name="ApeDoc" ColumnName="ApeDoc" />
-                <ScalarProperty Name="NombreDoc" ColumnName="NombreDoc" />
-                <ScalarProperty Name="NombrePaciente" ColumnName="NombrePaciente" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="inicio" ColumnName="inicio" />
-                <ScalarProperty Name="Fin" ColumnName="Fin" />
-                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
                 <ScalarProperty Name="IdTurno" ColumnName="IdTurno" />
+                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
+                <ScalarProperty Name="Fin" ColumnName="Fin" />
+                <ScalarProperty Name="inicio" ColumnName="inicio" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="NombrePaciente" ColumnName="NombrePaciente" />
+                <ScalarProperty Name="NombreDoc" ColumnName="NombreDoc" />
+                <ScalarProperty Name="ApeDoc" ColumnName="ApeDoc" />
+                <ScalarProperty Name="IdDia" ColumnName="IdDia" />
+                <ScalarProperty Name="NombreDia" ColumnName="NombreDia" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="EdadPac" ColumnName="EdadPac" />
+                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TipoUsuarios">
-            <EntityTypeMapping TypeName="FaeracTModel.TipoUsuarios">
+            <EntityTypeMapping TypeName="TurneroNewModel.TipoUsuarios">
               <MappingFragment StoreEntitySet="TipoUsuarios">
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="IdTipo" ColumnName="IdTipo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TurnoBox">
-            <EntityTypeMapping TypeName="FaeracTModel.TurnoBox">
+            <EntityTypeMapping TypeName="TurneroNewModel.TurnoBox">
               <MappingFragment StoreEntitySet="TurnoBox">
-                <ScalarProperty Name="idTurno" ColumnName="idTurno" />
-                <ScalarProperty Name="IdBox" ColumnName="IdBox" />
-                <ScalarProperty Name="TipoturnoBox" ColumnName="TipoturnoBox" />
                 <ScalarProperty Name="NumTurnoBox" ColumnName="NumTurnoBox" />
+                <ScalarProperty Name="TipoturnoBox" ColumnName="TipoturnoBox" />
+                <ScalarProperty Name="IdBox" ColumnName="IdBox" />
+                <ScalarProperty Name="idTurno" ColumnName="idTurno" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Turnos">
-            <EntityTypeMapping TypeName="FaeracTModel.Turnos">
+            <EntityTypeMapping TypeName="TurneroNewModel.Turnos">
               <MappingFragment StoreEntitySet="Turnos">
-                <ScalarProperty Name="ComentarioDoctor" ColumnName="ComentarioDoctor" />
-                <ScalarProperty Name="TurnoRealizado" ColumnName="TurnoRealizado" />
-                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="IdTurno" ColumnName="IdTurno" />
+                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
+                <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="TurnoRealizado" ColumnName="TurnoRealizado" />
+                <ScalarProperty Name="ComentarioDoctor" ColumnName="ComentarioDoctor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TurnosMod">
+            <EntityTypeMapping TypeName="TurneroNewModel.TurnosMod">
+              <MappingFragment StoreEntitySet="TurnosMod">
+                <ScalarProperty Name="IdTurno" ColumnName="IdTurno" />
                 <ScalarProperty Name="IdDoc" ColumnName="IdDoc" />
                 <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
-                <ScalarProperty Name="IdTurno" ColumnName="IdTurno" />
+                <ScalarProperty Name="IdHorario" ColumnName="IdHorario" />
+                <ScalarProperty Name="Atendido" ColumnName="Atendido" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdDia" ColumnName="IdDia" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserIntegrada">
-            <EntityTypeMapping TypeName="FaeracTModel.UserIntegrada">
+            <EntityTypeMapping TypeName="TurneroNewModel.UserIntegrada">
               <MappingFragment StoreEntitySet="UserIntegrada">
-                <ScalarProperty Name="Token" ColumnName="Token" />
-                <ScalarProperty Name="IdTipo" ColumnName="IdTipo" />
-                <ScalarProperty Name="Edad" ColumnName="Edad" />
-                <ScalarProperty Name="Genero" ColumnName="Genero" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="DNIUsuario" ColumnName="DNIUsuario" />
-                <ScalarProperty Name="Especializacion" ColumnName="Especializacion" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Nusuario" ColumnName="Nusuario" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nusuario" ColumnName="Nusuario" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Especializacion" ColumnName="Especializacion" />
+                <ScalarProperty Name="DNIUsuario" ColumnName="DNIUsuario" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Genero" ColumnName="Genero" />
+                <ScalarProperty Name="Edad" ColumnName="Edad" />
+                <ScalarProperty Name="IdTipo" ColumnName="IdTipo" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Usuarios">
-            <EntityTypeMapping TypeName="FaeracTModel.Usuarios">
+            <EntityTypeMapping TypeName="TurneroNewModel.Usuarios">
               <MappingFragment StoreEntitySet="Usuarios">
-                <ScalarProperty Name="Genero" ColumnName="Genero" />
-                <ScalarProperty Name="Token" ColumnName="Token" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="NumeroContacto" ColumnName="NumeroContacto" />
-                <ScalarProperty Name="Correo" ColumnName="Correo" />
-                <ScalarProperty Name="IdTipo" ColumnName="IdTipo" />
-                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
-                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
                 <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
+                <ScalarProperty Name="IdTipo" ColumnName="IdTipo" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="NumeroContacto" ColumnName="NumeroContacto" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="Genero" ColumnName="Genero" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

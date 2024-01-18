@@ -4,44 +4,50 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9d8d5dd4edcb4af7afdde6b1f3024628" Name="Diagram1" ZoomLevel="63">
-        <EntityTypeShape EntityType="FaeracTModel.Appointments" Width="1.5" PointX="3" PointY="1.125" />
-        <EntityTypeShape EntityType="FaeracTModel.Boxes" Width="1.5" PointX="2.75" PointY="4.75" />
-        <EntityTypeShape EntityType="FaeracTModel.Consultorios" Width="1.5" PointX="4.75" PointY="4.75" />
-        <EntityTypeShape EntityType="FaeracTModel.DiasSemana" Width="1.5" PointX="5.25" PointY="7.5" />
-        <EntityTypeShape EntityType="FaeracTModel.DiasTrabajoDoc" Width="1.5" PointX="7.5" PointY="11.25" />
-        <EntityTypeShape EntityType="FaeracTModel.DoctorDetails" Width="1.5" PointX="0.75" PointY="1" />
-        <EntityTypeShape EntityType="FaeracTModel.Doctores" Width="1.5" PointX="5.25" PointY="10.375" />
-        <EntityTypeShape EntityType="FaeracTModel.Especializaciones" Width="1.5" PointX="3" PointY="7.5" />
-        <EntityTypeShape EntityType="FaeracTModel.HorariosDisponibles" Width="1.5" PointX="7.5" PointY="22.25" />
-        <EntityTypeShape EntityType="FaeracTModel.HorariosPredefinidos" Width="1.5" PointX="5.75" PointY="0.75" />
-        <EntityTypeShape EntityType="FaeracTModel.IndiceAnalisis" Width="1.5" PointX="6.75" PointY="3.75" />
-        <EntityTypeShape EntityType="FaeracTModel.IndiceGenero" Width="1.5" PointX="7.75" PointY="0.75" />
-        <EntityTypeShape EntityType="FaeracTModel.IndiceHorarios" Width="1.5" PointX="7.5" PointY="16.875" />
-        <EntityTypeShape EntityType="FaeracTModel.Pacientes" Width="1.5" PointX="5.25" PointY="21.625" />
-        <EntityTypeShape EntityType="FaeracTModel.PatientDetails" Width="1.5" PointX="0.75" PointY="5.125" />
-        <EntityTypeShape EntityType="FaeracTModel.ProgramaDoc" Width="1.5" PointX="7.5" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="FaeracTModel.sysdiagrams" Width="1.5" PointX="8.75" PointY="3.75" />
-        <EntityTypeShape EntityType="FaeracTModel.TablaTurnos" Width="1.5" PointX="7.5" PointY="26" />
-        <EntityTypeShape EntityType="FaeracTModel.TipoUsuarios" Width="1.5" PointX="0.75" PointY="11.5" />
-        <EntityTypeShape EntityType="FaeracTModel.TurnoBox" Width="1.5" PointX="9.75" PointY="0.75" />
-        <EntityTypeShape EntityType="FaeracTModel.Turnos" Width="1.5" PointX="10.5" PointY="16.375" />
-        <EntityTypeShape EntityType="FaeracTModel.UserIntegrada" Width="1.5" PointX="9.75" PointY="6.75" />
-        <EntityTypeShape EntityType="FaeracTModel.Usuarios" Width="1.5" PointX="3" PointY="10.625" />
-        <AssociationConnector Association="FaeracTModel.FK__Appointme__Docto__5DCAEF64" />
-        <AssociationConnector Association="FaeracTModel.FK__Appointme__Patie__5CD6CB2B" />
-        <AssociationConnector Association="FaeracTModel.FK_DiasTrabajoDoc_DiasSemana" />
-        <AssociationConnector Association="FaeracTModel.FK_DiasTrabajoDoc_Doctores" />
-        <AssociationConnector Association="FaeracTModel.FK_Doctores_Especializaciones" />
-        <AssociationConnector Association="FaeracTModel.FK_Doctores_Usuarios" />
-        <AssociationConnector Association="FaeracTModel.FK_IndiceHorarios_Doctores" />
-        <AssociationConnector Association="FaeracTModel.FK_ProgramaDoc_Doctores" />
-        <AssociationConnector Association="FaeracTModel.FK_TablaTurnos_Doctores" />
-        <AssociationConnector Association="FaeracTModel.FK_Turnos_Doctores" />
-        <AssociationConnector Association="FaeracTModel.FK_HorariosDisponibles_Pacientes" />
-        <AssociationConnector Association="FaeracTModel.FK_Pacientes_Usuarios" />
-        <AssociationConnector Association="FaeracTModel.FK_Turnos_Pacientes" />
-        <AssociationConnector Association="FaeracTModel.FK_Usuarios_TipoUsuarios" />
+      <Diagram DiagramId="b84bcb9e502b4448912e14cf87ad9ccb" Name="Diagram1" ZoomLevel="47">
+        <EntityTypeShape EntityType="TurneroNewModel.Appointments" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.Boxes" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.Consultorios" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.DiasSemana" Width="1.5" PointX="8.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.DiasTrabajoDoc" Width="1.5" PointX="10.5" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.DoctorDetails" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.Doctores" Width="1.5" PointX="5.25" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.Especializaciones" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.HorariosDisponibles" Width="1.5" PointX="7.5" PointY="24.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.HorariosPredefinidos" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.IndiceAnalisis" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.IndiceGenero" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.IndiceHorarios" Width="1.5" PointX="7.5" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.Pacientes" Width="1.5" PointX="5.25" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.PatientDetails" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.ProgramaDoc" Width="1.5" PointX="7.5" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.sysdiagrams" Width="1.5" PointX="8.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.TablaHorarios" Width="1.5" PointX="8.25" PointY="28.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.TablaTurnos" Width="1.5" PointX="7.5" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.TipoUsuarios" Width="1.5" PointX="0.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.TurnoBox" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.Turnos" Width="1.5" PointX="10.5" PointY="18.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.TurnosMod" Width="1.5" PointX="10.5" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.UserIntegrada" Width="1.5" PointX="10.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TurneroNewModel.Usuarios" Width="1.5" PointX="3" PointY="12.875" IsExpanded="true" />
+        <AssociationConnector Association="TurneroNewModel.FK__Appointme__Docto__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK__Appointme__Patie__5CD6CB2B" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_DiasTrabajoDoc_DiasSemana" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_TurnosMod_DiasSemana" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_DiasTrabajoDoc_Doctores" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_Doctores_Especializaciones" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_Doctores_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_IndiceHorarios_Doctores" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_ProgramaDoc_Doctores" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_TablaTurnos_Doctores" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_Turnos_Doctores" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_TurnosMod_Doctores" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_HorariosDisponibles_Pacientes" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_Pacientes_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_Turnos_Pacientes" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_TurnosMod_Pacientes" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_TurnosMod_TablaHorarios" ManuallyRouted="false" />
+        <AssociationConnector Association="TurneroNewModel.FK_Usuarios_TipoUsuarios" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,35 +1,27 @@
-﻿
-@model List<TurneroFaeracWeb.Models.TablaTurnosCLS>
+﻿@model List<TurneroFaeracWeb.Models.TablaTurnosCLS>
+@{
+    ViewBag.Lista = "listaEspecializacion";
+}
 
 <table class="table tab-content table-bordered table-hover">
     <tr>
-        <td align="center"><strong>IdUsuario</strong></td>
-        <td align="center"><strong>Nombre</strong></td>
-        <td align="center"><strong>Apellido</strong></td>
-        <td align="center"><strong>IdDoc</strong></td>
-        <td align="center"><strong>Nombre Doctor</strong></td>
-        <td align="center"><strong>Apellido Doctor</strong></td>
-        <td align="center"><strong>Fecha/Hora</strong></td>
-        <td align="center"><strong>Acciones</strong></td>
+        <td align="center"><strong>ID Turno</strong></td>
+        <td align="center"><strong>ID Paciente</strong></td>
+        <td align="center"><strong>ID Doctor</strong></td>
+        <td align="center"><strong>Inicio</strong></td>
+        <!-- Agrega otras columnas según sea necesario -->
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
             <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.IdTurno)
+            </td>
+            <td style="text-align: center;">
                 @Html.DisplayFor(modelItem => item.IdPaciente)
             </td>
             <td style="text-align: center;">
-                @Html.DisplayFor(modelItem => item.NombrePaciente)
-            </td>
-            <td style="text-align: center;">
                 @Html.DisplayFor(modelItem => item.IdDoc)
-            </td>
-            <td style="text-align: center;">
-                @Html.DisplayFor(modelItem => item.NombreDoc)
-            </td>
-            <td style="text-align: center;">
-                @Html.DisplayFor(modelItem => item.ApeDoc)
             </td>
             <td style="text-align: center;">
                 @Html.DisplayFor(modelItem => item.inicio)
@@ -39,11 +31,10 @@
                     <img src="~/images/btnedit.png" alt="editar" class="editar-icon" />
                 </button>
                 <button type="button" onclick="Eliminar(@item.IdPaciente)" class="btn btn-danger glyphicon-trash" data-toggle="modal" data-target="#EliminarConfirmacion">
-                    <img src="~/images/btnborrar.png" alt="Eliminar" class="
-                         -icon" />
+                    <img src="~/images/btnborrar.png" alt="Eliminar" class="icon" />
                 </button>
             </td>
         </tr>
+
     }
 </table>
-

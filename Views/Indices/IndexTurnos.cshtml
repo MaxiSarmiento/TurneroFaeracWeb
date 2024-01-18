@@ -32,6 +32,30 @@
 
     <script>
         $(document).ready(function () {
+            // Evento cuando se cambia la especialización
+            $("#ddlEspecializacion").change(function () {
+                var idEspecializacion = $(this).val();
+
+                // Realiza una solicitud AJAX para obtener los doctores según la especialización seleccionada
+                $.ajax({
+                    url: "/LandingPage/ObtenerDoctores", // Reemplaza con la URL correcta de tu acción
+                    type: "GET", // O POST según tu configuración
+                    data: { idEspecializacion: idEspecializacion },
+                    success: function (data) {
+                        // Limpia el segundo select
+                        $("#ddlDoctores").empty();
+
+                        // Agrega las opciones de doctores
+                        $.each(data, function (index, doctor) {
+                            $("#ddlDoctores").append('<option value="' + doctor.Value + '">' + doctor.Text + '</option>');
+                        });
+                    },
+                    error: function () {
+                        alert("Hubo un error al cargar los doctores.");
+                    }
+                });
+            });
+        $(document).ready(function () {
             var events = [];
             $.ajax({
                 type: "GET",

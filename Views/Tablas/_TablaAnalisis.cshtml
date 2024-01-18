@@ -1,0 +1,36 @@
+﻿@model List<TurneroFaeracWeb.Models.IndiceAnalisisCLS>
+@{
+    ViewBag.Title = "listaEspecializacion";
+}
+
+<table class="table tab-content table-bordered table-hover">
+    <tr>
+        <td align="center"><strong>ID Paciente</strong></td>
+        <td align="center"><strong>ID Analisis</strong></td>
+        <td align="center"><strong>Fecha Analisis</strong></td>
+        <td align="center"><strong>Link Analisis</strong></td>
+        <td align="center"><strong>Especializacion</strong></td>
+        <td align="center"><strong>Acciones</strong></td>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.IdPaciente)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.IdAnalisis)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.FechaAnalisis)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.LinkAnalisis)
+            </td>
+
+
+        </tr>
+    }
+</table>
+

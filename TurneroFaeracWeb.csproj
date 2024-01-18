@@ -185,6 +185,15 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Models\Appointments.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Boxes.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Consultorios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DiasSemana.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -193,7 +202,16 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DiasTrabajoDocCLS.cs" />
+    <Compile Include="Models\DoctorDetails.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Doctores.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ErrorViewModel.cs" />
+    <Compile Include="Models\Especializaciones.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GoogleCalendarAppointmentModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndicesController.cs" />
@@ -207,25 +225,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AnalisisPacientesCLS.cs" />
-    <Compile Include="Models\Appointments.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Boxes.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Consultorios.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DoctorDetails.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Doctores.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DoctoresCLS.cs" />
-    <Compile Include="Models\Especializaciones.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\EspecializacionesCLS.cs" />
     <Compile Include="Models\GeneroCLS.cs" />
     <Compile Include="Models\GoogleTokenModel.cs" />
@@ -277,7 +277,10 @@
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TablaAnalisisCLS.cs" />
+    <Compile Include="Models\TablaHorarios.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TablaHorariosCLS.cs" />
     <Compile Include="Models\TablaTurnos.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -294,6 +297,10 @@
     </Compile>
     <Compile Include="Models\TurnosCLS.cs" />
     <Compile Include="Models\TurnosDoctoresCLS.cs" />
+    <Compile Include="Models\TurnosMod.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TurnosModCLS.cs" />
     <Compile Include="Models\UserIntegrada.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -363,9 +370,20 @@
     <Content Include="images\btnedit.svg" />
     <Content Include="images\santaclogochico.jpg" />
     <Content Include="images\SantaClogoGr.jpg" />
-    <Content Include="res\fondoWeb.jpg" />
+    <Content Include="Models\Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
+    <Content Include="res\fondoweb.jpg" />
     <Content Include="images\SantaClogo.jpg" />
     <Content Include="res\EstiloLogin.css" />
+    <Content Include="res\fondoweb2.jpg" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-af.js" />
@@ -418,16 +436,6 @@
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.min.js" />
     <Content Include="Scripts\script.js" />
-    <Content Include="Models\Model1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\Model1.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
-    </Content>
     <Content Include="res\1 doctor.jpg" />
     <Content Include="res\2 doctor.jpg" />
     <Content Include="res\3 doctor.jpg" />
@@ -503,13 +511,6 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\Model1.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Content>
     <Content Include="res\lib\owlcarousel\LICENSE" />
     <Content Include="res\lib\waypoints\links.php" />
     <Content Include="res\scss\bootstrap.scss" />
@@ -682,6 +683,13 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\_bootstrap-datetimepicker.less" />
     <Content Include="Content\bootstrap-datetimepicker-build.less" />
+    <EntityDeploy Include="Models\Model1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -694,6 +702,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Views\Tablas\JavaScript.js" />
+    <Content Include="Views\User\estiloLog.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -720,8 +729,8 @@
     <Content Include="Views\LandingPage\_HorariosDisponibles.cshtml" />
     <Content Include="Views\LandingPage\_ListaDoctores.cshtml" />
     <Content Include="Views\Indices\_ListaTurnos.cshtml" />
-    <Content Include="Views\Tablas\TablaEmpleados.cshtml" />
-    <Content Include="Views\Tablas\_TablaEmpleados.cshtml" />
+    <Content Include="Views\Tablas\TablaUsuarios.cshtml" />
+    <Content Include="Views\Tablas\_TablaUsuarios.cshtml" />
     <Content Include="Views\Tablas\TablaDoctores.cshtml" />
     <Content Include="Views\Tablas\_TablaDoctores.cshtml" />
     <Content Include="Views\Tablas\TablaPacientes.cshtml" />
@@ -732,10 +741,12 @@
     <Content Include="Views\Login\Dashboard.cshtml" />
     <Content Include="Views\Tablas\_TablaTurnos.cshtml" />
     <Content Include="Views\Tablas\TablaAuxiliar.cshtml" />
+    <Content Include="Views\Tablas\_TablaAnalisis.cshtml" />
+    <Content Include="Views\Tablas\TablaAnalisis.cshtml" />
+    <Content Include="Views\Tablas\_TablaAnalisis2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\DBUsuario\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

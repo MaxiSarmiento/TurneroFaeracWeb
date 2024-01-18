@@ -34,7 +34,7 @@ namespace FaeracT.Controllers
             llenarEspecializacion();
 
             List<TurnosCLS> listaTurnos = new List<TurnosCLS>();
-            using (var bd = new TurneroFaeracEntities())
+            using (var bd = new TurneroNewEntities())
             {
                 listaTurnos = (from turnos in bd.Turnos
                                join doctores in bd.Doctores
@@ -62,6 +62,31 @@ namespace FaeracT.Controllers
             return View();
         }
 
+        private List<DoctoresCLS> ObtenerListaDoctores()
+        {
+            List<DoctoresCLS> listaDocs;
+
+            using (var db = new TurneroNewEntities())
+            {
+                listaDocs = (from doctores in db.Doctores
+                             select new DoctoresCLS
+                             {
+                                 IdDoc = doctores.IdDoc,
+                                 IdUser = doctores.IdUser,
+                                 ApeDoc = doctores.ApeDoc,
+                                 NombreDoc = doctores.NombreDoc,
+                                 IDEspecializacion = doctores.IDEspecializacion,
+                                 Usuario = doctores.Usuarios.Usuario,
+                                 Contraseña = doctores.Usuarios.Contraseña,
+                                 NumeroContacto = doctores.Usuarios.NumeroContacto,
+                                 Genero = doctores.Usuarios.Genero
+                             }).ToList();
+            }
+
+            return listaDocs;
+        }
+
+
         public ActionResult IndexAdmin()
         {
             return View();
@@ -78,7 +103,7 @@ namespace FaeracT.Controllers
         List<SelectListItem> listaEspecializacion;
         private void llenarEspecializacion()
         {
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 listaEspecializacion = (from Especializaciones in db.Especializaciones
 
@@ -104,7 +129,7 @@ namespace FaeracT.Controllers
 
             string nombreDoc = oDoctoresCLS.nombreFiltro;
             List<DoctoresCLS> listaDocs = new List<DoctoresCLS>();
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
 
                 if (nombreDoc == null)
                 {
@@ -156,7 +181,7 @@ namespace FaeracT.Controllers
                 }
                 else
                 {
-                    using (var bd = new TurneroFaeracEntities())
+                    using (var bd = new TurneroNewEntities())
                     {
                         int cantidad = 0;
                         //agregar
@@ -214,7 +239,7 @@ namespace FaeracT.Controllers
         {
             //agregar
             List<SelectListItem> lista;
-            using (var bd = new TurneroFaeracEntities())
+            using (var bd = new TurneroNewEntities())
             {
                 lista = (from item in bd.Doctores
 
@@ -243,7 +268,7 @@ namespace FaeracT.Controllers
             }
             else
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     // Verificar si el DNI ya existe
                     bool TurnoExistente = db.Turnos.Any(e => e.IdTurno == oTurnosCLS.IdTurno);
@@ -283,7 +308,7 @@ namespace FaeracT.Controllers
             try
             {
                 int id = oTurnosCLS.IdTurno;
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     Turnos oTurno = db.Turnos.Where(p => p.IdTurno == id).First();
                     db.Turnos.Remove(oTurno);
@@ -302,7 +327,7 @@ namespace FaeracT.Controllers
         public JsonResult RellenarCampos(int titulo)
         {
             EspecializacionesCLS oEspecializacionesCLS = new EspecializacionesCLS();
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 Especializaciones oEspecializaciones = db.Especializaciones.Where(p => p.IDEspecializacion == titulo).First();
                 oEspecializaciones.Descripcion = oEspecializacionesCLS.Descripcion;
@@ -315,7 +340,7 @@ namespace FaeracT.Controllers
         List<SelectListItem> listaGenero;
         private void llenarGenero()
         {
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 listaGenero = (from genero in db.IndiceGenero
                              where genero.Habilitado == 1
@@ -345,7 +370,7 @@ namespace FaeracT.Controllers
                     ViewBag.lista = listaGenero;
                     ViewBag.Lista = listaEspecializacion;
                     UsuarioCLS oUsuarioCLS = new UsuarioCLS();
-                    using (var db = new TurneroFaeracEntities())
+                    using (var db = new TurneroNewEntities())
                     {
                         Usuarios oUsuario = db.Usuarios.Where(p => p.IdUser.Equals(id)).First();
                         oUsuarioCLS.IdUser = oUsuario.IdUser;
@@ -380,7 +405,7 @@ namespace FaeracT.Controllers
                 return View(oUsuarioCLS);
             }
 
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 Usuarios oUsuario = db.Usuarios.Where(p => p.IdUser.Equals(id)).First();
                 oUsuarioCLS.IdUser = oUsuario.IdUser;
@@ -430,7 +455,23 @@ namespace FaeracT.Controllers
             }
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public ActionResult ObtenerDoctores(int idEspecializacion)
+        {
+            using (var db = new TurneroNewEntities())
+            {
+                var doctores = db.Doctores
+                                 .Where(d => d.IDEspecializacion == idEspecializacion)
+                                 .Select(d => new
+                                 {
+                                     Value = d.IdDoc.ToString(),
+                                     Text = d.ApeDoc
+                                 })
+                                 .ToList();
 
+                return Json(doctores, JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult EditarDoctor(int id)
         {
             try
@@ -447,7 +488,7 @@ namespace FaeracT.Controllers
                     ViewBag.lista = listaGenero;
                     ViewBag.Lista = listaEspecializacion;
                     DoctoresCLS oDoctoresCLS = new DoctoresCLS();
-                    using (var db = new TurneroFaeracEntities())
+                    using (var db = new TurneroNewEntities())
                     {
                         Doctores oDoctores = db.Doctores.Where(p => p.IdUser.Equals(id)).First();
                         oDoctores.IdDoc = oDoctoresCLS.IdDoc;
@@ -480,7 +521,7 @@ namespace FaeracT.Controllers
                 
             }
 
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 Doctores oDoctores = db.Doctores.Where(p => p.IdUser.Equals(id)).First();
                 oDoctores.IdDoc = oDoctoresCLS.IdDoc;
@@ -492,6 +533,8 @@ namespace FaeracT.Controllers
             }
             return RedirectToAction("Index");
         }
+
+     
 
         [HttpGet]
         public ActionResult EditarPaciente(int id)
@@ -510,7 +553,7 @@ namespace FaeracT.Controllers
                     ViewBag.lista = listaGenero;
                     ViewBag.Lista = listaEspecializacion;
                     PacientesCLS oPacientesCLS = new PacientesCLS();
-                    using (var db = new TurneroFaeracEntities())
+                    using (var db = new TurneroNewEntities())
                     {
                         Pacientes oPacientes = db.Pacientes.Where(p => p.IdPaciente.Equals(id)).First();
                         oPacientes.IdPaciente = oPacientesCLS.IdPaciente;
@@ -550,7 +593,7 @@ namespace FaeracT.Controllers
 
             }
 
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 Pacientes oPacientes = db.Pacientes.Where(p => p.IdPaciente.Equals(id)).First();
                 oPacientes.IdPaciente = oPacientesCLS.IdPaciente;
@@ -574,7 +617,7 @@ namespace FaeracT.Controllers
 
 /*   private List<HorarioPredefinido> HorariosTurnos()
    {
-       using (var context = new TurneroFaeracEntities())
+       using (var context = new TurneroNewEntities())
        {
            var horarios = context.HorariosPredefinidos.ToList();
            return horarios;

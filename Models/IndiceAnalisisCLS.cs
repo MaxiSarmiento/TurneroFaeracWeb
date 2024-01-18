@@ -12,6 +12,6 @@ namespace TurneroFaeracWeb.Models
 
         public string LinkAnalisis { get; set; }
         public DateTime FechaAnalisis { get; set; }
-
+        public string nombreFiltro { get; set; }
     }
 }

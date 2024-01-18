@@ -12,20 +12,18 @@ namespace TurneroFaeracWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DiasSemana
+    public partial class TablaHorarios
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DiasSemana()
+        public TablaHorarios()
         {
-            this.DiasTrabajoDoc = new HashSet<DiasTrabajoDoc>();
             this.TurnosMod = new HashSet<TurnosMod>();
         }
     
-        public int Id { get; set; }
-        public string Dia { get; set; }
+        public int IdHorario { get; set; }
+        public Nullable<System.TimeSpan> IniHorario { get; set; }
+        public Nullable<System.TimeSpan> FinHorario { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DiasTrabajoDoc> DiasTrabajoDoc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TurnosMod> TurnosMod { get; set; }
     }

@@ -1,0 +1,30 @@
+﻿@model List<TurneroFaeracWeb.Models.IndiceAnalisisCLS>
+
+<h2>Tabla Analisis</h2>
+
+
+
+<h2 align="center">Listado de Analisis</h2>
+<hr />
+
+<!-- Button trigger modal -->
+hr />
+
+@using (Ajax.BeginForm("FiltrarA", "", new AjaxOptions
+{
+    HttpMethod = "Post",
+    UpdateTargetId = "divRol",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmFiltrado" }))
+{
+    <div>
+        @Html.Label("Filtrar por Nombre")
+        @Html.TextBox("nombreFiltro")
+    </div>
+    <div id="divRol">
+        @Html.Partial("_TablaAnalisis2", Model)
+    </div>
+}
+<hr />
+
+

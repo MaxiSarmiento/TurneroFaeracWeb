@@ -25,7 +25,7 @@ namespace FaeracT.Controllers
         {
             return View();
         }
-        private TurneroFaeracEntities db = new TurneroFaeracEntities();
+        private TurneroNewEntities db = new TurneroNewEntities();
 
         public ActionResult ListarEsp()
         {
@@ -60,7 +60,7 @@ namespace FaeracT.Controllers
         {
             List<DoctoresCLS> listaDocs = new List<DoctoresCLS>();
 
-            using (var db = new TurneroFaeracEntities())
+            using (var db = new TurneroNewEntities())
             {
                 if (string.IsNullOrWhiteSpace(nombreFiltro))
                 {

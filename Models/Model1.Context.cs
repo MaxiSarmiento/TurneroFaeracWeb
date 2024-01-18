@@ -13,10 +13,10 @@ namespace TurneroFaeracWeb.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TurneroFaeracEntities : DbContext
+    public partial class TurneroNewEntities : DbContext
     {
-        public TurneroFaeracEntities()
-            : base("name=TurneroFaeracEntities")
+        public TurneroNewEntities()
+            : base("name=TurneroNewEntities")
         {
         }
     
@@ -42,10 +42,12 @@ namespace TurneroFaeracWeb.Models
         public virtual DbSet<PatientDetails> PatientDetails { get; set; }
         public virtual DbSet<ProgramaDoc> ProgramaDoc { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<TablaHorarios> TablaHorarios { get; set; }
         public virtual DbSet<TablaTurnos> TablaTurnos { get; set; }
         public virtual DbSet<TipoUsuarios> TipoUsuarios { get; set; }
         public virtual DbSet<TurnoBox> TurnoBox { get; set; }
         public virtual DbSet<Turnos> Turnos { get; set; }
+        public virtual DbSet<TurnosMod> TurnosMod { get; set; }
         public virtual DbSet<UserIntegrada> UserIntegrada { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
     }

@@ -10,7 +10,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url(fondoweb2.jpg) no-repeat center center fixed;
+    background: url(fondoWeb.jpg) no-repeat center center fixed;
 }
 
 .wrapper{

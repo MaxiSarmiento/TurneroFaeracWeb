@@ -29,5 +29,9 @@ namespace TurneroFaeracWeb.Models
       
         public virtual ICollection<DiasTrabajoDocCLS> DiasTrabajoDoc { get; set; }
         public virtual ICollection<ProgramaDocCLS> ProgramaDoc { get; set; }
+        public string Usuario { get; internal set; }
+        public string Contraseña { get; internal set; }
+        public string NumeroContacto { get; internal set; }
+        public int? Genero { get; internal set; }
     }
 }

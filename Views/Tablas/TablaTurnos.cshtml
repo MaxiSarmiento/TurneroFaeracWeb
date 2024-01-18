@@ -39,7 +39,7 @@
         function obtenerDoctores(idEspecializacion) {
             // Realiza una solicitud AJAX para obtener los doctores según la especialización seleccionada
             $.ajax({
-                url: "../Tablas/ListarDocs",
+                url: "/Indices/ObtenerDoctores",
                 type: "GET",
                 data: { idEspecializacion: idEspecializacion },
                 success: function (data) {
@@ -52,7 +52,7 @@
                         var nombreCompleto = doctor.ApeDoc + ', ' + doctor.NombreDoc;
 
                         // Utiliza la cadena concatenada como valor a mostrar en la opción
-                        $("#ddlDoctores").append('<option value="' + nombreCompleto + '</option>');
+                        $("#ddlDoctores").append('<option value="' + nombreCompleto + '">' + nombreCompleto + '</option>');
                     });
                 },
                 error: function (xhr, textStatus, errorThrown) {
@@ -64,6 +64,7 @@
                 }
             });
         }
+
 
         function mostrarModal() {
             $('#modalAgregarTurno').modal('show');
@@ -136,8 +137,9 @@
                             <div class="form-group">
                                 <label for="especializacion"></label>
                                 <!-- Ajusta la lista de especializaciones según tus necesidades -->
+
                                 <select id="ddlEspecializacion" class="form-select bg-light border-0" style="height: 55px;">
-                                    <option selected> Seleccione Especialidad</option>
+                                    <option selected>Seleccione Especialidad</option>
                                     @foreach (var especializacion in ViewBag.Especializaciones)
                                     {
                                         <option value="@especializacion.Value">@especializacion.Text</option>
@@ -146,9 +148,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="doctor">Doctor:</label>
-                                <!-- Ajusta la lista de doctores según tus necesidades -->
-                                <select class="form-control" id="ddlDoctores" name="doctor">
-                                    <!-- Las opciones de doctores se cargarán dinámicamente -->
+                                <select id="ddlDoctores" class="form-select bg-light border-0" style="height: 55px;">
+                                    <option selected>Seleccione Profesional</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -210,8 +211,53 @@
 
 </body>
 </html>
-
 <script>
+    $(document).ready(function () {
+        // Evento cuando se cambia la especialización
+        $("#ddlEspecializacion").change(function () {
+            var idEspecializacion = $(this).val();
+
+            // Realiza una solicitud AJAX para obtener los doctores según la especialización seleccionada
+            $.ajax({
+                url: "/Indices/ObtenerDoctores",
+                type: "GET",
+                data: { idEspecializacion: idEspecializacion },
+                success: function (data) {
+                    // Limpia el segundo select
+                    $("#ddlDoctores").empty();
+
+                    // Agrega las opciones de doctores
+                    $.each(data, function (index, doctor) {
+                        $("#ddlDoctores").append('<option value="' + doctor.Value + '">' + doctor.Text + '</option>');
+                    });
+                },
+                error: function () {
+                    alert("Hubo un error al cargar los doctores.");
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btnBuscar").click(function () {
+            var selectedEspecializacion = $("#ddlEspecializacion").val();
+            var nombreFiltro = $("#txtKeyword").val(); // Obtén el valor del filtro de búsqueda
+
+            $.ajax({
+                url: "/LandingPage/BuscarDocs",
+                type: "POST",
+                data: { idEspecializacion: selectedEspecializacion, nombreFiltro: nombreFiltro }, // Incluye ambos valores
+                success: function (data) {
+                    $("#resultadoBusqueda").html(data);
+                },
+                error: function () {
+                    alert("Hubo un error al buscar doctores.");
+                }
+            });
+        });
+    });
+
+
     var frmFiltrado = document.getElementById("frmFiltrado");
     var nombreFiltro = document.getElementById("nombreFiltro");
     nombreFiltro.onkeyup = function () {
@@ -252,7 +298,7 @@
             document.getElementById("inicio").value = data.inicio;
 
             // Buscar el elemento select
-            var doctorSelect = document.getElementById("IdDoc");
+         /*   var doctorSelect = document.getElementById("IdDoc");
             var EspSelect = document.getElementById("IDEspecializacion");
             // Iterar sobre las opciones y seleccionar la correspondiente al valor recibido
             for (var i = 0; i < doctorSelect.options.length; i++) {
@@ -265,7 +311,7 @@
                 if (EspSelect.options[i].value == data.IDEspecializacion) {
                     EspSelect.options[i].selected = true;
                 }
-            }
+            }*/
         });
     }
 
@@ -285,10 +331,7 @@
     }
 
     function Limpiar() {
-        document.getElementById("NombrePac").value = data.NombrePac;
-        document.getElementById("ApePac").value = data.ApePac;
-        document.getElementById("EdadPac").value = data.EdadPac;
-        document.getElementById("Doctor").value = data.IdDoc;
-        document.getElementById("inicio").value = data.inicio;
+        // Agrega aquí la lógica para limpiar los campos del formulario según sea necesario
     }
+    
 </script>

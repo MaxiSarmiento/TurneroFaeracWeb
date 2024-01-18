@@ -22,6 +22,7 @@ namespace TurneroFaeracWeb.Models
             this.ProgramaDoc = new HashSet<ProgramaDoc>();
             this.TablaTurnos = new HashSet<TablaTurnos>();
             this.Turnos = new HashSet<Turnos>();
+            this.TurnosMod = new HashSet<TurnosMod>();
         }
     
         public int IdDoc { get; set; }
@@ -44,5 +45,7 @@ namespace TurneroFaeracWeb.Models
         public virtual ICollection<TablaTurnos> TablaTurnos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Turnos> Turnos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TurnosMod> TurnosMod { get; set; }
     }
 }

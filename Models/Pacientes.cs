@@ -19,6 +19,7 @@ namespace TurneroFaeracWeb.Models
         {
             this.HorariosDisponibles = new HashSet<HorariosDisponibles>();
             this.Turnos = new HashSet<Turnos>();
+            this.TurnosMod = new HashSet<TurnosMod>();
         }
     
         public int IdPaciente { get; set; }
@@ -37,5 +38,7 @@ namespace TurneroFaeracWeb.Models
         public virtual Usuarios Usuarios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Turnos> Turnos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TurnosMod> TurnosMod { get; set; }
     }
 }

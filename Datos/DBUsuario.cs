@@ -19,7 +19,7 @@ namespace TurneroFaeracWeb.Datos
 
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     Usuarios oUsuario = new Usuarios
                     {
@@ -46,7 +46,7 @@ namespace TurneroFaeracWeb.Datos
             UsuarioCLS usuario = null;
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     var usuarioDB = db.Usuarios
                         .Where(u => u.Correo == correo && u.Contraseña == clave)
@@ -73,7 +73,7 @@ namespace TurneroFaeracWeb.Datos
             UsuarioCLS usuario = null;
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     var usuarioDB = db.Usuarios
                         .Where(u => u.Correo == correo)
@@ -103,7 +103,7 @@ namespace TurneroFaeracWeb.Datos
             bool respuesta = false;
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     var usuarioDB = db.Usuarios
                         .Where(u => u.Token == token)
@@ -130,7 +130,7 @@ namespace TurneroFaeracWeb.Datos
             bool respuesta = false;
             try
             {
-                using (var db = new TurneroFaeracEntities())
+                using (var db = new TurneroNewEntities())
                 {
                     var usuarioDB = db.Usuarios
                         .Where(u => u.Token == token)
