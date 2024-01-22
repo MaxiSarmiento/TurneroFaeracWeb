@@ -81,7 +81,7 @@
 
             // Configuración del DateTimePicker
             $("#fechaTurno").datetimepicker({
-                format: 'Y-m-d H:i:s', // Ajusta el formato según tus necesidades
+                format: 'd-m-Y H:i:s', // Ajusta el formato según tus necesidades
                 step: 15 // Ajusta el intervalo de minutos según tus necesidades
             });
         });
@@ -97,10 +97,11 @@
 
             // Realizar la solicitud Ajax para guardar el turno
             $.ajax({
-                url: "../Tablas/GuardarTurno",
+                url: "../Tablas/GuardarTurnos",
                 type: "POST",
                 data: formData,
                 success: function (resultado) {
+                    console.info("Turno Guardado Correctamente, Recuerde estar presente 20 minutos antes del mismo ");
                     GuardarT(resultado);
                 },
                 error: function (xhr, textStatus, errorThrown) {

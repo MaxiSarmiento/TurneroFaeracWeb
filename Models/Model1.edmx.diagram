@@ -48,6 +48,7 @@
         <AssociationConnector Association="TurneroNewModel.FK_TurnosMod_Pacientes" ManuallyRouted="false" />
         <AssociationConnector Association="TurneroNewModel.FK_TurnosMod_TablaHorarios" ManuallyRouted="false" />
         <AssociationConnector Association="TurneroNewModel.FK_Usuarios_TipoUsuarios" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TurneroNewModel.Appointment" Width="1.5" PointX="5.375" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

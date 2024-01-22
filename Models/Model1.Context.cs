@@ -50,5 +50,6 @@ namespace TurneroFaeracWeb.Models
         public virtual DbSet<TurnosMod> TurnosMod { get; set; }
         public virtual DbSet<UserIntegrada> UserIntegrada { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
+        public virtual DbSet<Appointment> Appointment { get; set; }
     }
 }

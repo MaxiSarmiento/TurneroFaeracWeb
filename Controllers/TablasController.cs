@@ -1,6 +1,7 @@
 ﻿using Google;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
@@ -282,7 +283,7 @@ namespace FaeracT.Controllers
                                               IdPaciente = turnos.IdPaciente,
                                               inicio = (DateTime)turnos.inicio,
                                               IdDoc = (int)turnos.IdDoc,
-                                             
+
                                           }).ToList();
                             Session["lista"] = turnosPacs;
                         }
@@ -724,18 +725,18 @@ namespace FaeracT.Controllers
             using (var db = new TurneroNewEntities())
             {
                 listaTurnos = (from ia in db.TablaTurnos
-                                 join p in db.Doctores on ia.IdDoc equals p.IdDoc
-                                 select new TablaTurnosCLS
-                                 {
-                                     IdTurno = ia.IdTurno,
-                                     IdPaciente = ia.IdPaciente,
-                                     inicio = (DateTime)ia.inicio,
-                                     Fin = (DateTime)ia.Fin,
-                                     Estado = ia.Estado,
-                                     IdDoc = (int)ia.IdDoc,
-                                     NombrePaciente = ia.NombrePaciente,
-                                     ApeDoc = ia.ApeDoc
-                                 }).ToList();
+                               join p in db.Doctores on ia.IdDoc equals p.IdDoc
+                               select new TablaTurnosCLS
+                               {
+                                   IdTurno = ia.IdTurno,
+                                   IdPaciente = ia.IdPaciente,
+                                   inicio = (DateTime)ia.inicio,
+                                   Fin = (DateTime)ia.Fin,
+                                   Estado = ia.Estado,
+                                   IdDoc = (int)ia.IdDoc,
+                                   NombrePaciente = ia.NombrePaciente,
+                                   ApeDoc = ia.ApeDoc
+                               }).ToList();
 
                 return listaTurnos;
             }
@@ -927,7 +928,7 @@ namespace FaeracT.Controllers
                     turnoPacs = turnoPacs.Where(t => t.nombreFiltro.Contains(turnoPac)).ToList();
                 }
 
-             
+
             }
 
             return PartialView("_TablaTurnos", turnoPacs);
@@ -1011,13 +1012,13 @@ namespace FaeracT.Controllers
                 {
                     TablaTurnos oTurnos = new TablaTurnos
                     {
-                   IdTurno = oTablaTurnosCLS.IdTurno,
-                   IdPaciente = oTablaTurnosCLS.IdPaciente,
-                   inicio = oTablaTurnosCLS.inicio,
-                   Fin = oTablaTurnosCLS.Fin,
-                   EdadPac = oTablaTurnosCLS.EdadPac,
-                   IdDoc = oTablaTurnosCLS.IdDoc,
-                };
+                        IdTurno = oTablaTurnosCLS.IdTurno,
+                        IdPaciente = oTablaTurnosCLS.IdPaciente,
+                        inicio = oTablaTurnosCLS.inicio,
+                        Fin = oTablaTurnosCLS.Fin,
+                        EdadPac = oTablaTurnosCLS.EdadPac,
+                        IdDoc = oTablaTurnosCLS.IdDoc,
+                    };
                     db.TablaTurnos.Add(oTurnos);
                     rpta = db.SaveChanges();
                 }
@@ -1314,12 +1315,16 @@ namespace FaeracT.Controllers
 
             return rpta;
         }
-        public string GuardarTurnos(TablaTurnosCLS oTablaTurnosCLS, int titulo)
+
+        [HttpPost]
+        public string GuardarTurnos(TurnosModCLS oTurnosModCLS)
         {
             string rpta = "";
 
             try
             {
+                int userId = GetUserIdFromSession();
+
                 if (!ModelState.IsValid)
                 {
                     // Manejo de errores de validación del modelo
@@ -1329,65 +1334,71 @@ namespace FaeracT.Controllers
                 {
                     using (var db = new TurneroNewEntities())
                     {
-                        if (titulo == -1)
+                        // Agregar nuevo turno
+                        TurnosMod nuevoTurno = new TurnosMod
                         {
-                            // Agregar nuevo usuario
-                            TablaTurnos oTablaTurnos = new TablaTurnos
-                            {
+                            IdDoc = oTurnosModCLS.IdDoc,
+                            IdPaciente = userId,
+                            IdHorario = oTurnosModCLS.IdHorario, // Asegúrate de tener este campo en oTablaTurnosCLS
+                            Fecha = oTurnosModCLS.Fecha, // Asegúrate de tener este campo en oTablaTurnosCLS
+                             // 0 para domingo, 1 para lunes, ..., 6 para sábado
+                        };
 
-
-                                IdTurno = oTablaTurnosCLS.IdTurno,
-                                IdPaciente = oTablaTurnosCLS.IdPaciente,
-                                inicio = oTablaTurnosCLS.inicio,
-                                 Fin = oTablaTurnosCLS.Fin,
-                                NombrePaciente = oTablaTurnosCLS.NombrePaciente,
-                                IdDoc = oTablaTurnosCLS.IdDoc,
-                            };
-
-                            db.TablaTurnos.Add(oTablaTurnos);
-                            rpta = db.SaveChanges().ToString();
-                            if (rpta == "0") rpta = "";
+                        db.TurnosMod.Add(nuevoTurno);
+                        rpta = db.SaveChanges().ToString();
+                        if (rpta == "1")
+                        {
+                            // Turno agregado correctamente
+                            rpta = "Turno agregado correctamente. Recuerda llegar 20 minutos antes del horario del turno.";
                         }
                         else
                         {
-                            // Actualizar usuario existente
-
-                            TablaTurnos oTablaTurnos = db.TablaTurnos.Where(p => p.IdTurno == titulo).FirstOrDefault();
-                            if (oTablaTurnos != null)
-                            {
-
-
-
-
-                                oTablaTurnos.IdTurno = oTablaTurnosCLS.IdTurno;
-                                oTablaTurnos.IdPaciente = oTablaTurnosCLS.IdPaciente;
-                                oTablaTurnos.inicio = oTablaTurnosCLS.inicio;
-                                oTablaTurnos.Fin = oTablaTurnosCLS.Fin;
-                                oTablaTurnos.NombrePaciente = oTablaTurnosCLS.NombrePaciente;
-                                oTablaTurnos.IdDoc = oTablaTurnosCLS.IdDoc;
-                                
-
-
-                                rpta = db.SaveChanges().ToString();
-                            }
-                            else
-                            {
-                                // Manejar el caso en el que el usuario no se encuentra
-                                rpta = "Doctor no encontrado";
-                            }
+                            rpta = "";
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                rpta = "Error en otra cosa: " + ex.Message;
+                rpta = "Error al agregar el turno: " + ex.Message;
             }
 
             return rpta;
         }
+        public JsonResult GetEvents()
+        {
+            using (var db = new TurneroNewEntities())
+            {
+                int userId = GetUserIdFromSession();
+                var eventos = db.TurnosMod.Select(t => new
+                {
+                    IdPaciente = userId,
+                    IdDoctor = t.IdDoc,
+                    Start = t.Fecha,
+                    
+                }).ToList();
 
-        public JsonResult RellenarCampos(int titulo)
+                return Json(eventos, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        private int GetUserIdFromSession()
+        {
+            if (Session["UserId"] != null)
+            {
+                int userId;
+                if (int.TryParse(Session["UserId"].ToString(), out userId))
+                {
+                    return userId;
+                }
+            }
+            // Puedes devolver un valor predeterminado o lanzar una excepción según tus necesidades
+            return -1; // Valor predeterminado en caso de error
+        }
+
+
+    public JsonResult RellenarCampos(int titulo)
 
         {
 

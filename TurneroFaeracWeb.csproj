@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Microsoft.TypeScript.MSBuild.5.3.3\build\Microsoft.TypeScript.MSBuild.props" Condition="Exists('packages\Microsoft.TypeScript.MSBuild.5.3.3\build\Microsoft.TypeScript.MSBuild.props')" />
   <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -46,6 +47,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DHTMLX, Version=4.0.7963.42414, Culture=neutral, PublicKeyToken=53f24791214eb8ac, processorArchitecture=MSIL">
+      <HintPath>packages\DHTMLX.Scheduler.NET.4.0.3\lib\DHTMLX.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -185,12 +189,18 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CalendarioController.cs" />
+    <Compile Include="Controllers\indexController.cs" />
+    <Compile Include="Models\Appointment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Appointments.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Boxes.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CalendarContext.cs" />
     <Compile Include="Models\Consultorios.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -213,7 +223,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GoogleCalendarAppointmentModel.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndicesController.cs" />
     <Compile Include="Controllers\LandingPageController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -384,6 +393,218 @@
     <Content Include="images\SantaClogo.jpg" />
     <Content Include="res\EstiloLogin.css" />
     <Content Include="res\fondoweb2.jpg" />
+    <Content Include="Scripts\dhtmlxScheduler\dhtmlxscheduler.css" />
+    <Content Include="Scripts\dhtmlxScheduler\dhtmlxscheduler.js" />
+    <Content Include="Scripts\dhtmlxScheduler\dhtmlxscheduler_contrast_black.css" />
+    <Content Include="Scripts\dhtmlxScheduler\dhtmlxscheduler_contrast_white.css" />
+    <Content Include="Scripts\dhtmlxScheduler\dhtmlxscheduler_custom_lightbox.js" />
+    <Content Include="Scripts\dhtmlxScheduler\dhtmlxscheduler_flat.css" />
+    <Content Include="Scripts\dhtmlxScheduler\dhtmlxscheduler_material.css" />
+    <Content Include="Scripts\dhtmlxScheduler\dhtmlxscheduler_terrace.css" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_active_links.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_agenda_view.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_all_timed.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_collision.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_container_autoresize.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_cookie.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_csp.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_daytimeline.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_drag_between.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_editors.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_expand.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_grid_view.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_html_templates.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_key_nav.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_layer.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_limit.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_live_updates.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_map_view.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_minical.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_monthheight.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_multisection.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_multiselect.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_multisource.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_mvc.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_offline.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_outerdrag.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_pdf.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_quick_info.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_readonly.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_recurring.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_serialize.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_timeline.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_tooltip.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_treetimeline.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_units.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_url.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_week_agenda.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_wp.js" />
+    <Content Include="Scripts\dhtmlxScheduler\ext\dhtmlxscheduler_year_view.js" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\buttons.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\but_repeat.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\calendar.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\clock_big.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\clock_small.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\collapse_expand_icon.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\controls.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\databg.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\databg_now.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\export_ical.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\export_pdf.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\icon.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\images.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\loading.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs\resize_dots.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\arrow_left.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\arrow_right.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\but_repeat.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\calendar.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\clock_big.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\clock_small.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\close_icon.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\collapse_expand_icon.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\controls.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\databg.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\databg_now.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\export_ical.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\export_pdf.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\resize_dots.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_black\resizing.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\arrow_left.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\arrow_right.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\but_repeat.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\calendar.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\clock_big.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\clock_small.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\close_icon.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\collapse_expand_icon.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\controls.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\databg.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\export_ical.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\export_pdf.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\quick_info_edit.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\resize_dots.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_contrast_white\resizing.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\agenda-calendar-hov.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\agenda-calendar.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\agenda_bg.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\arrow_left.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\arrow_left_hov.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\arrow_right.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\arrow_right_hov.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\but_repeat.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\calendar.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\clock_big.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\clock_small.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\close_icon.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\collapse_expand_icon.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\controls.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\databg.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\drag-horizontal.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\drag-vertical.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\export_ical.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\export_pdf.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\icon.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\menu-down.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\resizing.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\Shape.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\time.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_material\tree_arrow.svg" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\arrow_left.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\arrow_right.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\but_repeat.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\calendar.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\clock_big.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\clock_small.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\close_icon.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\collapse_expand_icon.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\controls.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\databg.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\databg_now.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\export_ical.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\export_pdf.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\resize_dots.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_dhx_terrace\resizing.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\agenda_bg.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\arrow_left.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\arrow_right.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\but_repeat.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\calendar.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\clock.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\clock_big.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\clock_small.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\close_icon.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\collapse_expand_icon.gif" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\controls.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\databg.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\databg_now.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\export_ical.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\export_pdf.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\resize_dots.png" />
+    <Content Include="Scripts\dhtmlxScheduler\imgs_flat\resizing.png" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_ar.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_be.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_ca.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_cn.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_cs.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_da.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_de.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_el.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_en.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_es.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_fi.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_fr.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_he.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_hu.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_id.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_it.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_jp.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_nb.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_nl.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_no.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_pl.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_pt.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_ro.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_ru.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_si.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_sk.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_sv.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_tr.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\locale_ua.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_be.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_cn.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_cs.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_da.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_de.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_el.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_en.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_es.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_fi.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_fr.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_he.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_it.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_nb.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_nl.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_pl.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_pt.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_ro.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_ru.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_sk.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_sv.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\locale_recurring_ua.js" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_be.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_cn.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_de.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_el.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_en.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_es.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_fr.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_he.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_it.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_nl.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_ro.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_ru.html" />
+    <Content Include="Scripts\dhtmlxScheduler\locale\recurring\repeat_template_sk.html" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-af.js" />
@@ -714,9 +935,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Indices\IndexTurnos.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Login\Registro.cshtml" />
@@ -744,6 +962,9 @@
     <Content Include="Views\Tablas\_TablaAnalisis.cshtml" />
     <Content Include="Views\Tablas\TablaAnalisis.cshtml" />
     <Content Include="Views\Tablas\_TablaAnalisis2.cshtml" />
+    <Content Include="Views\Calendario\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout2.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\DBUsuario\" />
@@ -776,7 +997,11 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\dhtmlxScheduler\dhtmlxscheduler.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -813,8 +1038,11 @@
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('packages\Microsoft.TypeScript.MSBuild.5.3.3\build\Microsoft.TypeScript.MSBuild.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.TypeScript.MSBuild.5.3.3\build\Microsoft.TypeScript.MSBuild.props'))" />
+    <Error Condition="!Exists('packages\Microsoft.TypeScript.MSBuild.5.3.3\build\Microsoft.TypeScript.MSBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.TypeScript.MSBuild.5.3.3\build\Microsoft.TypeScript.MSBuild.targets'))" />
   </Target>
   <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <Import Project="packages\Microsoft.TypeScript.MSBuild.5.3.3\build\Microsoft.TypeScript.MSBuild.targets" Condition="Exists('packages\Microsoft.TypeScript.MSBuild.5.3.3\build\Microsoft.TypeScript.MSBuild.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
